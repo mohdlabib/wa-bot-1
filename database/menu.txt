@@ -1,0 +1,34 @@
+I'm FreackBot,
+Created by Fikri 'Freack21' Rivandi
+
+*>BOT MENU<*
+*-menu* or *-help* -> view all menu
+*-bot* -> summon bot
+
+*>BOT FEATURES<*
+*-sticker* or *-s* -> make sticker
+*-toimg* or *-img* -> convert sticker to image
+*-groupinfo* -> see group info
+*-speq* 'keyword' -> search phones name by keyword
+*-spec* 'phone name' -> check specifications phone by query
+*-spek* 'keyword' -> check specifications phone by keyword
+*-everyone* or *-tagall* -> tag everyone in group
+*-hidetag* -> send a message and tag everyone
+
+*>AI<*
+*-ai* or *-t* -> talking with bot
+*-tlen* -> translate to english
+*-tlin* or *-tlid* -> translate to bahasa indonesia
+*-stden* -> correct sentences to Grammatical Standard English
+
+*>GAMES<*
+*-gamecodes* -> view available gamecode
+*-fam* -> start Family100
+*-lontong* -> start Quiz Lontong
+*-qdd* -> add question for selected gamecode
+*-stop* 'gamecode' -> stop game from selected gamecode
+*-lb* -> view leaderboard in this group
+
+*>NEWS<*
+*-cnn* 'category' -> search news by category in CNN indonesia
+*-category* 'newsportal' -> view available categories of newsportal
