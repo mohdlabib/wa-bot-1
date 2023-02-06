@@ -2,11 +2,11 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-const { Client, LocalAuth, MessageMedia } = require("whatsapp-web.js");
+const { Client, LocalAuth, MessageMedia, NoAuth } = require("whatsapp-web.js");
 let chrome = {};
 let options = {};
 let client;
-const qrcode = require("qrcode-terminal");
+const qrcode = require("qrcode");
 const fam = require("./controllers/games/fam");
 const lontong = require("./controllers/games/lontong");
 const gamecodes = [
@@ -129,7 +129,7 @@ client = new Client({
 });
 
 app.get("/", async (req, res) => {
-    res.sendfile("views/index.html", {
+    res.sendFile("views/index.html", {
         root: __dirname,
     });
 });
@@ -716,11 +716,11 @@ client.on("message", async (message) => {
 
 client.initialize();
 
-io.on("connection", (socket) => {
+io.on("connection", function (socket) {
     // client.on("qr", (qr) => {
     //     qrcode.generate(qr, { small: true });
     // });
-    socket.emit("message", "Connecting...");
+    // socket.emit("message", "Connecting...");
 
     client.on("qr", (qr) => {
         console.log("QR RECEIVED", qr);
