@@ -1,4 +1,5 @@
-const app = require("express")();
+const express = require("express");
+const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const { Client, LocalAuth, MessageMedia } = require("whatsapp-web.js");
@@ -32,7 +33,6 @@ const { ai, tlid, tlen, stden } = require("./controllers/api/ai");
 const { cnn, base } = require("./controllers/api/berita");
 const { spec, speq, spek, speb, specs } = require("./controllers/api/spec");
 const stickers = require("./controllers/api/stickers");
-const { Socket } = require("socket.io");
 const emojisCmd = [
     "Apple",
     "Google",
@@ -82,7 +82,7 @@ app.use(
     })
 );
 
-app.get("/", async (req, res) => {
+async function init() {
     if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
         chrome = require("chrome-aws-lambda");
         options = {
@@ -119,12 +119,16 @@ app.get("/", async (req, res) => {
             ],
         };
     }
-    client = new Client({
-        restartOnAuthFail: true,
-        puppeteer: options,
-        authStrategy: new LocalAuth(),
-    });
+}
 
+init();
+client = new Client({
+    restartOnAuthFail: true,
+    puppeteer: options,
+    authStrategy: new LocalAuth(),
+});
+
+app.get("/", async (req, res) => {
     res.sendfile("views/index.html", {
         root: __dirname,
     });
@@ -727,25 +731,31 @@ io.on("connection", (socket) => {
     });
 
     client.on("ready", () => {
+        console.log("ready");
         socket.emit("ready", "Whatsapp is ready!");
         socket.emit("message", "Whatsapp is ready!");
     });
 
     client.on("authenticated", () => {
+        console.log("authenticated");
         socket.emit("authenticated", "Whatsapp is authenticated!");
         socket.emit("message", "Whatsapp is authenticated!");
         console.log("AUTHENTICATED");
     });
 
     client.on("auth_failure", function (session) {
+        console.log("auth_failure");
         socket.emit("message", "Auth failure, restarting...");
     });
 
     client.on("disconnected", (reason) => {
+        console.log("disconnected");
         socket.emit("message", "Whatsapp is disconnected!");
         client.destroy();
         client.initialize();
     });
 });
 
-server.listen(3000);
+server.listen(process.env.PORT || 3000, function () {
+    console.log("App running");
+});
