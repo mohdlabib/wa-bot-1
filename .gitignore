@@ -7,3 +7,5 @@ api.rest
 /.wwebjs_auth
 
 .env
+
+.vercel

@@ -1,4 +1,6 @@
 const { Client, LocalAuth, MessageMedia } = require("whatsapp-web.js");
+let chrome = {};
+let options = {};
 const qrcode = require("qrcode-terminal");
 const fam = require("./controllers/games/fam");
 const lontong = require("./controllers/games/lontong");
@@ -68,21 +70,49 @@ const stickersCmd = [
     "Tyni",
 ];
 
+async function init() {
+    if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+        chrome = require("chrome-aws-lambda");
+        options = {
+            headless: true,
+            args: [
+                ...chrome.args,
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-accelerated-2d-canvas",
+                "--no-first-run",
+                "--no-zygote",
+                "--single-process", // <- this one doesn't works in Windows
+                "--disable-gpu",
+                "--hidescrollbars",
+                "--disable-web-security",
+            ],
+            defaultViewport: chrome.defaultViewport,
+            ignoreHTTPSError: true,
+            executablePath: await chrome.executablePath,
+        };
+    } else {
+        options = {
+            headless: true,
+            args: [
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-accelerated-2d-canvas",
+                "--no-first-run",
+                "--no-zygote",
+                "--single-process", // <- this one doesn't works in Windows
+                "--disable-gpu",
+            ],
+        };
+    }
+}
+
+init();
 const client = new Client({
     restartOnAuthFail: true,
-    puppeteer: {
-        headless: true,
-        args: [
-            "--no-sandbox",
-            "--disable-setuid-sandbox",
-            "--disable-dev-shm-usage",
-            "--disable-accelerated-2d-canvas",
-            "--no-first-run",
-            "--no-zygote",
-            "--single-process", // <- this one doesn't works in Windows
-            "--disable-gpu",
-        ],
-    },
+    puppeteer: options,
     authStrategy: new LocalAuth(),
 });
 
