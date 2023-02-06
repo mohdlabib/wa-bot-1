@@ -1,6 +1,10 @@
+const app = require("express")();
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
 const { Client, LocalAuth, MessageMedia } = require("whatsapp-web.js");
 let chrome = {};
 let options = {};
+let client;
 const qrcode = require("qrcode-terminal");
 const fam = require("./controllers/games/fam");
 const lontong = require("./controllers/games/lontong");
@@ -28,6 +32,7 @@ const { ai, tlid, tlen, stden } = require("./controllers/api/ai");
 const { cnn, base } = require("./controllers/api/berita");
 const { spec, speq, spek, speb, specs } = require("./controllers/api/spec");
 const stickers = require("./controllers/api/stickers");
+const { Socket } = require("socket.io");
 const emojisCmd = [
     "Apple",
     "Google",
@@ -70,7 +75,14 @@ const stickersCmd = [
     "Tyni",
 ];
 
-async function init() {
+app.use(express.json());
+app.use(
+    express.urlencoded({
+        extended: true,
+    })
+);
+
+app.get("/", async (req, res) => {
     if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
         chrome = require("chrome-aws-lambda");
         options = {
@@ -107,21 +119,15 @@ async function init() {
             ],
         };
     }
-}
+    client = new Client({
+        restartOnAuthFail: true,
+        puppeteer: options,
+        authStrategy: new LocalAuth(),
+    });
 
-init();
-const client = new Client({
-    restartOnAuthFail: true,
-    puppeteer: options,
-    authStrategy: new LocalAuth(),
-});
-
-client.on("qr", (qr) => {
-    qrcode.generate(qr, { small: true });
-});
-
-client.on("ready", () => {
-    console.log("Client is ready!");
+    res.sendfile("views/index.html", {
+        root: __dirname,
+    });
 });
 
 client.on("message", async (message) => {
@@ -705,3 +711,41 @@ client.on("message", async (message) => {
 });
 
 client.initialize();
+
+io.on("connection", (socket) => {
+    // client.on("qr", (qr) => {
+    //     qrcode.generate(qr, { small: true });
+    // });
+    socket.emit("message", "Connecting...");
+
+    client.on("qr", (qr) => {
+        console.log("QR RECEIVED", qr);
+        qrcode.toDataURL(qr, (err, url) => {
+            socket.emit("qr", url);
+            socket.emit("message", "QR Code received, scan please!");
+        });
+    });
+
+    client.on("ready", () => {
+        socket.emit("ready", "Whatsapp is ready!");
+        socket.emit("message", "Whatsapp is ready!");
+    });
+
+    client.on("authenticated", () => {
+        socket.emit("authenticated", "Whatsapp is authenticated!");
+        socket.emit("message", "Whatsapp is authenticated!");
+        console.log("AUTHENTICATED");
+    });
+
+    client.on("auth_failure", function (session) {
+        socket.emit("message", "Auth failure, restarting...");
+    });
+
+    client.on("disconnected", (reason) => {
+        socket.emit("message", "Whatsapp is disconnected!");
+        client.destroy();
+        client.initialize();
+    });
+});
+
+server.listen(3000);
