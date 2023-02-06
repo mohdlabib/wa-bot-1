@@ -1,10 +1,18 @@
 const { Client, LocalAuth, MessageMedia } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
-const fam = require("./controllers/db/fam");
-const lontong = require("./controllers/db/lontong");
-const gamecodes = ["fam", "lontong"];
-const lb = require("./controllers/db/lb");
-const status = require("./controllers/db/status");
+const fam = require("./controllers/games/fam");
+const lontong = require("./controllers/games/lontong");
+const gamecodes = [
+    "fam",
+    "lontong",
+    "caklontong",
+    "tebakkata",
+    "tebaklirik",
+    "tebakkalimat",
+];
+const lb = require("./controllers/games/lb");
+const status = require("./controllers/games/status");
+const games = require("./controllers/games/games");
 const {
     group,
     error,
@@ -12,10 +20,53 @@ const {
     autoBot,
     sticker,
     img,
+    timer,
 } = require("./controllers/utils/autoMsg");
 const { ai, tlid, tlen, stden } = require("./controllers/api/ai");
 const { cnn, base } = require("./controllers/api/berita");
 const { spec, speq, spek, speb, specs } = require("./controllers/api/spec");
+const stickers = require("./controllers/api/stickers");
+const emojisCmd = [
+    "Apple",
+    "Google",
+    "Samsung",
+    "Microsoft",
+    "WhatsApp",
+    "Twitter",
+    "Facebook",
+    "JoyPixels",
+    "OpenMoji",
+    "Emojidex",
+    "Messenger",
+    "LG",
+    "HTC",
+    "Mozilla",
+    "Softbank",
+    "Docomo",
+    "AuByKddi",
+];
+const stickersCmd = [
+    "Patrick",
+    "Popoci",
+    "Sponsbob",
+    "Kawansponsbob",
+    "awoawo",
+    "kelinci",
+    "Chat",
+    "Dbfly",
+    "DinoKuning",
+    "Doge",
+    "Gojosatoru",
+    "HopeBoy",
+    "Jisoo",
+    "Krrobot",
+    "Kucing",
+    "ManusiaLidi",
+    "Menjamet",
+    "Meow",
+    "Nicholas",
+    "Tyni",
+];
 
 const client = new Client({
     restartOnAuthFail: true,
@@ -89,6 +140,22 @@ client.on("message", async (message) => {
         }
     } else if (message.body === "-sticker" || message.body == "-s") {
         sticker(message, qtmsg, MessageMedia, client);
+    } else if (message.body === "-stickers") {
+        let gcs = "*available random stickers*\n";
+        stickersCmd.forEach((gc) => {
+            gcs += `\n-${gc.toLowerCase()}`;
+        });
+        if (!stickersCmd.length) gcs += "\nnone";
+        gcs += "\n\ntype *-menu* to view full menu.";
+        message.reply(gcs);
+    } else if (message.body === "-emojis") {
+        let gcs = "*available emoji to sticker platform*\n";
+        emojisCmd.forEach((gc) => {
+            gcs += `\n-${gc.toLowerCase()}`;
+        });
+        if (!emojisCmd.length) gcs += "\nnone";
+        gcs += "\n\ntype *-menu* to view full menu.";
+        message.reply(gcs);
     } else if (message.body === "-img" || message.body == "-toimg") {
         img(message, qtmsg, MessageMedia, client);
     } else if (message.body === "-help" || message.body === "-menu") {
@@ -118,8 +185,7 @@ client.on("message", async (message) => {
         message.body.startsWith("-hidetag ")
     ) {
         if (chat.isGroup) {
-            let qtmsg = await message.getQuotedMessage();
-            let text =
+            const text =
                 message.body === "-hidetag"
                     ? qtmsg
                         ? qtmsg.body
@@ -134,7 +200,7 @@ client.on("message", async (message) => {
                 mentions.push(contact);
             }
 
-            await chat.sendMessage(text, { mentions });
+            message.reply(text, message.from, { mentions });
         } else {
             group(message);
         }
@@ -209,7 +275,7 @@ client.on("message", async (message) => {
                         return fam.setStatus(chat.id.user, 0);
                     }
                     message.reply(soal.msg);
-                    fam.timer(chat.id.user, chat);
+                    timer(chat.id.user, chat, fam);
                 } else {
                     message.reply(game.msg);
                 }
@@ -233,7 +299,7 @@ client.on("message", async (message) => {
                         return lontong.setStatus(chat.id.user, 0);
                     }
                     message.reply(soal.msg);
-                    lontong.timer(chat.id.user, chat);
+                    timer(chat.id.user, chat, lontong);
                 } else {
                     message.reply(game.msg);
                 }
@@ -244,6 +310,86 @@ client.on("message", async (message) => {
             group(message);
         }
         //lontong
+        //caklontong
+    } else if (message.body === "-caklontong") {
+        if (chat.isGroup) {
+            try {
+                const game = status.setStatus(chat.id.user, 1, "caklontong");
+                if (game.status) {
+                    const caklontong = await games.caklontong(chat.id.user);
+                    message.reply(caklontong.text);
+                    if (!caklontong.play) return;
+                    games.timer(chat.id.user, chat, "caklontong");
+                } else {
+                    message.reply(game.msg);
+                }
+            } catch (err) {
+                error(message, err);
+            }
+        } else {
+            group(message);
+        }
+        //caklontong
+        //tebakkata
+    } else if (message.body === "-tebakkata") {
+        if (chat.isGroup) {
+            try {
+                const game = status.setStatus(chat.id.user, 1, "tebakkata");
+                if (game.status) {
+                    const tebakkata = await games.tebakkata(chat.id.user);
+                    message.reply(tebakkata.text);
+                    if (!tebakkata.play) return;
+                    games.timer(chat.id.user, chat, "tebakkata");
+                } else {
+                    message.reply(game.msg);
+                }
+            } catch (err) {
+                error(message, err);
+            }
+        } else {
+            group(message);
+        }
+        //tebakkata
+        //tebaklirik
+    } else if (message.body === "-tebaklirik") {
+        if (chat.isGroup) {
+            try {
+                const game = status.setStatus(chat.id.user, 1, "tebaklirik");
+                if (game.status) {
+                    const tebaklirik = await games.tebaklirik(chat.id.user);
+                    message.reply(tebaklirik.text);
+                    if (!tebaklirik.play) return;
+                    games.timer(chat.id.user, chat, "tebaklirik");
+                } else {
+                    message.reply(game.msg);
+                }
+            } catch (err) {
+                error(message, err);
+            }
+        } else {
+            group(message);
+        }
+        //tebaklirik
+        //tebakkalimat
+    } else if (message.body === "-tebakkalimat") {
+        if (chat.isGroup) {
+            try {
+                const game = status.setStatus(chat.id.user, 1, "tebakkalimat");
+                if (game.status) {
+                    const tebakkalimat = await games.tebakkalimat(chat.id.user);
+                    message.reply(tebakkalimat.text);
+                    if (!tebakkalimat.play) return;
+                    games.timer(chat.id.user, chat, "tebakkalimat");
+                } else {
+                    message.reply(game.msg);
+                }
+            } catch (err) {
+                error(message, err);
+            }
+        } else {
+            group(message);
+        }
+        //tebakkalimat
     } else if (message.body === "-stop") {
         if (chat.isGroup) {
             message.reply(
@@ -260,16 +406,21 @@ client.on("message", async (message) => {
                     0,
                     message.body.split(" ")[1]
                 );
+                message.reply(game.msg);
                 if (game.status) {
                     if (game.game == "fam") {
-                        message.reply(game.msg);
-                        fam.end(chat.id.user, chat);
+                        fam.delSoal(chat.id.user);
                     } else if (game.game == "lontong") {
-                        message.reply(game.msg);
-                        lontong.end(chat.id.user, chat);
+                        lontong.delSoal(chat.id.user);
+                    } else if (game.game == "caklontong") {
+                        games.destroy(chat.id.user, "caklontong");
+                    } else if (game.game == "tebakkata") {
+                        games.destroy(chat.id.user, "tebakkata");
+                    } else if (game.game == "tebaklirik") {
+                        games.destroy(chat.id.user, "tebaklirik");
+                    } else if (game.game == "tebakkalimat") {
+                        games.destroy(chat.id.user, "tebakkalimat");
                     }
-                } else {
-                    message.reply(game.msg);
                 }
             } catch (err) {
                 error(message, err);
@@ -288,16 +439,14 @@ client.on("message", async (message) => {
         } else if (game == "lontong") {
             message.reply(lontong.writeSoal(msg));
         } else {
-            message.reply(
-                "to add a question, type *-qdd* followed by the following format.\n\n-qdd\n\n'gamecode'\n\ntype *-gamecodes* to view available gamecode"
-            );
+            message.reply("this gamecode not available to add new question.");
         }
     } else if (message.body === "-gamecodes") {
         let gcs = "*available gamecodes*\n";
         gamecodes.forEach((gc) => {
-            gcs += `\n${gc}`;
+            gcs += `\n-${gc}`;
         });
-        if (!gamecodes.length) gcs += "none";
+        if (!gamecodes.length) gcs += "\nnone";
         gcs += "\n\ntype *-menu* to view full menu.";
         message.reply(gcs);
     } else if (message.body === "-lb") {
@@ -312,9 +461,28 @@ client.on("message", async (message) => {
             group(message);
         }
     } else if (message.body.startsWith("-")) {
-        message.reply(
-            "command not valid. type *-help* or *-menu* to see valid commands."
-        );
+        const cmd = message.body.split("-")[1].toLowerCase();
+        let char = message.body.split("-")[2];
+        if (!char && qtmsg) char = qtmsg.body;
+        let nocmd = true;
+        stickersCmd.forEach((el) => {
+            if (el.toLowerCase() == cmd) {
+                nocmd = false;
+                return stickers.generate(cmd, message, MessageMedia);
+            }
+        });
+        if (char) {
+            emojisCmd.forEach((el) => {
+                if (el.toLowerCase() == cmd) {
+                    nocmd = false;
+                    return stickers.emoji(cmd, char, message, MessageMedia);
+                }
+            });
+        }
+        if (nocmd)
+            message.reply(
+                "command not valid. type *-help* or *-menu* to see valid commands."
+            );
     } else {
         if (chat.isGroup) {
             try {
@@ -329,6 +497,7 @@ client.on("message", async (message) => {
                                 soal.answer[i].toLowerCase() ===
                                 message.body.toLowerCase()
                             ) {
+                                let extra = "";
                                 let contact = await client.getContactById(
                                     message.author
                                 );
@@ -342,18 +511,18 @@ client.on("message", async (message) => {
                                     },
                                     soal.reward
                                 );
-                                soal.answer.splice(i, 1);
-                                message.reply(
-                                    `right answer. your point +${soal.reward}.\n\n*${soal.answer.length} answer(s) left*`
-                                );
-                                if (soal.answer.length == 0) {
-                                    chat.sendMessage(
-                                        `great! game has been completed.\ntype *-lb* to see leaderboard.`
-                                    );
+                                if (soal.answer.length == 1) {
+                                    extra = `great! game has been completed.\ntype *-lb* to see leaderboard.`;
                                     fam.setStatus(chat.id.user, 0);
-                                    return fam.delSoal(chat.id.user);
+                                    fam.delSoal(chat.id.user);
+                                } else {
+                                    soal.answer.splice(i, 1);
+                                    extra = `*${soal.answer.length} answer(s) left*`;
+                                    fam.upSoal(soal);
                                 }
-                                fam.upSoal(soal);
+                                message.reply(
+                                    `*FAMILY100*\n\nright answer. +${soal.reward} point.\n\n${extra}`
+                                );
                             }
                         }
                     }
@@ -365,6 +534,11 @@ client.on("message", async (message) => {
                             soal.answer.toLowerCase() ===
                             message.body.toLowerCase()
                         ) {
+                            message.reply(
+                                `*QUIZ LONTONG*\n\nright answer. +${soal.reward} point.\ntype *-lb* to see leaderboard.`
+                            );
+                            lontong.setStatus(chat.id.user, 0);
+                            lontong.delSoal(chat.id.user);
                             let contact = await client.getContactById(
                                 message.author
                             );
@@ -376,11 +550,120 @@ client.on("message", async (message) => {
                                 },
                                 soal.reward
                             );
+                        }
+                    }
+                    if (Object.values(game.game).indexOf("caklontong") > -1) {
+                        const soal = games.getAnsWard(
+                            chat.id.user,
+                            "caklontong"
+                        );
+
+                        if (
+                            soal.answer.toLowerCase() ===
+                            message.body.toLowerCase()
+                        ) {
                             message.reply(
-                                `right answer. your point +${soal.reward}.\n\ngreat! game has been completed.\ntype *-lb* to see leaderboard.`
+                                `*CAK LONTONG*\n\nright answer. +${
+                                    soal.reward
+                                } point.\n\ndesc : ${soal.desc.toLowerCase()}`
                             );
-                            lontong.setStatus(chat.id.user, 0);
-                            return lontong.delSoal(chat.id.user);
+                            status.setStatus(chat.id.user, 0, "caklontong");
+                            games.destroy(chat.id.user, "caklontong");
+                            let contact = await client.getContactById(
+                                message.author
+                            );
+                            lb.setLB(
+                                chat.id.user,
+                                {
+                                    user: `@${message.author.split("@")[0]}`,
+                                    contact,
+                                },
+                                soal.reward
+                            );
+                        }
+                    }
+                    if (Object.values(game.game).indexOf("tebakkata") > -1) {
+                        const soal = games.getAnsWard(
+                            chat.id.user,
+                            "tebakkata"
+                        );
+
+                        if (
+                            soal.answer.toLowerCase() ===
+                            message.body.toLowerCase()
+                        ) {
+                            message.reply(
+                                `*TEBAK KATA*\n\nright answer. +${soal.reward} point.`
+                            );
+                            status.setStatus(chat.id.user, 0, "tebakkata");
+                            games.destroy(chat.id.user, "tebakkata");
+                            let contact = await client.getContactById(
+                                message.author
+                            );
+                            lb.setLB(
+                                chat.id.user,
+                                {
+                                    user: `@${message.author.split("@")[0]}`,
+                                    contact,
+                                },
+                                soal.reward
+                            );
+                        }
+                    }
+                    if (Object.values(game.game).indexOf("tebaklirik") > -1) {
+                        const soal = games.getAnsWard(
+                            chat.id.user,
+                            "tebaklirik"
+                        );
+
+                        if (
+                            soal.answer.toLowerCase() ===
+                            message.body.toLowerCase()
+                        ) {
+                            message.reply(
+                                `*TEBAK LIRIK*\n\nright answer. +${soal.reward} point.`
+                            );
+                            status.setStatus(chat.id.user, 0, "tebaklirik");
+                            games.destroy(chat.id.user, "tebaklirik");
+                            let contact = await client.getContactById(
+                                message.author
+                            );
+                            lb.setLB(
+                                chat.id.user,
+                                {
+                                    user: `@${message.author.split("@")[0]}`,
+                                    contact,
+                                },
+                                soal.reward
+                            );
+                        }
+                    }
+                    if (Object.values(game.game).indexOf("tebakkalimat") > -1) {
+                        const soal = games.getAnsWard(
+                            chat.id.user,
+                            "tebakkalimat"
+                        );
+
+                        if (
+                            soal.answer.toLowerCase() ===
+                            message.body.toLowerCase()
+                        ) {
+                            message.reply(
+                                `*TEBAK KALIMAT*\n\nright answer. +${soal.reward} point.`
+                            );
+                            status.setStatus(chat.id.user, 0, "tebakkalimat");
+                            games.destroy(chat.id.user, "tebakkalimat");
+                            let contact = await client.getContactById(
+                                message.author
+                            );
+                            lb.setLB(
+                                chat.id.user,
+                                {
+                                    user: `@${message.author.split("@")[0]}`,
+                                    contact,
+                                },
+                                soal.reward
+                            );
                         }
                     }
                 }

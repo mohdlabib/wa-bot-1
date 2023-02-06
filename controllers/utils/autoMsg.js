@@ -1,7 +1,9 @@
 const fs = require("fs");
 const mime = require("mime-types");
+const { getStatus } = require("../games/status");
+let times = [];
 
-exports.sticker = async (message, image, MessageMedia, client) => {
+exports.sticker = async (message, image, MessageMedia) => {
     message = message.hasMedia
         ? message
         : image
@@ -24,20 +26,29 @@ exports.sticker = async (message, image, MessageMedia, client) => {
                         encoding: "base64",
                     });
                     console.log("file downloaded!", fullFilename);
-                    MessageMedia.fromFilePath(fullFilename);
-                    await client.sendMessage(
-                        message.from,
-                        new MessageMedia(
-                            media.mimetype,
-                            media.data,
-                            fullFilename
-                        ),
-                        {
-                            sendMediaAsSticker: true,
-                            stickerAuthor: "FreackBot",
-                            stickerName: "FreackStickers",
-                        }
+                    this.stickers(
+                        message,
+                        MessageMedia.fromFilePath(fullFilename)
                     );
+                    // new MessageMedia(
+                    //     media.mimetype,
+                    //     media.data,
+                    //     fullFilename
+                    // ),
+                    // MessageMedia.fromFilePath(fullFilename);
+                    // await client.sendMessage(
+                    //     message.from,
+                    //     new MessageMedia(
+                    //         media.mimetype,
+                    //         media.data,
+                    //         fullFilename
+                    //     ),
+                    //     {
+                    //         sendMediaAsSticker: true,
+                    //         stickerAuthor: "FreackBot",
+                    //         stickerName: "FreackStickers",
+                    //     }
+                    // );
                     fs.unlinkSync(fullFilename);
                     console.log(`file deleted!`);
                 } catch (err) {
@@ -49,6 +60,18 @@ exports.sticker = async (message, image, MessageMedia, client) => {
         });
     } else {
         message.reply(`send image with caption *-sticker* to create sticker`);
+    }
+};
+
+exports.stickers = async (message, MessageMedia) => {
+    try {
+        await message.reply(MessageMedia, message.from, {
+            sendMediaAsSticker: true,
+            stickerAuthor: "FreackBot",
+            stickerName: "FreackStickers",
+        });
+    } catch (err) {
+        message.reply(`*failed to create sticker.*\ntry again!`);
     }
 };
 
@@ -115,4 +138,22 @@ exports.group = (msg) => {
 
 exports.errai = (msg, err) => {
     msg.reply("sorry, i can't talk right now. something went wrong.\n\n" + err);
+};
+
+exports.timer = (grup, chat, gc) => {
+    const i = grup + gc.GAME;
+    times[i] = 0;
+    const val = setInterval(() => {
+        times[i]++;
+        if (times[i] >= gc.TIME) {
+            clearInterval(val);
+            times[i] = 0;
+            const game = getStatus(grup);
+            if (game.status) {
+                game.game.forEach((g) => {
+                    if (g == gc.GAME) gc.end(grup, chat, -1);
+                });
+            }
+        }
+    }, 1000);
 };

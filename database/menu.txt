@@ -1,19 +1,32 @@
-I'm FreackBot,
-Created by Fikri 'Freack21' Rivandi
+
+*FREACKBOT,*
+*CREATED BY FIKRI 'Freack21' RIVANDI*
+
+
+Web : http://freack21.github.io/
+
+GitHub : http://github.com/freack21/
+
 
 *>BOT MENU<*
 *-menu* or *-help* -> view all menu
 *-bot* -> summon bot
 
-*>BOT FEATURES<*
-*-sticker* or *-s* -> make sticker
-*-toimg* or *-img* -> convert sticker to image
+*>BASIC FEATURES<*
 *-groupinfo* -> see group info
+*-everyone* or *-tagall* -> tag everyone in group
+*-hidetag* -> send a message and tag everyone
+
+*>STICKERS<*
+*-sticker* or *-s* -> make sticker
+*-stickers* -> view available random stickers
+*-emojis* -> view available emoji to sticker platform
+*-toimg* or *-img* -> convert sticker to image
+
+*>PHONE SPECIFICATIONS<*
 *-speq* 'keyword' -> search phones name by keyword
 *-spec* 'phone name' -> check specifications phone by query
 *-spek* 'keyword' -> check specifications phone by keyword
-*-everyone* or *-tagall* -> tag everyone in group
-*-hidetag* -> send a message and tag everyone
 
 *>AI<*
 *-ai* or *-t* -> talking with bot
@@ -25,6 +38,10 @@ Created by Fikri 'Freack21' Rivandi
 *-gamecodes* -> view available gamecode
 *-fam* -> start Family100
 *-lontong* -> start Quiz Lontong
+*-caklontong* -> start Cak Lontong
+*-tebakkata* -> start Tebak Kata
+*-tebaklirik* -> start Tebak Lirik
+*-tebakkalimat* -> start Tebak Kalimat
 *-qdd* -> add question for selected gamecode
 *-stop* 'gamecode' -> stop game from selected gamecode
 *-lb* -> view leaderboard in this group
@@ -32,3 +49,10 @@ Created by Fikri 'Freack21' Rivandi
 *>NEWS<*
 *-cnn* 'category' -> search news by category in CNN indonesia
 *-category* 'newsportal' -> view available categories of newsportal
+
+
+Facebook : http://facebook.com/fkrvndii
+
+Instagram : http://instagram.com/fkrvndii
+
+LinkedIn : http://linkedin.com/in/fikrivandi

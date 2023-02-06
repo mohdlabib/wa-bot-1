@@ -24,10 +24,30 @@ exports.setStatus = (grup, act, game) => {
     let id = data[0].ids;
     const temp = data.filter((obj) => obj.grup == grup && obj.game == game);
     let status = { status: true, msg: "", game };
+    switch (game) {
+        case "fam":
+            status.msg = "*FAMILY100*\n\n";
+            break;
+        case "lontong":
+            status.msg = "*QUIZ LONTONG*\n\n";
+            break;
+        case "caklontong":
+            status.msg = "*CAK LONTONG*\n\n";
+            break;
+        case "tebakkata":
+            status.msg = "*TEBAK KATA*\n\n";
+            break;
+        case "tebaklirik":
+            status.msg = "*TEBAK LIRIK*\n\n";
+            break;
+        case "tebakkalimat":
+            status.msg = "*TEBAK KALIMAT*\n\n";
+            break;
+    }
     if (act == 1) {
         if (temp.length) {
             status.status = false;
-            status.msg = `the game is still going..\ntype *-stop* to stop the game`;
+            status.msg += `the game is still going..\ntype *-stop* to stop the game`;
             return status;
         }
         data.push({ id, grup, game });
@@ -36,11 +56,11 @@ exports.setStatus = (grup, act, game) => {
     } else {
         if (!temp.length) {
             status.status = false;
-            status.msg = `game not started yet. type *-help* or *-menu* to see valid commands.`;
+            status.msg += `game not started yet. type *-help* or *-menu* to see valid commands.`;
             return status;
         }
         data = data.filter((obj) => temp[0].id != obj.id);
-        status.msg = `game stopped. type *-help* or *-menu* to see more games.`;
+        status.msg += `game stopped.`;
     }
     fs.writeFileSync("./database/status.json", JSON.stringify(data));
     return status;
