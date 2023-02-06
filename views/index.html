@@ -31,6 +31,7 @@
                 <div class="my-5">
                     <img src="" id="qrcode" alt="" />
                     <h3>Logs:</h3>
+                    <p id="init"></p>
                     <p id="status"></p>
                 </div>
             </div>
@@ -50,8 +51,13 @@
             $(document).ready(function () {
                 var socket = io();
 
+                socket.on("init", function (msg) {
+                    $("#init").text(msg);
+                });
+
                 socket.on("message", function (msg) {
                     $("#status").text(msg);
+                    $("#init").hide();
                 });
 
                 socket.on("qr", function (src) {
@@ -64,6 +70,10 @@
                 });
 
                 socket.on("authenticated", function (data) {
+                    $("#qrcode").hide();
+                });
+
+                socket.on("session_saved", function (data) {
                     $("#qrcode").hide();
                 });
             });
