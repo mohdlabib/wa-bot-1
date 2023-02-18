@@ -78,8 +78,9 @@ exports.writeSoal = (text) => {
 
 exports.end = (grup, chat, act) => {
     let extra = "";
+    this.setStatus(grup, 0);
     if (act == -1) {
-        extra = "times up! " + this.setStatus(grup, 0).msg + "\n\n";
+        extra = "times up!\n\n";
     }
     const soal = this.getSoal(grup);
     if (soal.answer.length > 0) {

@@ -63,8 +63,8 @@ exports.writeSoal = (text) => {
 
 exports.end = (grup, chat, act) => {
     let text = "";
-    if (act == -1) text = "times up! " + this.setStatus(grup, 0).msg + "\n\n";
-
+    this.setStatus(grup, 0);
+    if (act == -1) text = "times up!\n\n";
     const soal = this.getSoal(grup);
     chat.sendMessage(
         `*QUIZ LONTONG*\n\n${text}answer : ${soal.answer.toLowerCase()}`

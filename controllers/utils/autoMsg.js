@@ -28,7 +28,11 @@ exports.sticker = async (message, image, MessageMedia) => {
                     console.log("file downloaded!", fullFilename);
                     this.stickers(
                         message,
-                        MessageMedia.fromFilePath(fullFilename)
+                        new MessageMedia(
+                            media.mimetype,
+                            media.data,
+                            fullFilename
+                        )
                     );
                     // new MessageMedia(
                     //     media.mimetype,
@@ -118,6 +122,22 @@ exports.img = async (message, image, MessageMedia, client) => {
     }
 };
 
+exports.jadwalkuliah = (hari, msg) => {
+    const file = fs.readFileSync("./database/jadwal_kuliah.json");
+    let data = JSON.parse(file);
+    data = data.filter((d) => d.hari == hari);
+    if (!data.length) {
+        return msg.reply("the day that you input maybe typo. check again.");
+    }
+    data = data[0];
+    let text = `*JADWAL KULIAH TI-B SEMESTER 2*\n\n\n*${data.hari.toUpperCase()}*\n`;
+    data = data.data;
+    data.forEach((d) => {
+        text += `\n> ${d.matkul}\n> ${d.sks} SKS\n> ${d.dosen}\n> ${d.ruangan}\n> ${d.jam}\n> ${d.jumlah} Orang\n`;
+    });
+    msg.reply(text);
+};
+
 exports.autoBot = (file, msg) => {
     const readStream = fs.createReadStream("./database/" + file, "utf8");
 
@@ -156,4 +176,68 @@ exports.timer = (grup, chat, gc) => {
             }
         }
     }, 1000);
+};
+
+exports.setKW = (keyword, reply, msg) => {
+    try {
+        const file = fs.readFileSync("./database/keyword.json");
+        let data = JSON.parse(file);
+        data.push({
+            keyword,
+            reply,
+        });
+        fs.writeFileSync("./database/keyword.json", JSON.stringify(data));
+        msg.reply("success add new keyword!");
+    } catch (err) {
+        this.error(msg, err);
+    }
+};
+
+exports.upKW = (ok, keyword, reply, msg) => {
+    try {
+        const file = fs.readFileSync("./database/keyword.json");
+        let data = JSON.parse(file);
+        const ndata = data.filter((d) => d.keyword == ok);
+        data = data.filter((d) => d.keyword != ok);
+        if (!ndata.length) return msg.reply("keyword not found! try again.");
+        data.push({
+            keyword,
+            reply,
+        });
+        fs.writeFileSync("./database/keyword.json", JSON.stringify(data));
+        msg.reply("success edit selected keyword!");
+    } catch (err) {
+        this.error(msg, err);
+    }
+};
+
+exports.delKW = (ok, msg) => {
+    try {
+        const file = fs.readFileSync("./database/keyword.json");
+        let data = JSON.parse(file);
+        const ndata = data.filter((d) => d.keyword == ok);
+        data = data.filter((d) => d.keyword != ok);
+        if (!ndata.length) return msg.reply("keyword not found! try again.");
+        fs.writeFileSync("./database/keyword.json", JSON.stringify(data));
+        msg.reply("success delete selected keyword!");
+    } catch (err) {
+        this.error(msg, err);
+    }
+};
+
+exports.getKW = (keyword, msg) => {
+    try {
+        const file = fs.readFileSync("./database/keyword.json");
+        let data = JSON.parse(file);
+        data = data.filter((d) => keyword.includes(d.keyword));
+        let text = "";
+        if (data.length) {
+            data.forEach((d) => {
+                if (!text.includes(d.reply)) text += d.reply + "\n\n";
+            });
+            msg.reply(text.trim());
+        }
+    } catch (err) {
+        console.log(err);
+    }
 };

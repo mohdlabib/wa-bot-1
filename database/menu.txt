@@ -23,6 +23,16 @@ GitHub : http://github.com/freack21/
 *-emojis* -> view available emoji to sticker platform
 *-toimg* or *-img* -> convert sticker to image
 
+*>DOWNLOADER<*
+*-yt* or *-ytvid* 'url' -> download video from YouTube
+*-ytaudio* 'url' -> download audio from YouTube
+*-tt* or *-tiktok* 'url' -> download video and audio from TikTok
+
+*>PRAY<*
+*-solat* or *-salat* 'city' -> view Solat Schedule
+*-doa* 'all' -> view all available doa
+*-doa* 'name' -> view doa
+
 *>PHONE SPECIFICATIONS<*
 *-speq* 'keyword' -> search phones name by keyword
 *-spec* 'phone name' -> check specifications phone by query

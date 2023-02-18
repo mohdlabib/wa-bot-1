@@ -21,6 +21,12 @@ exports.generate = async (char, message, MessageMedia) => {
             case "kelinci":
                 char = "awoawo";
                 break;
+            case "dedeu":
+                char = "lonte";
+                break;
+            case "adin":
+                char = "lonte";
+                break;
         }
         const img = await MessageMedia.fromUrl(
             "https://api.zeeoneofc.xyz/api/telegram-sticker/" +
@@ -37,7 +43,7 @@ exports.generate = async (char, message, MessageMedia) => {
 
 exports.emoji = async (platform, char, message, MessageMedia) => {
     try {
-        const img = await MessageMedia.fromUrl(
+        let img = await MessageMedia.fromUrl(
             `https://api.zeeoneofc.xyz/api/emoji/${platform}?apikey=${process.env.Alpha_API_KEY}&emoji=${char}`,
             { unsafeMime: true }
         );

@@ -1,1 +1,532 @@
-[{"grup":"120363031662885605","anggota":[{"anggota":{"user":"@628895066058","contact":{"id":{"server":"c.us","user":"628895066058","_serialized":"628895066058@c.us"},"number":"628895066058","isBusiness":false,"isEnterprise":false,"name":"sasa","pushname":"fika","shortName":"sasa","type":"in","isMe":false,"isUser":true,"isGroup":false,"isWAContact":true,"isMyContact":true,"isBlocked":false}},"poin":675},{"anggota":{"user":"@6282286230830","contact":{"id":{"server":"c.us","user":"6282286230830","_serialized":"6282286230830@c.us"},"number":"6282286230830","isBusiness":false,"isEnterprise":false,"name":"Pikli","pushname":"Fikri Rivandi","shortName":"Pikli","type":"in","isMe":false,"isUser":true,"isGroup":false,"isWAContact":true,"isMyContact":true,"isBlocked":false}},"poin":1200}]},{"grup":"120363030073580616","anggota":[{"anggota":{"user":"@6282286230830","contact":{"id":{"server":"c.us","user":"6282286230830","_serialized":"6282286230830@c.us"},"number":"6282286230830","isBusiness":false,"isEnterprise":false,"name":"Pikli","pushname":"Fikri Rivandi","shortName":"Pikli","type":"in","isMe":false,"isUser":true,"isGroup":false,"isWAContact":true,"isMyContact":true,"isBlocked":false}},"poin":470},{"anggota":{"user":"@6281276373116","contact":{"id":{"server":"c.us","user":"6281276373116","_serialized":"6281276373116@c.us"},"number":"6281276373116","isBusiness":false,"isEnterprise":false,"name":"Adel Vanryo","pushname":"Adel Vanryo","shortName":"Adel","type":"in","isMe":false,"isUser":true,"isGroup":false,"isWAContact":true,"isMyContact":true,"isBlocked":false}},"poin":25},{"anggota":{"user":"@6282284460031","contact":{"id":{"server":"c.us","user":"6282284460031","_serialized":"6282284460031@c.us"},"number":"6282284460031","isBusiness":false,"isEnterprise":false,"name":"Cika","pushname":"jesika.","shortName":"Cika","type":"in","isMe":false,"isUser":true,"isGroup":false,"isWAContact":true,"isMyContact":true,"isBlocked":false}},"poin":100}]},{"grup":"120363044383521998","anggota":[{"anggota":{"user":"@6282286230830","contact":{"id":{"server":"c.us","user":"6282286230830","_serialized":"6282286230830@c.us"},"number":"6282286230830","isBusiness":false,"isEnterprise":false,"name":"Pikli","pushname":"Fikri Rivandi","shortName":"Pikli","type":"in","isMe":false,"isUser":true,"isGroup":false,"isWAContact":true,"isMyContact":true,"isBlocked":false}},"poin":16},{"anggota":{"user":"@6282286939417","contact":{"id":{"server":"c.us","user":"6282286939417","_serialized":"6282286939417@c.us"},"number":"6282286939417","isBusiness":false,"isEnterprise":false,"name":"Zaqki Hidayat","pushname":"Zaqki Hidayat","shortName":"Zaqki","type":"in","isMe":false,"isUser":true,"isGroup":false,"isWAContact":true,"isMyContact":true,"isBlocked":false}},"poin":6}]},{"grup":"120363029291765015","anggota":[{"anggota":{"user":"@6282286230830","contact":{"id":{"server":"c.us","user":"6282286230830","_serialized":"6282286230830@c.us"},"number":"6282286230830","isBusiness":false,"isEnterprise":false,"name":"Pikli","pushname":"Fikri Rivandi","shortName":"Pikli","type":"in","isMe":false,"isUser":true,"isGroup":false,"isWAContact":true,"isMyContact":true,"isBlocked":false}},"poin":101},{"anggota":{"user":"@6283188144400","contact":{"id":{"server":"c.us","user":"6283188144400","_serialized":"6283188144400@c.us"},"number":"6283188144400","isBusiness":false,"isEnterprise":false,"name":"Celfinn","pushname":"Celfin Gun Pernanda","shortName":"Celfinn","type":"in","isMe":false,"isUser":true,"isGroup":false,"isWAContact":true,"isMyContact":true,"isBlocked":false}},"poin":8}]}]
+[
+    {
+        "grup": "120363031662885605",
+        "anggota": [
+            {
+                "anggota": {
+                    "user": "@628895066058",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "628895066058",
+                            "_serialized": "628895066058@c.us"
+                        },
+                        "number": "628895066058",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "sasa",
+                        "pushname": "fika",
+                        "shortName": "sasa",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 0
+            },
+            {
+                "anggota": {
+                    "user": "@6282286230830",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6282286230830",
+                            "_serialized": "6282286230830@c.us"
+                        },
+                        "number": "6282286230830",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "Pikli",
+                        "pushname": "Fikri Rivandi",
+                        "shortName": "Pikli",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 0
+            }
+        ]
+    },
+    {
+        "grup": "120363030073580616",
+        "anggota": [
+            {
+                "anggota": {
+                    "user": "@6282286230830",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6282286230830",
+                            "_serialized": "6282286230830@c.us"
+                        },
+                        "number": "6282286230830",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "Pikli",
+                        "pushname": "Fikri Rivandi",
+                        "shortName": "Pikli",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 920
+            },
+            {
+                "anggota": {
+                    "user": "@6281276373116",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6281276373116",
+                            "_serialized": "6281276373116@c.us"
+                        },
+                        "number": "6281276373116",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "Adel Vanryo",
+                        "pushname": "Adel Vanryo",
+                        "shortName": "Adel",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 25
+            },
+            {
+                "anggota": {
+                    "user": "@6282284460031",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6282284460031",
+                            "_serialized": "6282284460031@c.us"
+                        },
+                        "number": "6282284460031",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "Cika",
+                        "pushname": "jesika.",
+                        "shortName": "Cika",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 175
+            }
+        ]
+    },
+    {
+        "grup": "120363044383521998",
+        "anggota": [
+            {
+                "anggota": {
+                    "user": "@6282286230830",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6282286230830",
+                            "_serialized": "6282286230830@c.us"
+                        },
+                        "number": "6282286230830",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "Pikli",
+                        "pushname": "Fikri Rivandi",
+                        "shortName": "Pikli",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 251
+            },
+            {
+                "anggota": {
+                    "user": "@6282286939417",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6282286939417",
+                            "_serialized": "6282286939417@c.us"
+                        },
+                        "number": "6282286939417",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "Zaqki Hidayat",
+                        "pushname": "Zaqki Hidayat",
+                        "shortName": "Zaqki",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 31
+            },
+            {
+                "anggota": {
+                    "user": "@6289530856677",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6289530856677",
+                            "_serialized": "6289530856677@c.us"
+                        },
+                        "number": "6289530856677",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "Deuu",
+                        "pushname": "Deuu",
+                        "shortName": "Deuu",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 15
+            },
+            {
+                "anggota": {
+                    "user": "@6281292985690",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6281292985690",
+                            "_serialized": "6281292985690@c.us"
+                        },
+                        "number": "6281292985690",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "Syaah",
+                        "pushname": ".",
+                        "shortName": "Syaah",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 25
+            }
+        ]
+    },
+    {
+        "grup": "120363029291765015",
+        "anggota": [
+            {
+                "anggota": {
+                    "user": "@6282286230830",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6282286230830",
+                            "_serialized": "6282286230830@c.us"
+                        },
+                        "number": "6282286230830",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "Pikli",
+                        "pushname": "Fikri Rivandi",
+                        "shortName": "Pikli",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 101
+            },
+            {
+                "anggota": {
+                    "user": "@6283188144400",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6283188144400",
+                            "_serialized": "6283188144400@c.us"
+                        },
+                        "number": "6283188144400",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "Celfinn",
+                        "pushname": "Celfin Gun Pernanda",
+                        "shortName": "Celfinn",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 8
+            }
+        ]
+    },
+    {
+        "grup": "120363044066568094",
+        "anggota": [
+            {
+                "anggota": {
+                    "user": "@6282286230830",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6282286230830",
+                            "_serialized": "6282286230830@c.us"
+                        },
+                        "number": "6282286230830",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "Pikli",
+                        "pushname": "Fikri Rivandi",
+                        "shortName": "Pikli",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 100
+            }
+        ]
+    },
+    {
+        "grup": "120363026192412625",
+        "anggota": [
+            {
+                "anggota": {
+                    "user": "@6282286230830",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6282286230830",
+                            "_serialized": "6282286230830@c.us"
+                        },
+                        "number": "6282286230830",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "Pikli",
+                        "pushname": "Fikri Rivandi",
+                        "shortName": "Pikli",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 75
+            },
+            {
+                "anggota": {
+                    "user": "@6287749230046",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6287749230046",
+                            "_serialized": "6287749230046@c.us"
+                        },
+                        "number": "6287749230046",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "Diaz",
+                        "pushname": "Diaz~~",
+                        "shortName": "Diaz",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 175
+            }
+        ]
+    },
+    {
+        "grup": "6289603668689-1577530799",
+        "anggota": [
+            {
+                "anggota": {
+                    "user": "@628895066058",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "628895066058",
+                            "_serialized": "628895066058@c.us"
+                        },
+                        "number": "628895066058",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "sasa",
+                        "pushname": "fika",
+                        "shortName": "sasa",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 198
+            },
+            {
+                "anggota": {
+                    "user": "@6287813158116",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6287813158116",
+                            "_serialized": "6287813158116@c.us"
+                        },
+                        "number": "6287813158116",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "pushname": "joe",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": false,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 523
+            },
+            {
+                "anggota": {
+                    "user": "@6285772660669",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6285772660669",
+                            "_serialized": "6285772660669@c.us"
+                        },
+                        "number": "6285772660669",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "pushname": "nayy",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": false,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 287
+            }
+        ]
+    },
+    {
+        "grup": "120363047195785711",
+        "anggota": [
+            {
+                "anggota": {
+                    "user": "@6287749230046",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6287749230046",
+                            "_serialized": "6287749230046@c.us"
+                        },
+                        "number": "6287749230046",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "Diaz",
+                        "pushname": "Diaz~~",
+                        "shortName": "Diaz",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 450
+            },
+            {
+                "anggota": {
+                    "user": "@6282286230830",
+                    "contact": {
+                        "id": {
+                            "server": "c.us",
+                            "user": "6282286230830",
+                            "_serialized": "6282286230830@c.us"
+                        },
+                        "number": "6282286230830",
+                        "isBusiness": false,
+                        "isEnterprise": false,
+                        "name": "Pikli",
+                        "pushname": "Fikri Rivandi",
+                        "shortName": "Pikli",
+                        "type": "in",
+                        "isMe": false,
+                        "isUser": true,
+                        "isGroup": false,
+                        "isWAContact": true,
+                        "isMyContact": true,
+                        "isBlocked": false
+                    }
+                },
+                "poin": 350
+            }
+        ]
+    }
+]

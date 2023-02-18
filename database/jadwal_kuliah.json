@@ -1,0 +1,107 @@
+[
+    {
+        "hari": "senin",
+        "data": [
+            {
+                "matkul": "Sistem Digital T/P",
+                "sks": 3,
+                "dosen": "Novery Lisbeti",
+                "jam": "08.00-10.30",
+                "ruangan": "Jarkom",
+                "jumlah": 33
+            },
+            {
+                "matkul": "Algoritma dan Struktur Data T",
+                "sks": 3,
+                "dosen": "TY/DR",
+                "jam": "13.00-15.30",
+                "ruangan": "C.314",
+                "jumlah": 33
+            },
+            {
+                "matkul": "Algoritma dan Struktur Data (Praktikum)",
+                "sks": 1,
+                "dosen": "TY/DR",
+                "jam": "16.00-17.00",
+                "ruangan": "Jarkom",
+                "jumlah": 33
+            }
+        ]
+    },
+    {
+        "hari": "selasa",
+        "data": [
+            {
+                "matkul": "Bahasa Inggris",
+                "sks": 2,
+                "dosen": "Dian Iriani, M.Sc",
+                "jam": "09.40-11.20",
+                "ruangan": "C.315",
+                "jumlah": 35
+            },
+            {
+                "matkul": "Arsitektur & Organisasi Komputer",
+                "sks": 3,
+                "dosen": "RA",
+                "jam": "13.00-15.30",
+                "ruangan": "C.314",
+                "jumlah": 38
+            }
+        ]
+    },
+    {
+        "hari": "rabu",
+        "data": [
+            {
+                "matkul": "Matematika  Diskrit",
+                "sks": 2,
+                "dosen": "Novery Lisbeti",
+                "jam": "10.30-12.10",
+                "ruangan": "Lab. Telkom",
+                "jumlah": 35
+            },
+            {
+                "matkul": "Etika Profesi",
+                "sks": 3,
+                "dosen": "IT",
+                "jam": "13.00-15.30",
+                "ruangan": "Jarkom",
+                "jumlah": 30
+            }
+        ]
+    },
+    {
+        "hari": "kamis",
+        "data": [
+            {
+                "matkul": "Sistem Multimedia",
+                "sks": 3,
+                "dosen": "Rahyul Amri",
+                "jam": "08.00-10.30",
+                "ruangan": "R.C1TI",
+                "jumlah": 37
+            },
+            {
+                "matkul": "Interaksi Manusia dan Komputer",
+                "sks": 2,
+                "dosen": "ED",
+                "jam": "10.30-12.10",
+                "ruangan": "C.314",
+                "jumlah": 40
+            }
+        ]
+    },
+    {
+        "hari": "jumat",
+        "data": [
+            {
+                "matkul": "Matematika  Diskrit",
+                "sks": 2,
+                "dosen": "Novery Lisbeti",
+                "jam": "13.30-15.10",
+                "ruangan": "Lab. Telkom",
+                "jumlah": 33
+            }
+        ]
+    }
+]

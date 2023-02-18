@@ -10,8 +10,8 @@ const openai = new OpenAIApi(configuration);
 
 exports.ai = async (text, msg) => {
     const res = await this.chatai(text);
-    if (res.error) {
-        return errai(msg, res.error.message.trim());
+    if (res) {
+        if (res.error) return errai(msg, res.error.message.trim());
     }
 
     return msg.reply(res?.choices?.[0].text.trim());
@@ -30,15 +30,25 @@ exports.stden = async (text, msg) => {
 };
 
 exports.chatai = async (text) => {
-    const response = await openai.createCompletion({
-        model: "text-davinci-003",
-        prompt: text,
-        temperature: 0,
-        max_tokens: 1000,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0,
-    });
+    try {
+        const response = await openai.createCompletion({
+            model: "text-davinci-003",
+            prompt: text,
+            temperature: 0,
+            max_tokens: 1000,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0,
+        });
 
-    return response.data;
+        return response.data;
+    } catch (err) {
+        console.log("error while request AI response");
+        return {
+            error: {
+                message:
+                    "sorry, there was an error in answering your question. please resend the message.",
+            },
+        };
+    }
 };

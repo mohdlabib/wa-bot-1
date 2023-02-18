@@ -1,11 +1,12 @@
 const { default: axios } = require("axios");
 const { rand, getStatus, setStatus } = require("./status");
+const fs = require("fs");
 exports.TIME = 90;
-const REWARD = 25;
-let caklontong = [];
-let tebakkata = [];
-let tebaklirik = [];
-let tebakkalimat = [];
+// const REWARD = 25;
+// let caklontong = [];
+// let tebakkata = [];
+// let tebaklirik = [];
+// let tebakkalimat = [];
 let times = [];
 let interval = null;
 
@@ -25,23 +26,19 @@ exports.caklontong = async (grup) => {
                     });
                 }
                 response = response.result.data;
+                response.reward = rand(25, 50);
                 const text =
                     "*CAK LONTONG*\n\n" +
                     response.soal +
                     "\n\n" +
                     clue(response.jawaban) +
                     "\n" +
-                    REWARD +
+                    response.reward +
                     " point | " +
                     this.TIME +
                     "s";
 
-                caklontong.push({
-                    grup: grup,
-                    answer: response.jawaban,
-                    desc: response.desc,
-                    reward: REWARD,
-                });
+                setGames(grup, "caklontong", response);
                 resolve({
                     play: true,
                     text,
@@ -72,22 +69,58 @@ exports.tebakkata = async (grup) => {
                     });
                 }
                 response = response.result;
-                // clue(response.jawaban) +
-                // "\n" +
+                response.reward = rand(5, 25);
                 const text =
                     "*TEBAK KATA*\n\nclue : " +
                     response.soal +
                     "\n\n" +
-                    REWARD +
+                    response.reward +
                     " point | " +
                     this.TIME +
                     "s";
 
-                tebakkata.push({
-                    grup: grup,
-                    answer: response.jawaban,
-                    reward: REWARD,
+                setGames(grup, "tebakkata", response);
+                resolve({
+                    play: true,
+                    text,
                 });
+            })
+            .catch((err) => {
+                reject({
+                    play: false,
+                    text: err,
+                });
+            });
+    });
+};
+
+exports.tekateki = async (grup) => {
+    return new Promise((resolve, reject) => {
+        axios
+            .get(
+                "https://api.zeeoneofc.xyz/api/game/tekateki?apikey=" +
+                    process.env.Alpha_API_KEY
+            )
+            .then((res) => {
+                let response = res.data;
+                if (response.status != 200) {
+                    reject({
+                        play: false,
+                        text: response.message,
+                    });
+                }
+                response = response.result;
+                response.reward = rand(10, 50);
+                const text =
+                    "*TEKATEKI*\n\nclue : " +
+                    response.soal +
+                    "\n\n" +
+                    response.reward +
+                    " point | " +
+                    this.TIME +
+                    "s";
+
+                setGames(grup, "tekateki", response);
                 resolve({
                     play: true,
                     text,
@@ -118,20 +151,17 @@ exports.tebaklirik = async (grup) => {
                     });
                 }
                 response = response.result;
+                response.reward = rand(10, 50);
                 const text =
                     "*TEBAK LIRIK*\n\n" +
                     response.soal +
                     "\n\n" +
-                    REWARD +
+                    response.reward +
                     " point | " +
                     this.TIME +
                     "s";
 
-                tebaklirik.push({
-                    grup: grup,
-                    answer: response.jawaban,
-                    reward: REWARD,
-                });
+                setGames(grup, "tebaklirik", response);
                 resolve({
                     play: true,
                     text,
@@ -162,20 +192,17 @@ exports.tebakkalimat = async (grup) => {
                     });
                 }
                 response = response.result;
+                response.reward = rand(5, 30);
                 const text =
                     "*TEBAK KALIMAT*\n\n" +
                     response.soal +
                     "\n\n" +
-                    REWARD +
+                    response.reward +
                     " point | " +
                     this.TIME +
                     "s";
 
-                tebakkalimat.push({
-                    grup: grup,
-                    answer: response.jawaban,
-                    reward: REWARD,
-                });
+                setGames(grup, "tebakkalimat", response);
                 resolve({
                     play: true,
                     text,
@@ -191,34 +218,11 @@ exports.tebakkalimat = async (grup) => {
 };
 
 exports.getAnsWard = (grup, game) => {
-    let gd = [];
-    switch (game) {
-        case "caklontong":
-            gd = caklontong;
-            break;
-        case "tebakkata":
-            gd = tebakkata;
-            break;
-        case "tebaklirik":
-            gd = tebaklirik;
-            break;
-        case "tebakkalimat":
-            gd = tebakkalimat;
-            break;
-    }
-    return gd.filter((l) => l.grup == grup)[0];
+    return getGames(grup, game);
 };
 
 exports.destroy = (grup, game) => {
-    if (game == "caklontong") {
-        caklontong = caklontong.filter((l) => l.grup != grup);
-    } else if (game == "tebakkata") {
-        tebakkata = tebakkata.filter((l) => l.grup != grup);
-    } else if (game == "tebaklirik") {
-        tebaklirik = tebaklirik.filter((l) => l.grup != grup);
-    } else if (game == "tebakkalimat") {
-        tebakkalimat = tebakkalimat.filter((l) => l.grup != grup);
-    }
+    deleteGames(grup, game);
     clearTimer(grup + game);
 };
 
@@ -239,6 +243,8 @@ exports.end = (grup, chat, gc) => {
         chat.sendMessage(
             `*TEBAK LIRIK*\n\ntimes up!\n\nanswer : ${soal.answer}`
         );
+    else if (gc == "tekateki")
+        chat.sendMessage(`*TEKATEKI*\n\ntimes up!\n\nanswer : ${soal.answer}`);
     else if (gc == "tebakkalimat")
         chat.sendMessage(
             `*TEBAK KALIMAT*\n\ntimes up!\n\nanswer : ${soal.answer}`
@@ -287,3 +293,35 @@ function clue(ans) {
     }
     return ret.join("");
 }
+
+const setGames = (grup, game, response) => {
+    const file = fs.readFileSync("./database/games.json");
+    let data = JSON.parse(file);
+    data.push({
+        grup,
+        game,
+        question: response.soal,
+        answer: response.jawaban,
+        desc: response.desc,
+        reward: response.reward,
+    });
+    fs.writeFileSync("./database/games.json", JSON.stringify(data));
+};
+
+const getGames = (grup, game) => {
+    const file = fs.readFileSync("./database/games.json");
+    let data = JSON.parse(file);
+    data = data.filter((d) => d.grup == grup && d.game == game);
+    if (!data.length) return { answer: "", reward: 0, desc: "", grup, game };
+    return data[0];
+};
+
+const deleteGames = (grup, game) => {
+    const file = fs.readFileSync("./database/games.json");
+    let data = JSON.parse(file);
+    const ndata = data.filter((d) => d.grup == grup && d.game == game);
+    data = data.filter((d) => d.grup != grup && d.game != game);
+    if (!ndata.length) return false;
+    fs.writeFileSync("./database/games.json", JSON.stringify(data));
+    return true;
+};
