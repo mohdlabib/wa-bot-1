@@ -1,16 +1,4 @@
-// const express = require("express");
-// const app = express();
-// const server = require("http").createServer(app);
-// const io = require("socket.io")(server);
 const { Client, LocalAuth, MessageMedia } = require("whatsapp-web.js");
-// const { Client, MessageMedia, RemoteAuth } = require("whatsapp-web.js");
-// const { MongoStore } = require("wwebjs-mongo");
-// const mongoose = require("mongoose");
-// let store;
-// let client;
-// let chrome = {};
-// let options = {};
-// const qrcode = require("qrcode");
 const qrTerminal = require("qrcode-terminal");
 const fam = require("./controllers/games/fam");
 const lontong = require("./controllers/games/lontong");
@@ -23,6 +11,7 @@ const gamecodes = [
     "tebakkalimat",
     "tekateki",
 ];
+const mks = ["sd", "asd", "bing", "arsikom", "md", "imk", "ep", "sm"];
 const lb = require("./controllers/games/lb");
 const status = require("./controllers/games/status");
 const games = require("./controllers/games/games");
@@ -39,6 +28,9 @@ const {
     setKW,
     delKW,
     upKW,
+    addTask,
+    delTask,
+    getTask,
 } = require("./controllers/utils/autoMsg");
 const { ai, tlid, tlen, stden } = require("./controllers/api/ai");
 const { cnn, base } = require("./controllers/api/berita");
@@ -51,7 +43,9 @@ const {
     tt,
     ttvid,
     ttaudio,
+    ig,
 } = require("./controllers/api/downloader");
+const { json } = require("express");
 const emojisCmd = [
     "Apple",
     "Google",
@@ -83,8 +77,6 @@ const stickersCmd = [
     "DinoKuning",
     "Doge",
     "Gojosatoru",
-    "dedeu",
-    "adin",
     "HopeBoy",
     "Jisoo",
     "Krrobot",
@@ -96,62 +88,6 @@ const stickersCmd = [
     "Tyni",
 ];
 
-// app.use(express.json());
-// app.use(
-//     express.urlencoded({
-//         extended: true,
-//     })
-// );
-
-// async function init() {
-//     if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-//         chrome = require("chrome-aws-lambda");
-//         options = {
-//             headless: true,
-//             args: [
-//                 ...chrome.args,
-//                 "--no-sandbox",
-//                 "--disable-setuid-sandbox",
-//                 "--disable-dev-shm-usage",
-//                 "--disable-accelerated-2d-canvas",
-//                 "--no-first-run",
-//                 "--no-zygote",
-//                 "--single-process", // <- this one doesn't works in Windows
-//                 "--disable-gpu",
-//                 "--hidescrollbars",
-//                 "--disable-web-security",
-//             ],
-//             defaultViewport: chrome.defaultViewport,
-//             ignoreHTTPSError: true,
-//             executablePath: await chrome.executablePath,
-//         };
-//     } else {
-//         options = {
-//             headless: true,
-//             args: [
-//                 "--no-sandbox",
-//                 "--disable-setuid-sandbox",
-//                 "--disable-dev-shm-usage",
-//                 "--disable-accelerated-2d-canvas",
-//                 "--no-first-run",
-//                 "--no-zygote",
-//                 "--single-process", // <- this one doesn't works in Windows
-//                 "--disable-gpu",
-//             ],
-//         };
-//     }
-// }
-
-// init();
-
-// app.get("/", async (req, res) => {
-//     res.sendFile("views/index.html", {
-//         root: __dirname,
-//     });
-// });
-
-// mongoose.connect(process.env.MONGODB_URI).then(() => {
-//     store = new MongoStore({ mongoose: mongoose });
 const client = new Client({
     restartOnAuthFail: true,
     ffmpeg: "./ffmpeg",
@@ -177,9 +113,7 @@ try {
 } catch (err) {
     console.log(err);
 }
-// });
 
-// if (client) {
 client.on("qr", (qr) => {
     qrTerminal.generate(qr, { small: true });
 });
@@ -234,7 +168,22 @@ client.on("message", async (message) => {
             group(message);
         }
     } else if (message.body === "-sticker" || message.body == "-s") {
-        sticker(message, qtmsg, MessageMedia, client);
+        sticker(message, qtmsg, MessageMedia);
+    } else if (message.body.startsWith("-smeme")) {
+        const text = message.body.slice("-smeme ".length).split("|");
+        if (text.length <= 1)
+            return message.reply(
+                "wrong format. type *-smeme* toptext|bottomtext|padding|font to create sticker meme."
+            );
+        sticker(
+            message,
+            qtmsg,
+            MessageMedia,
+            text[0],
+            text[1],
+            Number(text[2]),
+            Number(text[3])
+        );
     } else if (message.body === "-stickers") {
         let gcs = "*available random stickers*\n";
         stickersCmd.forEach((gc) => {
@@ -251,8 +200,31 @@ client.on("message", async (message) => {
         if (!emojisCmd.length) gcs += "\nnone";
         gcs += "\n\ntype *-menu* to view full menu.";
         message.reply(gcs);
+    } else if (message.body === "-mks") {
+        let gcs = "*available matakuliah for task TI-B UR 22*\n";
+        mks.forEach((gc) => {
+            gcs += `\n-${gc.toLowerCase()}`;
+        });
+        if (!emojisCmd.length) gcs += "\nnone";
+        gcs += "\n\ntype *-menu* to view full menu.";
+        message.reply(gcs);
     } else if (message.body === "-img" || message.body == "-toimg") {
-        img(message, qtmsg, MessageMedia, client);
+        img(message, qtmsg, MessageMedia);
+    } else if (message.body.startsWith("-meme")) {
+        const text = message.body.slice("-meme ".length).split("|");
+        if (text.length <= 1)
+            return message.reply(
+                "wrong format. type *-meme* toptext|bottomtext|padding|font to create meme."
+            );
+        img(
+            message,
+            qtmsg,
+            MessageMedia,
+            text[0],
+            text[1],
+            Number(text[2]),
+            Number(text[3])
+        );
     } else if (message.body === "-help" || message.body === "-menu") {
         autoBot("menu.txt", message);
     } else if (
@@ -265,6 +237,58 @@ client.on("message", async (message) => {
                 "wrong format. type *-jadwalkuliah* 'day' or *-jk* 'day' to view Jadwal Kuliah TI-B Semester 2."
             );
         jadwalkuliah(hari.toLowerCase(), message);
+    } else if (message.body.startsWith("-addtask")) {
+        const cmd = message.body.split("+");
+        if (cmd.length != 4)
+            return message.reply(
+                "wrong format. type *-addtask* 'class' 'mk' 'task1,task2' to add task list."
+            );
+        addTask(
+            cmd[1].toLowerCase(),
+            cmd[2].toLowerCase(),
+            cmd[3].split(","),
+            message
+        );
+    } else if (message.body.startsWith("-deltask")) {
+        const cmd = message.body.split("+");
+        if (cmd.length != 4)
+            return message.reply(
+                "wrong format. type *-deltask* 'class' 'mk' 'task1,task2' to delete task list."
+            );
+        delTask(
+            cmd[1].toLowerCase(),
+            cmd[2].toLowerCase(),
+            cmd[3].split(","),
+            message
+        );
+    } else if (message.body.startsWith("-viewtask")) {
+        const cmd = message.body.split("+");
+        if (cmd.length != 3)
+            return message.reply(
+                "wrong format. type *-viewtask* 'class' 'mk' to view task list."
+            );
+        getTask(cmd[1].toLowerCase(), cmd[2].toLowerCase(), message);
+    } else if (message.body.startsWith("-addtb")) {
+        const cmd = message.body.split("+");
+        if (cmd.length != 3)
+            return message.reply(
+                "wrong format. type *-addtb* 'mk' 'task1,task2' to add task list for TI-B UR 22."
+            );
+        addTask("ti-b", cmd[1].toLowerCase(), cmd[2].split(","), message);
+    } else if (message.body.startsWith("-deltb")) {
+        const cmd = message.body.split("+");
+        if (cmd.length != 3)
+            return message.reply(
+                "wrong format. type *-deltb* 'mk' 'task1,task2' to delete task list for TI-B UR 22."
+            );
+        delTask("ti-b", cmd[1].toLowerCase(), cmd[2].split(","), message);
+    } else if (message.body.startsWith("-vtb")) {
+        const cmd = message.body.split("+");
+        if (cmd.length != 2)
+            return message.reply(
+                "wrong format. type *-vtb* 'mk' to view task list for TI-B UR 22."
+            );
+        getTask("ti-b", cmd[1].toLowerCase(), message);
     } else if (
         message.body.startsWith("-solat") ||
         message.body.startsWith("-salat") ||
@@ -331,6 +355,14 @@ client.on("message", async (message) => {
             );
         if (qtmsg && !url) url = qtmsg.body;
         ttaudio(url, message, MessageMedia, chat);
+    } else if (message.body.startsWith("-ig")) {
+        let url = message.body.split(" ")[1];
+        if (!url && !qtmsg)
+            return message.reply(
+                "wrong format. type *-ig* 'url' to download video from Instagram."
+            );
+        if (qtmsg && !url) url = qtmsg.body;
+        ig(url, message, MessageMedia);
     } else if (message.body === "-everyone" || message.body === "-tagall") {
         if (chat.isGroup) {
             let text = "";
@@ -915,58 +947,3 @@ client.on("message", async (message) => {
         }
     }
 });
-// client.initialize();
-
-// io.on("connection", function (socket) {
-//     // client.on("qr", (qr) => {
-//     //     qrcode.generate(qr, { small: true });
-//     // });
-
-//     socket.emit("init", "Connecting...");
-//     if (client) {
-//         client.on("qr", (qr) => {
-//             console.log("QR RECEIVED", qr);
-//             qrTerminal.generate(qr, { small: true });
-//             qrcode.toDataURL(qr, (err, url) => {
-//                 socket.emit("qr", url);
-//                 socket.emit("message", "QR Code received, scan please!");
-//             });
-//         });
-
-//         client.on("remote_session_saved", async () => {
-//             await store.save({ session: "freackbot" });
-//             socket.emit("session_saved", "Whatsapp session is saved!");
-//             socket.emit("message", "Whatsapp session is saved!");
-//             console.log("session_saved");
-//         });
-
-//         client.on("ready", () => {
-//             console.log("ready");
-//             socket.emit("ready", "Whatsapp is ready!");
-//             socket.emit("message", "Whatsapp is ready!");
-//         });
-
-//         client.on("authenticated", () => {
-//             socket.emit("authenticated", "Whatsapp is authenticated!");
-//             socket.emit("message", "Whatsapp is authenticated!");
-//             console.log("AUTHENTICATED");
-//         });
-
-//         client.on("auth_failure", function (session) {
-//             console.log("auth_failure");
-//             socket.emit("message", "Auth failure, restarting...");
-//         });
-
-//         client.on("disconnected", (reason) => {
-//             console.log("disconnected");
-//             socket.emit("message", "Whatsapp is disconnected!");
-//             client.destroy();
-//             client.initialize();
-//         });
-//     }
-// });
-
-// server.listen(process.env.PORT || 3000, function () {
-//     console.log("App running");
-// });
-// }

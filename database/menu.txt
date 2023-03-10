@@ -3,11 +3,6 @@
 *CREATED BY FIKRI 'Freack21' RIVANDI*
 
 
-Web : http://freack21.github.io/
-
-GitHub : http://github.com/freack21/
-
-
 *>BOT MENU<*
 *-menu* or *-help* -> view all menu
 *-bot* -> summon bot
@@ -17,9 +12,11 @@ GitHub : http://github.com/freack21/
 *-everyone* or *-tagall* -> tag everyone in group
 *-hidetag* -> send a message and tag everyone
 
-*>STICKERS<*
+*>STICKERS & MEDIA<*
 *-sticker* or *-s* -> make sticker
 *-stickers* -> view available random stickers
+*-smeme* -> make meme sticker
+*-meme* -> make meme from image
 *-emojis* -> view available emoji to sticker platform
 *-toimg* or *-img* -> convert sticker to image
 
@@ -27,6 +24,7 @@ GitHub : http://github.com/freack21/
 *-yt* or *-ytvid* 'url' -> download video from YouTube
 *-ytaudio* 'url' -> download audio from YouTube
 *-tt* or *-tiktok* 'url' -> download video and audio from TikTok
+*-ig* 'url' -> download video from Instagram
 
 *>PRAY<*
 *-solat* or *-salat* 'city' -> view Solat Schedule
@@ -61,8 +59,14 @@ GitHub : http://github.com/freack21/
 *-category* 'newsportal' -> view available categories of newsportal
 
 
+Stalk Me :
+
 Facebook : http://facebook.com/fkrvndii
 
 Instagram : http://instagram.com/fkrvndii
 
 LinkedIn : http://linkedin.com/in/fikrivandi
+
+Web : http://freack21.github.io/
+
+GitHub : http://github.com/freack21/

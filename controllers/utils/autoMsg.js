@@ -1,18 +1,29 @@
 const fs = require("fs");
+const path = require("path");
 const mime = require("mime-types");
 const { getStatus } = require("../games/status");
+// const memeMaker = require("@erickwendel/meme-maker");
+const memeMaker = require("meme-maker");
 let times = [];
 
-exports.sticker = async (message, image, MessageMedia) => {
-    message = message.hasMedia
+exports.sticker = async (
+    message,
+    image,
+    MessageMedia,
+    topText,
+    bottomText,
+    padding,
+    font
+) => {
+    let msg = message.hasMedia
         ? message
         : image
         ? image.hasMedia
             ? image
             : message
         : message;
-    if (message.hasMedia) {
-        message.downloadMedia().then(async (media) => {
+    if (msg.hasMedia) {
+        msg.downloadMedia().then(async (media) => {
             if (media) {
                 const mediaPath = "./downloaded-media/";
                 if (!fs.existsSync(mediaPath)) {
@@ -20,45 +31,66 @@ exports.sticker = async (message, image, MessageMedia) => {
                 }
                 const extension = mime.extension(media.mimetype);
                 const filename = new Date().getTime();
-                const fullFilename = mediaPath + filename + "." + extension;
+                let fullFilename = mediaPath + filename + "." + extension;
                 try {
                     fs.writeFileSync(fullFilename, media.data, {
                         encoding: "base64",
                     });
-                    console.log("file downloaded!", fullFilename);
-                    this.stickers(
-                        message,
-                        new MessageMedia(
-                            media.mimetype,
-                            media.data,
-                            fullFilename
-                        )
-                    );
-                    // new MessageMedia(
-                    //     media.mimetype,
-                    //     media.data,
-                    //     fullFilename
-                    // ),
-                    // MessageMedia.fromFilePath(fullFilename);
-                    // await client.sendMessage(
-                    //     message.from,
-                    //     new MessageMedia(
-                    //         media.mimetype,
-                    //         media.data,
-                    //         fullFilename
-                    //     ),
-                    //     {
-                    //         sendMediaAsSticker: true,
-                    //         stickerAuthor: "FreackBot",
-                    //         stickerName: "FreackStickers",
-                    //     }
-                    // );
-                    fs.unlinkSync(fullFilename);
-                    console.log(`file deleted!`);
+                    // console.log("file downloaded!", fullFilename);
+                    if (topText || bottomText) {
+                        const options = {
+                            image: fullFilename,
+                            bottomText: bottomText || "",
+                            topText: topText || "",
+                            outfile:
+                                "./downloaded-media/smeme" +
+                                Math.random() * 1000 +
+                                "." +
+                                extension,
+                            fontSize: font || 100,
+                            strokeColor: "#000",
+                            strokeWeight: 2,
+                            textPos: "center",
+                            padding: padding || 40,
+                            // font: "/path/to/font.ttf",
+                            // fontFill: "#FFF",
+                        };
+
+                        memeMaker(options, (err) => {
+                            if (err)
+                                return message.reply(
+                                    `*failed to create smeme.*\ntry again!\n\n${err}`
+                                );
+                            fs.unlinkSync(fullFilename);
+                            // console.log(`file deleted! ` + fullFilename);
+                            const file = options.outfile;
+                            // console.log("meme saved : " + file);
+                            const meme = MessageMedia.fromFilePath(file);
+                            this.stickers(
+                                message,
+                                new MessageMedia(meme.mimetype, meme.data, file)
+                            );
+                            fs.unlinkSync(file);
+                            // console.log(`file deleted! ` + file);
+                        });
+                    } else {
+                        this.stickers(
+                            message,
+                            new MessageMedia(
+                                media.mimetype,
+                                media.data,
+                                fullFilename
+                            )
+                        );
+                        fs.unlinkSync(fullFilename);
+                        // console.log(`file deleted!`);
+                    }
                 } catch (err) {
-                    console.log("failed to save:", err);
-                    console.log(`file deleted!`, err);
-                    message.reply(`*failed to create sticker.*\ntry again!`);
+                    // console.log("failed to save:", err);
+                    // console.log(`file deleted!`, err);
+                    message.reply(
+                        `*failed to create sticker.*\ntry again!\n${err}`
+                    );
                 }
             }
         });
@@ -75,18 +107,26 @@ exports.stickers = async (message, MessageMedia) => {
             stickerName: "FreackStickers",
         });
     } catch (err) {
-        message.reply(`*failed to create sticker.*\ntry again!`);
+        message.reply(`*failed to create sticker.*\ntry again!\n\n${err}`);
     }
 };
 
-exports.img = async (message, image, MessageMedia, client) => {
-    message = message.hasMedia
-        ? message
+exports.img = async (
+    msg,
+    image,
+    MessageMedia,
+    topText,
+    bottomText,
+    padding,
+    font
+) => {
+    let message = msg.hasMedia
+        ? msg
         : image
         ? image.hasMedia
             ? image
-            : message
-        : message;
+            : msg
+        : msg;
     if (message.hasMedia) {
         message.downloadMedia().then(async (media) => {
             if (media) {
@@ -96,22 +136,61 @@ exports.img = async (message, image, MessageMedia, client) => {
                 }
                 const extension = mime.extension(media.mimetype);
                 const filename = new Date().getTime();
-                const fullFilename = mediaPath + filename + "." + extension;
+                let fullFilename = mediaPath + filename + "." + extension;
                 try {
                     fs.writeFileSync(fullFilename, media.data, {
                         encoding: "base64",
                     });
-                    console.log("file downloaded!", fullFilename);
-                    await client.sendMessage(
-                        message.from,
-                        MessageMedia.fromFilePath(fullFilename)
-                    );
-                    fs.unlinkSync(fullFilename);
-                    console.log(`file deleted!`);
+                    // console.log("file downloaded!", fullFilename);
+                    if (topText || bottomText) {
+                        const options = {
+                            image: fullFilename,
+                            bottomText: bottomText || "",
+                            topText: topText || "",
+                            outfile:
+                                "./downloaded-media/meme" +
+                                Math.random() * 1000 +
+                                "." +
+                                extension,
+                            fontSize: font || 100,
+                            strokeColor: "#000",
+                            strokeWeight: 2,
+                            textPos: "center",
+                            padding: padding || 40,
+                            // font: "/path/to/font.ttf",
+                            // fontFill: "#FFF",
+                        };
+
+                        memeMaker(options, (err) => {
+                            if (err)
+                                return msg.reply(
+                                    `*failed to create meme.*\ntry again!\n\n${err}`
+                                );
+                            fs.unlinkSync(fullFilename);
+                            // console.log(`file deleted! ` + fullFilename);
+                            const file = options.outfile;
+                            // console.log("meme saved : " + file);
+                            const im = MessageMedia.fromFilePath(file);
+                            msg.reply(
+                                new MessageMedia(im.mimetype, im.data, file)
+                            );
+                            fs.unlinkSync(file);
+                            // console.log(`file deleted! ` + file);
+                        });
+                    } else {
+                        const im = MessageMedia.fromFilePath(fullFilename);
+                        await msg.reply(
+                            new MessageMedia(im.mimetype, im.data, fullFilename)
+                        );
+                        fs.unlinkSync(fullFilename);
+                        // console.log(`file deleted!`);
+                    }
                 } catch (err) {
-                    console.log("failed to save:", err);
-                    console.log(`file deleted!`, err);
-                    message.reply(`*failed to send image.*\ntry again!`);
+                    // console.log("failed to save:", err);
+                    // console.log(`file deleted!`, err);
+                    message.reply(
+                        `*failed to create image.*\ntry again!\n\n${err}`
+                    );
                 }
             }
         });
@@ -125,17 +204,28 @@ exports.img = async (message, image, MessageMedia, client) => {
 exports.jadwalkuliah = (hari, msg) => {
     const file = fs.readFileSync("./database/jadwal_kuliah.json");
     let data = JSON.parse(file);
-    data = data.filter((d) => d.hari == hari);
-    if (!data.length) {
-        return msg.reply("the day that you input maybe typo. check again.");
+    if (hari != "all") {
+        data = data.filter((d) => d.hari == hari);
+        if (!data.length) {
+            return msg.reply("the day that you input maybe typo. check again.");
+        }
+        data = data[0];
+        let text = `*JADWAL KULIAH TI-B*\n\n\n*${data.hari.toUpperCase()}*\n`;
+        data = data.data;
+        data.forEach((d) => {
+            text += `\n> ${d.matkul}\n> ${d.sks} SKS\n> ${d.dosen}\n> ${d.ruangan}\n> ${d.jam}\n> ${d.jumlah} Orang\n`;
+        });
+        msg.reply(text);
+    } else {
+        let text = `*JADWAL KULIAH TI-B*\n`;
+        data.forEach((d) => {
+            text += `\n\n*${d.hari.toUpperCase()}*\n`;
+            d.data.forEach((mk) => {
+                text += `\n> ${mk.matkul}\n> ${mk.sks} SKS\n> ${mk.dosen}\n> ${mk.ruangan}\n> ${mk.jam}\n> ${mk.jumlah} Orang\n`;
+            });
+        });
+        msg.reply(text);
     }
-    data = data[0];
-    let text = `*JADWAL KULIAH TI-B SEMESTER 2*\n\n\n*${data.hari.toUpperCase()}*\n`;
-    data = data.data;
-    data.forEach((d) => {
-        text += `\n> ${d.matkul}\n> ${d.sks} SKS\n> ${d.dosen}\n> ${d.ruangan}\n> ${d.jam}\n> ${d.jumlah} Orang\n`;
-    });
-    msg.reply(text);
 };
 
 exports.autoBot = (file, msg) => {
@@ -239,5 +329,124 @@ exports.getKW = (keyword, msg) => {
         }
     } catch (err) {
         console.log(err);
+    }
+};
+
+exports.addTask = (kelas, mk, task, msg) => {
+    try {
+        const file = fs.readFileSync("./database/tugas_kuliah.json");
+        let data = JSON.parse(file);
+        let ndata = data.filter((d) => d.kelas == kelas && d.mk == mk);
+        data.push({
+            kelas,
+            mk,
+            task,
+        });
+        // if (!ndata.length) {
+        //     data.push({
+        //         kelas,
+        //         mk,
+        //         task,
+        //     });
+        // } else {
+        //     data = data.filter((d) => d.kelas != kelas && d.mk != mk);
+        //     task.forEach((t) => {
+        //         ndata[0].task.push(t);
+        //     });
+        //     data.push(ndata[0]);
+        // }
+        fs.writeFileSync("./database/tugas_kuliah.json", JSON.stringify(data));
+        msg.reply("success add task list.");
+    } catch (err) {
+        this.error(msg, err);
+    }
+};
+
+exports.delTask = (kelas, mk, task, msg) => {
+    try {
+        const file = fs.readFileSync("./database/tugas_kuliah.json");
+        let data = JSON.parse(file);
+        let ndata = data.filter((d) => d.kelas == kelas && d.mk == mk);
+        data = data.filter((d) => d.kelas != kelas && d.mk != mk);
+        if (!ndata.length) return msg.reply("mk or task not found. try again.");
+        if (task[0] != "all") {
+            ndata = ndata[0];
+            for (let i = 0; i < ndata.task.length; i++) {
+                for (let j = 0; j < task.length; j++) {
+                    if (ndata.task[i] == task[j]) {
+                        ndata.task.splice(i, 1);
+                    }
+                }
+            }
+            data.push(ndata);
+        }
+        fs.writeFileSync("./database/tugas_kuliah.json", JSON.stringify(data));
+        msg.reply("success delete selected task list.");
+    } catch (err) {
+        this.error(msg, err);
+    }
+};
+
+function cMk(mk) {
+    switch (mk) {
+        case "sd":
+            mk = "sistem digital";
+            break;
+        case "asd":
+            mk = "algoritma struktur data";
+            break;
+        case "bing":
+            mk = "bahasa inggris";
+            break;
+        case "arsikom":
+            mk = "arsitektur dan organisasi komputer";
+            break;
+        case "md":
+            mk = "matematika diskrit";
+            break;
+        case "imk":
+            mk = "interaksi manusia dan komputer";
+            break;
+        case "ep":
+            mk = "etika profesi";
+            break;
+        case "sm":
+            mk = "sistem multimedia";
+            break;
+    }
+    return mk;
+}
+
+exports.getTask = (kelas, mk, msg) => {
+    try {
+        const file = fs.readFileSync("./database/tugas_kuliah.json");
+        let data = JSON.parse(file);
+        if (mk != all) {
+            data = data.filter((d) => d.kelas == kelas && d.mk == mk);
+            if (!data.length)
+                return msg.reply("mk or task not found. try again.");
+            let text =
+                "*DAFTAR TUGAS " +
+                cMk(mk).toUpperCase() +
+                " " +
+                kelas.toUpperCase() +
+                "*\n";
+            data[0].task.forEach((d, i) => {
+                text += "\n" + (i + 1) + ". " + d;
+            });
+            msg.reply(text);
+        } else {
+            data = data.filter((d) => d.kelas == kelas);
+            let text = "*SEMUA DAFTAR TUGAS " + kelas.toUpperCase() + "*\n";
+            data.forEach((dt) => {
+                text += "\n*" + cMk(mk).toUpperCase() + "*";
+                dt.task.forEach((d, i) => {
+                    text += "\n" + (i + 1) + ". " + d;
+                });
+            });
+            msg.reply(text);
+        }
+    } catch (err) {
+        this.error(msg, err);
     }
 };

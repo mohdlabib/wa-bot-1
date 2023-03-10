@@ -1,4 +1,5 @@
 const { stickers } = require("../utils/autoMsg");
+const fs = require("fs");
 
 exports.generate = async (char, message, MessageMedia) => {
     try {
@@ -21,15 +22,9 @@ exports.generate = async (char, message, MessageMedia) => {
             case "kelinci":
                 char = "awoawo";
                 break;
-            case "dedeu":
-                char = "lonte";
-                break;
-            case "adin":
-                char = "lonte";
-                break;
         }
         const img = await MessageMedia.fromUrl(
-            "https://api.zeeoneofc.xyz/api/telegram-sticker/" +
+            "https://api.zeeoneofc.my.id/api/telegram-sticker/" +
                 char +
                 "?apikey=" +
                 process.env.Alpha_API_KEY,
@@ -43,12 +38,36 @@ exports.generate = async (char, message, MessageMedia) => {
 
 exports.emoji = async (platform, char, message, MessageMedia) => {
     try {
-        let img = await MessageMedia.fromUrl(
-            `https://api.zeeoneofc.xyz/api/emoji/${platform}?apikey=${process.env.Alpha_API_KEY}&emoji=${char}`,
+        const img = await MessageMedia.fromUrl(
+            `https://api.zeeoneofc.my.id/api/emoji/${platform}?apikey=${process.env.Alpha_API_KEY}&emoji=${char}`,
             { unsafeMime: true }
         );
         stickers(message, img);
+        // let media = await MessageMedia.fromUrl(
+        //     `https://api.zeeoneofc.my.id/api/emoji/${platform}?apikey=${process.env.Alpha_API_KEY}&emoji=${char}`,
+        //     { unsafeMime: true }
+        // );
+        // if (media) {
+        //     const mediaPath = "./downloaded-media/";
+        //     if (!fs.existsSync(mediaPath)) {
+        //         fs.mkdirSync(mediaPath);
+        //     }
+        //     const filename = new Date().getTime();
+        //     const fullFilename = mediaPath + filename + ".gif";
+        //     fs.writeFileSync(fullFilename, media.data, {
+        //         encoding: "base64",
+        //     });
+        //     // console.log("file downloaded!", fullFilename);
+        //     stickers(
+        //         message,
+        //         new MessageMedia(media.mimetype, media.data, fullFilename)
+        //     );
+        //     fs.unlinkSync(fullFilename);
+        //     // console.log(`file deleted!`);
+        // }
     } catch (err) {
+        // console.log("failed to save:", err);
+        // console.log(`file deleted!`, err);
         message.reply(`*failed to create sticker.*\ntry again!\n\n` + err);
     }
 };
