@@ -16,10 +16,10 @@ exports.salat = async (kota, msg) => {
         data = data.filter((d) => d.tanggal == time);
         if (!data.length)
             return msg.reply(
-                "sorry, data not found. please check again the city you entered"
+                "maaf, data tidak ditemukan. periksa lagi kota yang kamu masukkan."
             );
         data = data[0];
-        text += `> Imsak\t: ${data.imsyak}\n> Subuh\t: ${data.shubuh}\n> Terbit\t: ${data.terbit}\n> Dhuha\t: ${data.dhuha}\n> Dzuhur\t: ${data.dzuhur}\n> Ashar\t: ${data.ashr}\n> Magrib\t: ${data.magrib}\n> Isya\t\t: ${data.isya}\n\n_don't forget to pray, okay?_`;
+        text += `> Imsak\t: ${data.imsyak}\n> Subuh\t: ${data.shubuh}\n> Terbit\t: ${data.terbit}\n> Dhuha\t: ${data.dhuha}\n> Dzuhur\t: ${data.dzuhur}\n> Ashar\t: ${data.ashr}\n> Magrib\t: ${data.magrib}\n> Isya\t\t: ${data.isya}\n\n_jangan lupa solat, yaa?_`;
         msg.reply(text);
     } catch (err) {
         error(msg, err);

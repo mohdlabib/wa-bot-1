@@ -1,0 +1,84 @@
+*Bantuan untuk Funday Bot*
+*Dibuat oleh Fikri 'Freack21' Rivandi*
+
+*NB :*
+- Semua perintah dimulai dengan tanda minus (-).
+- Silahkan hubungi owner jika ada kendala atau ingin premium.
+
+*>> STIKER & MEDIA <<*
+*-sticker* atau *-s* -> kirim atau balas gambar/video/gif yang sudah ada dengan perintah ini.
+
+*-smeme* -> kirim atau balas gambar/stiker yang sudah ada dengan perintah ini.
+PERINTAH : -smeme TEKS ATAS|TEKS BAWAH|JARAK ANTARA TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT
+CATATAN : Atribut yang harus ada hanya TEKS ATAS atau TEKS BAWAH. atribut bisa di skip dengan simbol |. Contoh skip TEKS BAWAH, jadi seperti ini,
+-smeme TEKS ATAS||JARAK|UKURAN FONT
+
+*-meme* -> kirim atau balas gambar yang sudah ada dengan perintah ini.
+PERINTAH : -meme TEKS ATAS|TEKS BAWAH|JARAK ANTARA TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT
+CATATAN : Atribut yang harus ada hanya TEKS ATAS atau TEKS BAWAH. atribut bisa di skip dengan simbol |. Contoh skip TEKS BAWAH, jadi seperti ini,
+-meme TEKS ATAS||JARAK|UKURAN FONT
+
+*-toimg* atau *-img* -> balas stiker yang sudah ada dengan perintah ini.
+
+*-stickers* -> kirim satu perintah random yang tersedia.
+
+*-emojis* -> kirim satu perintah platform yang tersedia dan diikut dengan emoji yang ingin dibuat stiker.
+CONTOH: -joypixels-emoji
+
+*NB :* Untuk stiker random dan emoji ke stiker ada limit harian. Gunakan seperlunya. Donasi ke bot untuk membantu owner mengoptimalkan bot ini.
+
+
+*>> DOWNLOADER <<*
+*-yt* atau *-ytvid* -> kirim atau balas url dengan perintah ini.
+CONTOH : -yt http://yt.com/video1
+
+*-ytaudio* -> kirim atau balas url dengan perintah ini.
+CONTOH : -ytaudio http://yt.com/video1
+
+*-tt* atau *-tiktok* -> kirim atau balas url dengan perintah ini.
+CONTOH : -tt http://tt.com/video1
+
+*-ig* -> kirim atau balas url dengan perintah ini.
+CONTOH : -ig http://ig.com/video1
+
+*NB :* Untuk semua fitur downloader ada limit harian. Gunakan seperlunya. Donasi ke bot untuk membantu owner mengoptimalkan bot ini.
+
+*>> IBADAH <<*
+*-solat* atau *-salat* 'city' -> kirim perintah ini diikut nama kota yang ingin dicari jadwalnya.
+
+*-doa* -> kirim perintah ini diikut nama doa yang ingin dicari.
+
+
+*>> SPESIFIKASI HP <<*
+*-speq* 'keyword' -> CONTOH : -speq redmi
+*-spec* 'phone name' -> CONTOH : -spec redmi 9c
+*-spek* 'keyword' -> CONTOH : -spek keyword-hp-redmi9c
+
+
+*>> AI & TRANSLATE <<*
+*-ai* atau *-t* -> kirim atau balas pesan dengan perintah ini.
+
+*-tlen* -> kirim atau balas pesan dengan perintah ini.
+
+*-tlin* atau *-tlid* -> kirim atau balas pesan dengan perintah ini.
+
+*-stden* -> kirim atau balas pesan dengan perintah ini.
+
+
+*>> BERITA <<*
+*-cnn* 'category' -> CONTOH : -cnn olahraga
+
+
+*>> Owner Contact <<*
+
+WhatsApp : http://wa.me/6282286230830
+
+Facebook : http://facebook.com/fkrvndii
+
+Instagram : http://instagram.com/fkrvndii
+
+LinkedIn : http://linkedin.com/in/fikrivandi
+
+Web : http://freack21.github.io/
+
+GitHub : http://github.com/freack21/

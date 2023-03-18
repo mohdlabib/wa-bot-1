@@ -1,12 +1,8 @@
 const { default: axios } = require("axios");
 const { rand, getStatus, setStatus } = require("./status");
 const fs = require("fs");
+const { AlphaKey } = require("../utils/apikey");
 exports.TIME = 90;
-// const REWARD = 25;
-// let caklontong = [];
-// let tebakkata = [];
-// let tebaklirik = [];
-// let tebakkalimat = [];
 let times = [];
 let interval = null;
 
@@ -14,8 +10,8 @@ exports.caklontong = async (grup) => {
     return new Promise((resolve, reject) => {
         axios
             .get(
-                "https://api.zeeoneofc.xyz/api/game/caklontong?apikey=" +
-                    process.env.Alpha_API_KEY
+                "https://api.zeeoneofc.my.id/api/game/caklontong?apikey=" +
+                    AlphaKey()
             )
             .then((res) => {
                 let response = res.data;
@@ -57,8 +53,8 @@ exports.tebakkata = async (grup) => {
     return new Promise((resolve, reject) => {
         axios
             .get(
-                "https://api.zeeoneofc.xyz/api/game/tebakkata?apikey=" +
-                    process.env.Alpha_API_KEY
+                "https://api.zeeoneofc.my.id/api/game/tebakkata?apikey=" +
+                    AlphaKey()
             )
             .then((res) => {
                 let response = res.data;
@@ -98,8 +94,8 @@ exports.tekateki = async (grup) => {
     return new Promise((resolve, reject) => {
         axios
             .get(
-                "https://api.zeeoneofc.xyz/api/game/tekateki?apikey=" +
-                    process.env.Alpha_API_KEY
+                "https://api.zeeoneofc.my.id/api/game/tekateki?apikey=" +
+                    AlphaKey()
             )
             .then((res) => {
                 let response = res.data;
@@ -139,8 +135,8 @@ exports.tebaklirik = async (grup) => {
     return new Promise((resolve, reject) => {
         axios
             .get(
-                "https://api.zeeoneofc.xyz/api/game/tebaklirik?apikey=" +
-                    process.env.Alpha_API_KEY
+                "https://api.zeeoneofc.my.id/api/game/tebaklirik?apikey=" +
+                    AlphaKey()
             )
             .then((res) => {
                 let response = res.data;
@@ -180,8 +176,8 @@ exports.tebakkalimat = async (grup) => {
     return new Promise((resolve, reject) => {
         axios
             .get(
-                "https://api.zeeoneofc.xyz/api/game/tebakkalimat?apikey=" +
-                    process.env.Alpha_API_KEY
+                "https://api.zeeoneofc.my.id/api/game/tebakkalimat?apikey=" +
+                    AlphaKey()
             )
             .then((res) => {
                 let response = res.data;
@@ -231,23 +227,25 @@ exports.end = (grup, chat, gc) => {
     setStatus(grup, 0, gc);
     if (gc == "caklontong")
         chat.sendMessage(
-            `*CAK LONTONG*\n\ntimes up!\n\nanswer : ${
+            `*CAK LONTONG*\n\nwaktu habis!\n\njawaban : ${
                 soal.answer
-            }\ndesc : ${soal.desc.toLowerCase()}`
+            }\ndeskripsi : ${soal.desc.toLowerCase()}`
         );
     else if (gc == "tebakkata")
         chat.sendMessage(
-            `*TEBAK KATA*\n\ntimes up!\n\nanswer : ${soal.answer}`
+            `*TEBAK KATA*\n\nwaktu habis!\n\njawaban : ${soal.answer}`
         );
     else if (gc == "tebaklirik")
         chat.sendMessage(
-            `*TEBAK LIRIK*\n\ntimes up!\n\nanswer : ${soal.answer}`
+            `*TEBAK LIRIK*\n\nwaktu habis!\n\njawaban : ${soal.answer}`
         );
     else if (gc == "tekateki")
-        chat.sendMessage(`*TEKATEKI*\n\ntimes up!\n\nanswer : ${soal.answer}`);
+        chat.sendMessage(
+            `*TEKATEKI*\n\nwaktu habis!\n\njawaban : ${soal.answer}`
+        );
     else if (gc == "tebakkalimat")
         chat.sendMessage(
-            `*TEBAK KALIMAT*\n\ntimes up!\n\nanswer : ${soal.answer}`
+            `*TEBAK KALIMAT*\n\nwaktu habis!\n\njawaban : ${soal.answer}`
         );
     this.destroy(grup, gc);
 };

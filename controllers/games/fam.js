@@ -45,13 +45,13 @@ exports.getSoal = (idgrup) => {
     if (!data.length) {
         return {
             play: false,
-            msg: "sorry, question not found.\n\ntype *-fam* to restart the game.",
+            msg: "maaf, soal tidak ditemukan.\n\nketik *-fam* untuk restart game.",
         };
     }
     const { grup, question, answer, reward } = data[0];
     return {
         play: true,
-        msg: `*FAMILY100*\n\n${question}\n\n${answer.length} answers | ${reward} point | ${this.TIME}s`,
+        msg: `*FAMILY100*\n\n${question}\n\n${answer.length} jawaban | ${reward} point | ${this.TIME}s`,
         grup,
         answer,
         reward,
@@ -64,7 +64,7 @@ exports.setStatus = (grup, act) => {
 
 exports.writeSoal = (text) => {
     if (text.length != 3)
-        return "ex. to add a question for Family100.\n\n-qdd\n\nfam\n\n'question'\n\n'ans1, ans2, ans3, ...'\n\n'price'";
+        return "ex. untuk menambah soal game Family100.\n\n-qdd\n\nfam\n\n'soal'\n\n'jawaban1, jawaban2, jawaban3, ...'\n\n'hadiah'\n\nnb: tanpa tanda kutip.";
     const file = fs.readFileSync("./database/" + this.GAME + ".json");
     let data = JSON.parse(file);
     data.push({
@@ -73,7 +73,7 @@ exports.writeSoal = (text) => {
         reward: parseInt(text[2]),
     });
     fs.writeFileSync("./database/" + this.GAME + ".json", JSON.stringify(data));
-    return `successfully added a new question for Family100.\n\nthank you for helping me develop this bot.`;
+    return `berhasil menambah soal baru untuk game Family100.\n\nterimakasih telah membantu mengembangkan bot ini.`;
 };
 
 exports.end = (grup, chat, act) => {

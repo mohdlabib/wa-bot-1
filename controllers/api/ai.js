@@ -1,7 +1,5 @@
-const dotenv = require("dotenv");
 const { errai } = require("../utils/autoMsg");
 const { Configuration, OpenAIApi } = require("openai");
-dotenv.config();
 
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
@@ -18,11 +16,11 @@ exports.ai = async (text, msg) => {
 };
 
 exports.tlid = async (text, msg) => {
-    return await this.ai("translate to bahasa indonesia: " + text, msg);
+    return await this.ai("translate ke bahasa indonesia: " + text, msg);
 };
 
 exports.tlen = async (text, msg) => {
-    return await this.ai("translate to english: " + text, msg);
+    return await this.ai("translate ke english: " + text, msg);
 };
 
 exports.stden = async (text, msg) => {
@@ -47,7 +45,7 @@ exports.chatai = async (text) => {
         return {
             error: {
                 message:
-                    "sorry, there was an error in answering your question. please resend the message.",
+                    "maaf, ada error saat menjawab pertanyaanmu. tolong kirim ulang pesanmu.",
             },
         };
     }

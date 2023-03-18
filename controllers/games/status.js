@@ -13,7 +13,7 @@ exports.getStatus = (grup) => {
     } else {
         return {
             status: false,
-            msg: "game not started yet. type *-help* or *-menu* to see valid commands.",
+            msg: "game belum dimulai. ketik *-menu* untuk melihat menu. lihat bantuan dengan ketik *-help* atau hubungi owner bot.",
         };
     }
 };
@@ -47,7 +47,7 @@ exports.setStatus = (grup, act, game) => {
     if (act == 1) {
         if (temp.length) {
             status.status = false;
-            status.msg += `the game is still going..\ntype *-stop* to stop the game`;
+            status.msg += `game masih berjalan..\nketik *-stop* 'gamecode' (tanpa tanda kutip) untuk menghentikan game.`;
             return status;
         }
         data.push({ id, grup, game });
@@ -56,11 +56,11 @@ exports.setStatus = (grup, act, game) => {
     } else {
         if (!temp.length) {
             status.status = false;
-            status.msg += `game not started yet. type *-help* or *-menu* to see valid commands.`;
+            status.msg += `game belum dimulai. ketik *-menu* untuk melihat menu. lihat bantuan dengan ketik *-help* atau hubungi owner bot.`;
             return status;
         }
         data = data.filter((obj) => temp[0].id != obj.id);
-        status.msg += `game stopped.`;
+        status.msg += `game berhenti.`;
     }
     fs.writeFileSync("./database/status.json", JSON.stringify(data));
     return status;

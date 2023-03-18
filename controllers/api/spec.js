@@ -9,7 +9,7 @@ exports.spec = (hp, message, MessageMedia, chat) => {
             }
             if (!query.data.data.phones.length) {
                 return message.reply(
-                    "sorry, failed to search your phone. there is an error."
+                    "maaf, gagal mencari ponsel yang kamu maksud. ada error."
                 );
             }
             this.spek(
@@ -20,7 +20,9 @@ exports.spec = (hp, message, MessageMedia, chat) => {
             );
         })
         .catch((err) => {
-            message.reply("sorry, failed to search your phone.\n\n" + err);
+            message.reply(
+                "maaf, gagal mencari ponsel yang kamu maksud.\n\n" + err
+            );
         });
 };
 
@@ -42,7 +44,9 @@ exports.speq = (hp, message) => {
             message.reply(text);
         })
         .catch((err) => {
-            message.reply("sorry, failed to search your phone.\n\n" + err);
+            message.reply(
+                "maaf, gagal mencari ponsel yang kamu maksud.\n\n" + err
+            );
         });
 };
 
@@ -70,7 +74,9 @@ exports.spek = async (hp, message, MessageMedia, chat) => {
             }
         })
         .catch((err) => {
-            message.reply("sorry, failed to search your phone.\n\n" + err);
+            message.reply(
+                "maaf, gagal mencari ponsel yang kamu maksud.\n\n" + err
+            );
         });
 };
 

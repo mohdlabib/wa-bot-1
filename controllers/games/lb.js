@@ -50,7 +50,7 @@ exports.getLB = (grup) => {
         return { text, mentions };
     } else {
         return {
-            text: `no leaderboard found. play games to earn point and create leaderboard.\n\ntype *-help* to see valid commands`,
+            text: `tidak ada leaderboard ditemukan. mainkan game untuk membuat leaderboard.\n\nketik *-menu* untuk melihat menu. lihat bantuan dengan ketik *-help* atau hubungi owner bot.`,
             mentions: [],
         };
     }

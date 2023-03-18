@@ -31,7 +31,7 @@ exports.getSoal = (grup) => {
     if (!data.length) {
         return {
             play: false,
-            msg: "sorry, question not found.\n\ntype *-lontong* to restart the game.",
+            msg: "maaf, soal tidak ditemukan.\n\nketik *-lontong* untuk restart game.",
         };
     }
     return {
@@ -50,7 +50,7 @@ exports.setStatus = (grup, act) => {
 
 exports.writeSoal = (text) => {
     if (text.length != 2)
-        return "ex. to add a question for Quiz Lontong.\n\n-qdd\n\nlontong\n\n'question'\n\n'answer'";
+        return "ex. untuk menambah soal game Quiz Lontong.\n\n-qdd\n\nlontong\n\n'soal'\n\n'jawaban'";
     const file = fs.readFileSync("./database/" + this.GAME + ".json");
     let data = JSON.parse(file);
     data.push({
@@ -58,16 +58,16 @@ exports.writeSoal = (text) => {
         answer: text[1],
     });
     fs.writeFileSync("./database/" + this.GAME + ".json", JSON.stringify(data));
-    return `successfully added a new question for Quiz Lontong.\n\nthank you for helping me develop this bot.`;
+    return `berhasil menambah soal baru untuk game Quiz Lontong.\n\nterimakasih telah membantu mengembangkan bot ini.`;
 };
 
 exports.end = (grup, chat, act) => {
     let text = "";
     this.setStatus(grup, 0);
-    if (act == -1) text = "times up!\n\n";
+    if (act == -1) text = "waktu habis!\n\n";
     const soal = this.getSoal(grup);
     chat.sendMessage(
-        `*QUIZ LONTONG*\n\n${text}answer : ${soal.answer.toLowerCase()}`
+        `*QUIZ LONTONG*\n\n${text}jawaban : ${soal.answer.toLowerCase()}`
     );
     this.delSoal(grup);
 };

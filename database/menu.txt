@@ -1,65 +1,75 @@
+*Funday Bot,*
+*Dibuat oleh Fikri 'Freack21' Rivandi*
 
-*FREACKBOT,*
-*CREATED BY FIKRI 'Freack21' RIVANDI*
+*NB :*
+- Semua perintah dimulai dengan tanda minus (-).
+- Silahkan hubungi owner jika ada kendala atau ingin premium.
 
+*>> BOT MENU <<*
+*-menu* -> melihat semua menu
+*-help* -> melihat bantuan bot
+*-bot* -> memanggil bot
+*-limit* -> limit untuk user gratis
 
-*>BOT MENU<*
-*-menu* or *-help* -> view all menu
-*-bot* -> summon bot
+*>> FITUR DASAR <<*
+*-groupinfo* -> melihat info grup chat
+*-everyone* atau *-tagall* -> tag semua orang di grup chat
+*-hidetag* -> kirim pesan dan tag semua orang di grup chat
 
-*>BASIC FEATURES<*
-*-groupinfo* -> see group info
-*-everyone* or *-tagall* -> tag everyone in group
-*-hidetag* -> send a message and tag everyone
+*>> STIKER & MEDIA <<*
+*-sticker* atau *-s* -> membuat stiker dari gambar/video/gif
+*-smeme* -> membuat stiker dengan teks
+*-meme* -> menambah teks ke gambar
+*-toimg* atau *-img* -> merubah stiker menjadi gambar
+*-stickers* -> melihat stiker random yang tersedia
+*-emojis* -> melihat platform emoji ke stiker yang tersedia
+*NB :* Untuk stiker random dan emoji ke stiker ada limit harian. Gunakan seperlunya. Donasi ke bot untuk membantu owner mengoptimalkan bot ini.
 
-*>STICKERS & MEDIA<*
-*-sticker* or *-s* -> make sticker
-*-stickers* -> view available random stickers
-*-smeme* -> make meme sticker
-*-meme* -> make meme from image
-*-emojis* -> view available emoji to sticker platform
-*-toimg* or *-img* -> convert sticker to image
+*>> DOWNLOADER <<*
+*-yt* atau *-ytvid* 'url' -> download video dari YouTube
+*-ytaudio* 'url' -> download audio dari YouTube
+*-tt* atau *-tiktok* 'url' -> download video dan audio dari TikTok
+*-ig* 'url' -> download video dari Instagram
+*NB :* Untuk semua fitur downloader ada limit harian. Gunakan seperlunya. Donasi ke bot untuk membantu owner mengoptimalkan bot ini.
 
-*>DOWNLOADER<*
-*-yt* or *-ytvid* 'url' -> download video from YouTube
-*-ytaudio* 'url' -> download audio from YouTube
-*-tt* or *-tiktok* 'url' -> download video and audio from TikTok
-*-ig* 'url' -> download video from Instagram
+*>> IBADAH <<*
+*-solat* atau *-salat* 'kota' -> lihat jadwal solat
+*-doa* all -> lihat semua doa
+*-doa* 'name' -> cari doa
 
-*>PRAY<*
-*-solat* or *-salat* 'city' -> view Solat Schedule
-*-doa* 'all' -> view all available doa
-*-doa* 'name' -> view doa
+*>> SPESIFIKASI HP <<*
+*-speq* 'keyword' -> cari daftar hp dengan keyword
+*-spec* 'nama hp' -> cek spesifikasi hp dari nama hp
+*-spek* 'keyword' -> cek spesifikasi hp dengan keyword
 
-*>PHONE SPECIFICATIONS<*
-*-speq* 'keyword' -> search phones name by keyword
-*-spec* 'phone name' -> check specifications phone by query
-*-spek* 'keyword' -> check specifications phone by keyword
+*>> AI & TRANSLATE <<*
+*-ai* atau *-t* -> berbicara / bertanya dengan AI
+*-tlen* -> translate ke english
+*-tlin* atau *-tlid* -> translate ke bahasa indonesia
+*-stden* -> membenarkan kalimat ke Grammatical Standard English
 
-*>AI<*
-*-ai* or *-t* -> talking with bot
-*-tlen* -> translate to english
-*-tlin* or *-tlid* -> translate to bahasa indonesia
-*-stden* -> correct sentences to Grammatical Standard English
-
-*>GAMES<*
-*-gamecodes* -> view available gamecode
+*>> GAMES <<*
+*-gamecodes* -> lihat gamecode yang tersedia
 *-fam* -> start Family100
 *-lontong* -> start Quiz Lontong
 *-caklontong* -> start Cak Lontong
 *-tebakkata* -> start Tebak Kata
 *-tebaklirik* -> start Tebak Lirik
 *-tebakkalimat* -> start Tebak Kalimat
+*-tekateki* -> start Tebak Kalimat
 *-qdd* -> add question for selected gamecode
 *-stop* 'gamecode' -> stop game from selected gamecode
 *-lb* -> view leaderboard in this group
+*NB :* Untuk game caklontong, tebakkata, tebaklirik, tebakkalimat, dan tekateki ada limit harian. Gunakan seperlunya. Donasi ke bot untuk membantu owner mengoptimalkan bot ini.
 
-*>NEWS<*
+*>> BERITA <<*
 *-cnn* 'category' -> search news by category in CNN indonesia
 *-category* 'newsportal' -> view available categories of newsportal
 
 
-Stalk Me :
+*>> Owner Contact <<*
+
+WhatsApp : http://wa.me/6282286230830
 
 Facebook : http://facebook.com/fkrvndii
 

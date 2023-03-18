@@ -1,5 +1,6 @@
 const { stickers } = require("../utils/autoMsg");
 const fs = require("fs");
+const { AlphaKey } = require("../utils/apikey");
 
 exports.generate = async (char, message, MessageMedia) => {
     try {
@@ -27,24 +28,24 @@ exports.generate = async (char, message, MessageMedia) => {
             "https://api.zeeoneofc.my.id/api/telegram-sticker/" +
                 char +
                 "?apikey=" +
-                process.env.Alpha_API_KEY,
+                AlphaKey(),
             { unsafeMime: true }
         );
         stickers(message, img);
     } catch (error) {
-        message.reply(`*failed to create sticker.*\ntry again!\n\n` + error);
+        message.reply(`*gagal membuat stiker.*\ncoba lagi!\n\n` + error);
     }
 };
 
 exports.emoji = async (platform, char, message, MessageMedia) => {
     try {
         const img = await MessageMedia.fromUrl(
-            `https://api.zeeoneofc.my.id/api/emoji/${platform}?apikey=${process.env.Alpha_API_KEY}&emoji=${char}`,
+            `https://api.zeeoneofc.my.id/api/emoji/${platform}?apikey=${AlphaKey()}&emoji=${char}`,
             { unsafeMime: true }
         );
         stickers(message, img);
         // let media = await MessageMedia.fromUrl(
-        //     `https://api.zeeoneofc.my.id/api/emoji/${platform}?apikey=${process.env.Alpha_API_KEY}&emoji=${char}`,
+        //     `https://api.zeeoneofc.my.id/api/emoji/${platform}?apikey=${AlphaKey()}&emoji=${char}`,
         //     { unsafeMime: true }
         // );
         // if (media) {
@@ -68,6 +69,6 @@ exports.emoji = async (platform, char, message, MessageMedia) => {
     } catch (err) {
         // console.log("failed to save:", err);
         // console.log(`file deleted!`, err);
-        message.reply(`*failed to create sticker.*\ntry again!\n\n` + err);
+        message.reply(`*gagal membuat stiker.*\ncoba lagi!\n\n` + err);
     }
 };
