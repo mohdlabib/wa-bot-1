@@ -6,17 +6,17 @@ exports.TIME = 90;
 let times = [];
 let interval = null;
 
-exports.caklontong = async (grup) => {
+exports.caklontong = async (grup, user) => {
     return new Promise((resolve, reject) => {
         axios
             .get(
                 "https://api.zeeoneofc.my.id/api/game/caklontong?apikey=" +
-                    AlphaKey()
+                    AlphaKey(user)
             )
             .then((res) => {
                 let response = res.data;
                 if (response.status != 200) {
-                    reject({
+                    resolve({
                         play: false,
                         text: response.message,
                     });
@@ -41,25 +41,32 @@ exports.caklontong = async (grup) => {
                 });
             })
             .catch((err) => {
-                reject({
-                    play: false,
-                    text: err,
-                });
+                if (err.response.status == 403) {
+                    resolve({
+                        play: false,
+                        text: "Maaf, limit dari pengguna gratis telah tercapai. Harap menunggu esok hari agar limit refresh kembali. Hubungi owner bot untuk upgrade ke Premium. Terimakasih :)",
+                    });
+                } else {
+                    resolve({
+                        play: false,
+                        text: err,
+                    });
+                }
             });
     });
 };
 
-exports.tebakkata = async (grup) => {
+exports.tebakkata = async (grup, user) => {
     return new Promise((resolve, reject) => {
         axios
             .get(
                 "https://api.zeeoneofc.my.id/api/game/tebakkata?apikey=" +
-                    AlphaKey()
+                    AlphaKey(user)
             )
             .then((res) => {
                 let response = res.data;
                 if (response.status != 200) {
-                    reject({
+                    resolve({
                         play: false,
                         text: response.message,
                     });
@@ -82,25 +89,32 @@ exports.tebakkata = async (grup) => {
                 });
             })
             .catch((err) => {
-                reject({
-                    play: false,
-                    text: err,
-                });
+                if (err.response.status == 403) {
+                    resolve({
+                        play: false,
+                        text: "Maaf, limit dari pengguna gratis telah tercapai. Harap menunggu esok hari agar limit refresh kembali. Hubungi owner bot untuk upgrade ke Premium. Terimakasih :)",
+                    });
+                } else {
+                    resolve({
+                        play: false,
+                        text: err,
+                    });
+                }
             });
     });
 };
 
-exports.tekateki = async (grup) => {
+exports.tekateki = async (grup, user) => {
     return new Promise((resolve, reject) => {
         axios
             .get(
                 "https://api.zeeoneofc.my.id/api/game/tekateki?apikey=" +
-                    AlphaKey()
+                    AlphaKey(user)
             )
             .then((res) => {
                 let response = res.data;
                 if (response.status != 200) {
-                    reject({
+                    resolve({
                         play: false,
                         text: response.message,
                     });
@@ -123,25 +137,32 @@ exports.tekateki = async (grup) => {
                 });
             })
             .catch((err) => {
-                reject({
-                    play: false,
-                    text: err,
-                });
+                if (err.response.status == 403) {
+                    resolve({
+                        play: false,
+                        text: "Maaf, limit dari pengguna gratis telah tercapai. Harap menunggu esok hari agar limit refresh kembali. Hubungi owner bot untuk upgrade ke Premium. Terimakasih :)",
+                    });
+                } else {
+                    resolve({
+                        play: false,
+                        text: err,
+                    });
+                }
             });
     });
 };
 
-exports.tebaklirik = async (grup) => {
+exports.tebaklirik = async (grup, user) => {
     return new Promise((resolve, reject) => {
         axios
             .get(
                 "https://api.zeeoneofc.my.id/api/game/tebaklirik?apikey=" +
-                    AlphaKey()
+                    AlphaKey(user)
             )
             .then((res) => {
                 let response = res.data;
                 if (response.status != 200) {
-                    reject({
+                    resolve({
                         play: false,
                         text: response.message,
                     });
@@ -164,25 +185,32 @@ exports.tebaklirik = async (grup) => {
                 });
             })
             .catch((err) => {
-                reject({
-                    play: false,
-                    text: err,
-                });
+                if (err.response.status == 403) {
+                    resolve({
+                        play: false,
+                        text: "Maaf, limit dari pengguna gratis telah tercapai. Harap menunggu esok hari agar limit refresh kembali. Hubungi owner bot untuk upgrade ke Premium. Terimakasih :)",
+                    });
+                } else {
+                    resolve({
+                        play: false,
+                        text: err,
+                    });
+                }
             });
     });
 };
 
-exports.tebakkalimat = async (grup) => {
+exports.tebakkalimat = async (grup, user) => {
     return new Promise((resolve, reject) => {
         axios
             .get(
                 "https://api.zeeoneofc.my.id/api/game/tebakkalimat?apikey=" +
-                    AlphaKey()
+                    AlphaKey(user)
             )
             .then((res) => {
                 let response = res.data;
                 if (response.status != 200) {
-                    reject({
+                    resolve({
                         play: false,
                         text: response.message,
                     });
@@ -205,10 +233,17 @@ exports.tebakkalimat = async (grup) => {
                 });
             })
             .catch((err) => {
-                reject({
-                    play: false,
-                    text: err,
-                });
+                if (err.response.status == 403) {
+                    resolve({
+                        play: false,
+                        text: "Maaf, limit dari pengguna gratis telah tercapai. Harap menunggu esok hari agar limit refresh kembali. Hubungi owner bot untuk upgrade ke Premium. Terimakasih :)",
+                    });
+                } else {
+                    resolve({
+                        play: false,
+                        text: err,
+                    });
+                }
             });
     });
 };

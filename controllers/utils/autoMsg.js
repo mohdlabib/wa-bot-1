@@ -50,7 +50,7 @@ exports.sticker = async (
                             strokeColor: "#000",
                             strokeWeight: 2,
                             textPos: "center",
-                            padding: padding || 40,
+                            padding: padding || 50,
                             // font: "/path/to/font.ttf",
                             // fontFill: "#FFF",
                         };
@@ -229,11 +229,11 @@ exports.jadwalkuliah = (hari, msg) => {
     }
 };
 
-exports.autoBot = (file, msg) => {
+exports.autoBot = (file, msg, mentions) => {
     const readStream = fs.createReadStream("./database/" + file, "utf8");
 
     readStream.on("data", function (chunk) {
-        msg.reply(chunk);
+        msg.reply(chunk, msg.from, { mentions });
     });
 };
 

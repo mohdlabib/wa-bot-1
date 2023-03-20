@@ -43,7 +43,11 @@ const stickers = require("./controllers/api/stickers");
 const { salat, doa } = require("./controllers/api/salat");
 const { ytaudio, yt, tt, ig } = require("./controllers/api/downloader");
 const { json } = require("express");
-const { AlphaKey, AlphaCount } = require("./controllers/utils/apikey");
+const {
+    AlphaKey,
+    AlphaCount,
+    PremiumList,
+} = require("./controllers/utils/apikey");
 const emojisCmd = [
     "Apple",
     "Google",
@@ -103,8 +107,8 @@ const client = new Client({
             "--single-process", // <- this one doesn't works in Windows
             "--disable-gpu",
         ],
-        executablePath: "/usr/bin/google-chrome-stable",
-        // executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe",
+        // executablePath: "/usr/bin/google-chrome-stable",
+        executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe",
     },
     authStrategy: new LocalAuth(),
 });
@@ -112,6 +116,7 @@ const client = new Client({
 const app = express();
 const server = http.createServer(app);
 const io = socket(server);
+const owner = "6282286230830@c.us";
 
 app.use(express.json());
 app.use(
@@ -132,16 +137,21 @@ app.get("/", (req, res) => {
     }
 });
 
+if (new Date().getHours == 0) {
+    AlphaCount(0, "all", "all");
+}
+
 client.on("message", async (message) => {
     // console.log(message.body);
+    // console.log(message);
     let chat = await message.getChat();
+    let contact = await client.getContactById(message.author || message.from);
+    let user = contact.id._serialized;
     await chat.sendSeen();
-    // if (
-    //     !(await chat.getContact()).isMyContact &&
-    //     message.body.startsWith("-")
-    // ) {
+    // if (!contact.isMyContact && message.body.startsWith("-")) {
+    // const mentions = [await client.getContactById(owner)];
     //     message.reply(
-    //         "Maaf, bot sedang maintenance. Upgrade ke premium untuk ikut mencoba bot saat maintenance. Hubungi owner bot, Fikri Rivandi (http://wa.me/6282286230830)."
+    //         "Maaf, bot sedang maintenance. Upgrade ke premium untuk ikut mencoba bot saat maintenance. Hubungi owner bot, @"+mentions[0].id.user+".", {mentions}
     //     );
     //     return;
     // }
@@ -151,7 +161,13 @@ client.on("message", async (message) => {
     } catch (error) {
         console.log("failed get quoted message");
     }
-    if (new Date().getHours() == 0) AlphaKey(-1);
+    if (message.body.startsWith("-resetlimit")) {
+        AlphaCount(0, -1, message.body.split(" ")[1]);
+        message.reply(
+            "limit user " + message.body.split(" ")[1] + " sudah di reset."
+        );
+        return;
+    }
 
     //api
     if (
@@ -193,7 +209,7 @@ client.on("message", async (message) => {
         const text = message.body.slice("-smeme ".length).split("|");
         if (text.length < 1)
             return message.reply(
-                "format salah. ketik *-smeme* TEKS ATAS|TEKS BAWAH|JARAK TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT untuk membuat stiker dengan teks (meme)."
+                "format salah. ketik *-smeme* TEKS ATAS|TEKS BAWAH|JARAK TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT untuk membuat stiker dengan teks (meme).\n\nketik *-help* untuk melihat bantuan."
             );
         sticker(
             message,
@@ -205,14 +221,50 @@ client.on("message", async (message) => {
             Number(text[3])
         );
     } else if (message.body === "-limit") {
-        message.reply(AlphaCount().toString());
+        let limit = AlphaCount(0, 0, user);
+        message.reply(
+            "limit user " + limit.name.split("|")[1] + " -> " + limit.hit
+        );
+    } else if (
+        message.body === "-premiumlist" ||
+        message.body === "-listpremium"
+    ) {
+        let premium = PremiumList();
+        let prm = "*List User Premium Funday Bot*\n",
+            no = 1,
+            mentions = [];
+        for (const pr of premium) {
+            for (const p of pr.user) {
+                const contact = await client.getContactById(p);
+                prm += `\n${no++}. @${contact.id.user}`;
+                mentions.push(contact);
+            }
+        }
+        if (!premium.length) prm += "\nTidak ada User Premium";
+        prm +=
+            "\n\n*NB :* ketik *-jadipremium* atau *-addpremium* atau *-premium* untuk daftar jadi User Premium.";
+        await message.reply(prm, message.from, {
+            mentions,
+        });
+    } else if (
+        message.body === "-premium" ||
+        message.body === "-addpremium" ||
+        message.body === "-jadipremium"
+    ) {
+        const mentions = [await client.getContactById(owner)];
+        await message.reply(
+            `Upgrade ke premium dengan harga terjangkau.\n\n*List Paket Premium Funday Bot*\n1. 5k/bulan -> 350 perintah (downloader, stiker random, emoji ke stiker, dan games)/hari\n2. 10k/bulan -> 1000 perintah (downloader, stiker random, emoji ke stiker, dan games)/hari\n3. 15k/bulan -> 1750 perintah (downloader, stiker random, emoji ke stiker, dan games)/hari\n4. 20k/bulan -> 3000 perintah (downloader, stiker random, emoji ke stiker, dan games)/hari\n5. 25k/bulan -> 7500 perintah (downloader, stiker random, emoji ke stiker, dan games)/hari\n6. Donasi seikhlasnya -> 100-200 perintah (downloader, stiker random, emoji ke stiker, dan games)/hari\n\nTertarik? Hubungi owner bot, @${mentions[0].id.user}.`,
+            message.from,
+            { mentions }
+        );
     } else if (message.body === "-stickers") {
         let gcs = "*stiker random yang tersedia*\n";
         stickersCmd.forEach((gc) => {
             gcs += `\n-${gc.toLowerCase()}`;
         });
         if (!stickersCmd.length) gcs += "\nnone";
-        gcs += "\n\nketik *-menu* untuk melihat semua menu.";
+        gcs +=
+            "\n\nketik *-menu* untuk melihat semua menu.\nketik *-help* untuk melihat bantuan.";
         message.reply(gcs);
     } else if (message.body === "-emojis") {
         let gcs = "*platform emoji ke stiker yang tersedia*\n";
@@ -221,7 +273,7 @@ client.on("message", async (message) => {
         });
         if (!emojisCmd.length) gcs += "\nnone";
         gcs +=
-            "\n\nperintah :\n-platform-emoji\n\nketik *-menu* untuk melihat semua menu.";
+            "\n\nperintah :\n-platform-emoji\nganti 'emoji' dengan emoji yang ingin dibuat stiker\n\nketik *-menu* untuk melihat semua menu.\nketik *-help* untuk melihat bantuan.";
         message.reply(gcs);
     } else if (message.body === "-mks") {
         let gcs = "*available matakuliah for task TI-B UR 22*\n";
@@ -237,7 +289,7 @@ client.on("message", async (message) => {
         const text = message.body.slice("-meme ".length).split("|");
         if (text.length <= 1)
             return message.reply(
-                "format salah. ketik *-meme* TEKS ATAS|TEKS BAWAH|JARAK TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT untuk membuat teks di gambar (meme)."
+                "format salah. ketik *-meme* TEKS ATAS|TEKS BAWAH|JARAK TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT untuk membuat teks di gambar (meme).\n\nketik *-help* untuk melihat bantuan."
             );
         img(
             message,
@@ -322,7 +374,7 @@ client.on("message", async (message) => {
         const kota = message.body.split(" ")[1];
         if (!kota)
             return message.reply(
-                "format salah. ketik *-solat* 'kota' atau *-shalat* 'kota' untuk melihat Jadwal Solat today."
+                "format salah. ketik *-solat* atau *-shalat* 'kota' (tanpa tanda kutip) untuk melihat Jadwal Solat hari ini.\n\nketik *-help* untuk melihat bantuan."
             );
         salat(kota.toLowerCase(), message);
     } else if (message.body === "-spku") {
@@ -331,17 +383,17 @@ client.on("message", async (message) => {
         const doaa = message.body.slice("-doa ".length);
         if (!doaa)
             return message.reply(
-                "format salah. ketik *-doa* 'nama doa' (tanpa tanda kutip) untuk mencari Doa."
+                "format salah. ketik *-doa* 'nama doa' (tanpa tanda kutip) untuk mencari Doa.\n\nketik *-help* untuk melihat bantuan."
             );
         doa(doaa.toLowerCase(), message);
     } else if (message.body.startsWith("-ytaudio")) {
         let url = message.body.split(" ")[1];
         if (!url && !qtmsg)
             return message.reply(
-                "format salah. ketik *-ytaudio* 'url yt' (tanpa tanda kutip) untuk download audio dari YouTube."
+                "format salah. ketik *-ytaudio* 'url yt' (tanpa tanda kutip) untuk download audio dari YouTube.\n\nketik *-help* untuk melihat bantuan."
             );
         if (qtmsg && !url) url = qtmsg.body;
-        ytaudio(url, message, MessageMedia, chat);
+        ytaudio(url, message, MessageMedia, chat, user);
     } else if (
         message.body.startsWith("-yt") ||
         message.body.startsWith("-ytvid")
@@ -349,10 +401,10 @@ client.on("message", async (message) => {
         let url = message.body.split(" ")[1];
         if (!url && !qtmsg)
             return message.reply(
-                "format salah. ketik *-ytvid* 'url yt' (tanpa tanda kutip) untuk download video dari YouTube."
+                "format salah. ketik *-ytvid* 'url yt' (tanpa tanda kutip) untuk download video dari YouTube.\n\nketik *-help* untuk melihat bantuan."
             );
         if (qtmsg && !url) url = qtmsg.body;
-        yt(url, message, MessageMedia, chat);
+        yt(url, message, MessageMedia, chat, user);
     } else if (
         message.body.startsWith("-tt") ||
         message.body.startsWith("-tiktok")
@@ -360,18 +412,18 @@ client.on("message", async (message) => {
         let url = message.body.split(" ")[1];
         if (!url && !qtmsg)
             return message.reply(
-                "format salah. ketik *-tt* 'url tiktok' (tanpa tanda kutip) untuk download video dan audio dari TikTok."
+                "format salah. ketik *-tt* 'url tiktok' (tanpa tanda kutip) untuk download video dan audio dari TikTok.\n\nketik *-help* untuk melihat bantuan."
             );
         if (qtmsg && !url) url = qtmsg.body;
-        tt(url, message);
+        tt(url, message, user);
     } else if (message.body.startsWith("-ig")) {
         let url = message.body.split(" ")[1];
         if (!url && !qtmsg)
             return message.reply(
-                "format salah. ketik *-ig* 'url ig' (tanpa tanda kutip) untuk download video dari Instagram."
+                "format salah. ketik *-ig* 'url ig' (tanpa tanda kutip) untuk download video dari Instagram.\n\nketik *-help* untuk melihat bantuan."
             );
         if (qtmsg && !url) url = qtmsg.body;
-        ig(url, message, MessageMedia);
+        ig(url, message, MessageMedia, user);
     } else if (message.body === "-everyone" || message.body === "-tagall") {
         if (chat.isGroup) {
             let text = "";
@@ -559,9 +611,15 @@ client.on("message", async (message) => {
             try {
                 const game = status.setStatus(chat.id.user, 1, "caklontong");
                 if (game.status) {
-                    const caklontong = await games.caklontong(chat.id.user);
+                    const caklontong = await games.caklontong(
+                        chat.id.user,
+                        user
+                    );
                     message.reply(caklontong.text);
-                    if (!caklontong.play) return;
+                    if (!caklontong.play) {
+                        status.setStatus(chat.id.user, 0, "caklontong");
+                        return;
+                    }
                     games.timer(chat.id.user, chat, "caklontong");
                 } else {
                     message.reply(game.msg);
@@ -579,9 +637,12 @@ client.on("message", async (message) => {
             try {
                 const game = status.setStatus(chat.id.user, 1, "tebakkata");
                 if (game.status) {
-                    const tebakkata = await games.tebakkata(chat.id.user);
+                    const tebakkata = await games.tebakkata(chat.id.user, user);
                     message.reply(tebakkata.text);
-                    if (!tebakkata.play) return;
+                    if (!tebakkata.play) {
+                        status.setStatus(chat.id.user, 0, "tebakkata");
+                        return;
+                    }
                     games.timer(chat.id.user, chat, "tebakkata");
                 } else {
                     message.reply(game.msg);
@@ -599,9 +660,12 @@ client.on("message", async (message) => {
             try {
                 const game = status.setStatus(chat.id.user, 1, "tekateki");
                 if (game.status) {
-                    const tekateki = await games.tekateki(chat.id.user);
+                    const tekateki = await games.tekateki(chat.id.user, user);
                     message.reply(tekateki.text);
-                    if (!tekateki.play) return;
+                    if (!tekateki.play) {
+                        status.setStatus(chat.id.user, 0, "tekateki");
+                        return;
+                    }
                     games.timer(chat.id.user, chat, "tekateki");
                 } else {
                     message.reply(game.msg);
@@ -619,9 +683,15 @@ client.on("message", async (message) => {
             try {
                 const game = status.setStatus(chat.id.user, 1, "tebaklirik");
                 if (game.status) {
-                    const tebaklirik = await games.tebaklirik(chat.id.user);
+                    const tebaklirik = await games.tebaklirik(
+                        chat.id.user,
+                        user
+                    );
                     message.reply(tebaklirik.text);
-                    if (!tebaklirik.play) return;
+                    if (!tebaklirik.play) {
+                        status.setStatus(chat.id.user, 0, "tebaklirik");
+                        return;
+                    }
                     games.timer(chat.id.user, chat, "tebaklirik");
                 } else {
                     message.reply(game.msg);
@@ -639,9 +709,15 @@ client.on("message", async (message) => {
             try {
                 const game = status.setStatus(chat.id.user, 1, "tebakkalimat");
                 if (game.status) {
-                    const tebakkalimat = await games.tebakkalimat(chat.id.user);
+                    const tebakkalimat = await games.tebakkalimat(
+                        chat.id.user,
+                        user
+                    );
                     message.reply(tebakkalimat.text);
-                    if (!tebakkalimat.play) return;
+                    if (!tebakkalimat.play) {
+                        status.setStatus(chat.id.user, 0, "tebakkalimat");
+                        return;
+                    }
                     games.timer(chat.id.user, chat, "tebakkalimat");
                 } else {
                     message.reply(game.msg);
@@ -733,14 +809,20 @@ client.on("message", async (message) => {
         stickersCmd.forEach((el) => {
             if (el.toLowerCase() == cmd) {
                 nocmd = false;
-                return stickers.generate(cmd, message, MessageMedia);
+                return stickers.generate(cmd, message, MessageMedia, user);
             }
         });
         if (char) {
             emojisCmd.forEach((el) => {
                 if (el.toLowerCase() == cmd) {
                     nocmd = false;
-                    return stickers.emoji(cmd, char, message, MessageMedia);
+                    return stickers.emoji(
+                        cmd,
+                        char,
+                        message,
+                        MessageMedia,
+                        user
+                    );
                 }
             });
         }
@@ -765,9 +847,6 @@ client.on("message", async (message) => {
                                 message.body.toLowerCase()
                             ) {
                                 let extra = "";
-                                let contact = await client.getContactById(
-                                    message.author
-                                );
                                 lb.setLB(
                                     chat.id.user,
                                     {
@@ -779,7 +858,7 @@ client.on("message", async (message) => {
                                     soal.reward
                                 );
                                 if (soal.answer.length == 1) {
-                                    extra = `hebat! game telah selesai.\nketik *-lb* untuk melihat leaderboard.`;
+                                    extra = `hebat! game telah selesai.\n\nketik *-lb* untuk melihat leaderboard.`;
                                     fam.setStatus(chat.id.user, 0);
                                     fam.delSoal(chat.id.user);
                                 } else {
@@ -802,13 +881,10 @@ client.on("message", async (message) => {
                             message.body.toLowerCase()
                         ) {
                             message.reply(
-                                `*QUIZ LONTONG*\n\njawaban benar. +${soal.reward} point.\nketik *-lb* untuk melihat leaderboard.`
+                                `*QUIZ LONTONG*\n\njawaban benar. +${soal.reward} point.\n\nketik *-lb* untuk melihat leaderboard.`
                             );
                             lontong.setStatus(chat.id.user, 0);
                             lontong.delSoal(chat.id.user);
-                            let contact = await client.getContactById(
-                                message.author
-                            );
                             lb.setLB(
                                 chat.id.user,
                                 {
@@ -836,9 +912,6 @@ client.on("message", async (message) => {
                             );
                             status.setStatus(chat.id.user, 0, "caklontong");
                             games.destroy(chat.id.user, "caklontong");
-                            let contact = await client.getContactById(
-                                message.author
-                            );
                             lb.setLB(
                                 chat.id.user,
                                 {
@@ -864,9 +937,6 @@ client.on("message", async (message) => {
                             );
                             status.setStatus(chat.id.user, 0, "tebakkata");
                             games.destroy(chat.id.user, "tebakkata");
-                            let contact = await client.getContactById(
-                                message.author
-                            );
                             lb.setLB(
                                 chat.id.user,
                                 {
@@ -889,9 +959,6 @@ client.on("message", async (message) => {
                             );
                             status.setStatus(chat.id.user, 0, "tekateki");
                             games.destroy(chat.id.user, "tekateki");
-                            let contact = await client.getContactById(
-                                message.author
-                            );
                             lb.setLB(
                                 chat.id.user,
                                 {
@@ -917,9 +984,6 @@ client.on("message", async (message) => {
                             );
                             status.setStatus(chat.id.user, 0, "tebaklirik");
                             games.destroy(chat.id.user, "tebaklirik");
-                            let contact = await client.getContactById(
-                                message.author
-                            );
                             lb.setLB(
                                 chat.id.user,
                                 {
@@ -945,9 +1009,6 @@ client.on("message", async (message) => {
                             );
                             status.setStatus(chat.id.user, 0, "tebakkalimat");
                             games.destroy(chat.id.user, "tebakkalimat");
-                            let contact = await client.getContactById(
-                                message.author
-                            );
                             lb.setLB(
                                 chat.id.user,
                                 {

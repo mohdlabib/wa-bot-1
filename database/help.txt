@@ -5,6 +5,14 @@
 - Semua perintah dimulai dengan tanda minus (-).
 - Silahkan hubungi owner jika ada kendala atau ingin premium.
 
+*>> PREMIUM & LIMIT <<*
+*-limit* -> melihat sisa limit perintah spesial (downloader, stiker random, emoji ke stiker, dan games).
+
+*-premium* atau *-jadipremium* atau *-addpremium* -> daftar menjadi User Premium.
+
+*-premiumlist* atau *-listpremium* -> daftar User Premium Funday Bot.
+
+
 *>> STIKER & MEDIA <<*
 *-sticker* atau *-s* -> kirim atau balas gambar/video/gif yang sudah ada dengan perintah ini.
 
@@ -71,7 +79,7 @@ CONTOH : -ig http://ig.com/video1
 
 *>> Owner Contact <<*
 
-WhatsApp : http://wa.me/6282286230830
+WhatsApp : @6282286230830
 
 Facebook : http://facebook.com/fkrvndii
 

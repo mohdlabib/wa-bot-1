@@ -9,7 +9,11 @@
 *-menu* -> melihat semua menu
 *-help* -> melihat bantuan bot
 *-bot* -> memanggil bot
-*-limit* -> limit untuk user gratis
+
+*>> PREMIUM & LIMIT <<*
+*-limit* -> melihat sisa limit perintah spesial (downloader, stiker random, emoji ke stiker, dan games).
+*-premium* atau *-jadipremium* atau *-addpremium* -> daftar menjadi User Premium.
+*-premiumlist* atau *-listpremium* -> daftar User Premium Funday Bot.
 
 *>> FITUR DASAR <<*
 *-groupinfo* -> melihat info grup chat
@@ -23,6 +27,7 @@
 *-toimg* atau *-img* -> merubah stiker menjadi gambar
 *-stickers* -> melihat stiker random yang tersedia
 *-emojis* -> melihat platform emoji ke stiker yang tersedia
+
 *NB :* Untuk stiker random dan emoji ke stiker ada limit harian. Gunakan seperlunya. Donasi ke bot untuk membantu owner mengoptimalkan bot ini.
 
 *>> DOWNLOADER <<*
@@ -30,6 +35,7 @@
 *-ytaudio* 'url' -> download audio dari YouTube
 *-tt* atau *-tiktok* 'url' -> download video dan audio dari TikTok
 *-ig* 'url' -> download video dari Instagram
+
 *NB :* Untuk semua fitur downloader ada limit harian. Gunakan seperlunya. Donasi ke bot untuk membantu owner mengoptimalkan bot ini.
 
 *>> IBADAH <<*
@@ -60,16 +66,24 @@
 *-qdd* -> add question for selected gamecode
 *-stop* 'gamecode' -> stop game from selected gamecode
 *-lb* -> view leaderboard in this group
+
 *NB :* Untuk game caklontong, tebakkata, tebaklirik, tebakkalimat, dan tekateki ada limit harian. Gunakan seperlunya. Donasi ke bot untuk membantu owner mengoptimalkan bot ini.
 
 *>> BERITA <<*
 *-cnn* 'category' -> search news by category in CNN indonesia
 *-category* 'newsportal' -> view available categories of newsportal
 
+*>> FITUR YANG SEGERA DATANG <<*
+*-quran* -> menampilkan surah, beserta arti, data, dan tafsirnya.
+*-nsfw* -> auto generate Anime Character
+dan banyak lagi lainnya..
+
+*NB :* Semakin banyak yang Premium, semakin cepat fitur baru update.
+
 
 *>> Owner Contact <<*
 
-WhatsApp : http://wa.me/6282286230830
+WhatsApp : @6282286230830
 
 Facebook : http://facebook.com/fkrvndii
 

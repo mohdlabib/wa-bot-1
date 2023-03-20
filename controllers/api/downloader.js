@@ -2,36 +2,42 @@ const { default: axios } = require("axios");
 const { error } = require("../utils/autoMsg");
 const { AlphaKey } = require("../utils/apikey");
 
-exports.ytaudio = (url, msg, MessageMedia, chat) => {
-    try {
-        axios
-            .get(
-                `https://api.zeeoneofc.my.id/api/downloader/youtube-audio?url=${url}&apikey=${AlphaKey()}`
-            )
-            .then(async (response) => {
-                let data = response.data;
-                if (data.status) {
-                    data = data.result;
-                    const caption = `*YouTube Audio Downloader*\n\nTitle : ${data.title}\n\nQuality : ${data.quality}\n\nFilesize : ${data.filesize}\n\nDownload : ${data.download}\n`;
-                    const media = await MessageMedia.fromUrl(data.download, {
-                        unsafeMime: true,
-                    });
-                    msg.reply(caption);
-                    await chat.sendMessage(media);
-                }
-            })
-            .catch((err) => {
-                error(msg, err);
-            });
-    } catch (err) {
-        error(msg, err);
-    }
-};
-
-exports.yt = (url, msg, MessageMedia, chat) => {
+exports.ytaudio = (url, msg, MessageMedia, chat, user) => {
     axios
         .get(
-            `https://api.zeeoneofc.my.id/api/downloader/youtube-video?url=${url}&apikey=${AlphaKey()}`
+            `https://api.zeeoneofc.my.id/api/downloader/youtube-audio?url=${url}&apikey=${AlphaKey(
+                user
+            )}`
+        )
+        .then(async (response) => {
+            let data = response.data;
+            if (data.status) {
+                data = data.result;
+                const caption = `*YouTube Audio Downloader*\n\nTitle : ${data.title}\n\nQuality : ${data.quality}\n\nFilesize : ${data.filesize}\n\nDownload : ${data.download}\n`;
+                const media = await MessageMedia.fromUrl(data.download, {
+                    unsafeMime: true,
+                });
+                msg.reply(caption);
+                await chat.sendMessage(media);
+            }
+        })
+        .catch((err) => {
+            if (err.response.status == 403) {
+                msg.reply(
+                    "Maaf, limit dari pengguna gratis telah tercapai. Harap menunggu esok hari agar limit refresh kembali. Hubungi owner bot untuk upgrade ke Premium. Terimakasih :)"
+                );
+                return;
+            }
+            error(msg, err);
+        });
+};
+
+exports.yt = (url, msg, MessageMedia, chat, user) => {
+    axios
+        .get(
+            `https://api.zeeoneofc.my.id/api/downloader/youtube-video?url=${url}&apikey=${AlphaKey(
+                user
+            )}`
         )
         .then(async (response) => {
             let data = response.data;
@@ -46,14 +52,22 @@ exports.yt = (url, msg, MessageMedia, chat) => {
             }
         })
         .catch((err) => {
+            if (err.response.status == 403) {
+                msg.reply(
+                    "Maaf, limit dari pengguna gratis telah tercapai. Harap menunggu esok hari agar limit refresh kembali. Hubungi owner bot untuk upgrade ke Premium. Terimakasih :)"
+                );
+                return;
+            }
             error(msg, err);
         });
 };
 
-exports.tt = (url, msg) => {
+exports.tt = (url, msg, user) => {
     axios
         .get(
-            `https://api.zeeoneofc.my.id/api/downloader/tiktok?url=${url}&apikey=${AlphaKey()}`
+            `https://api.zeeoneofc.my.id/api/downloader/tiktok?url=${url}&apikey=${AlphaKey(
+                user
+            )}`
         )
         .then(async (response) => {
             let data = response.data;
@@ -65,14 +79,22 @@ exports.tt = (url, msg) => {
             }
         })
         .catch((err) => {
+            if (err.response.status == 403) {
+                msg.reply(
+                    "Maaf, limit dari pengguna gratis telah tercapai. Harap menunggu esok hari agar limit refresh kembali. Hubungi owner bot untuk upgrade ke Premium. Terimakasih :)"
+                );
+                return;
+            }
             error(msg, err);
         });
 };
 
-exports.ig = (url, msg, MessageMedia) => {
+exports.ig = (url, msg, MessageMedia, user) => {
     axios
         .get(
-            `https://api.zeeoneofc.my.id/api/downloader/instagram-video?url=${url}&apikey=${AlphaKey()}`
+            `https://api.zeeoneofc.my.id/api/downloader/instagram-video?url=${url}&apikey=${AlphaKey(
+                user
+            )}`
         )
         .then(async (response) => {
             let data = response.data;
@@ -87,6 +109,12 @@ exports.ig = (url, msg, MessageMedia) => {
             }
         })
         .catch((err) => {
+            if (err.response.status == 403) {
+                msg.reply(
+                    "Maaf, limit dari pengguna gratis telah tercapai. Harap menunggu esok hari agar limit refresh kembali. Hubungi owner bot untuk upgrade ke Premium. Terimakasih :)"
+                );
+                return;
+            }
             error(msg, err);
         });
 };
