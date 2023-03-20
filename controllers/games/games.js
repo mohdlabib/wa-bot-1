@@ -2,6 +2,7 @@ const { default: axios } = require("axios");
 const { rand, getStatus, setStatus } = require("./status");
 const fs = require("fs");
 const { AlphaKey } = require("../utils/apikey");
+const { premiumNotifyText } = require("../utils/autoMsg");
 exports.TIME = 90;
 let times = [];
 let interval = null;
@@ -21,10 +22,11 @@ exports.caklontong = async (grup, user) => {
                         text: response.message,
                     });
                 }
-                response = response.result.data;
+                response = response.result;
+                response.jawaban = response.jawaban.trim();
                 response.reward = rand(25, 50);
                 const text =
-                    "*CAK LONTONG*\n\n" +
+                    "*✱ CAK LONTONG ✱*\n\n" +
                     response.soal +
                     "\n\n" +
                     clue(response.jawaban) +
@@ -44,7 +46,7 @@ exports.caklontong = async (grup, user) => {
                 if (err.response.status == 403) {
                     resolve({
                         play: false,
-                        text: "Maaf, limit dari pengguna gratis telah tercapai. Harap menunggu esok hari agar limit refresh kembali. Hubungi owner bot untuk upgrade ke Premium. Terimakasih :)",
+                        text: premiumNotifyText,
                     });
                 } else {
                     resolve({
@@ -72,9 +74,10 @@ exports.tebakkata = async (grup, user) => {
                     });
                 }
                 response = response.result;
+                response.jawaban = response.jawaban.trim();
                 response.reward = rand(5, 25);
                 const text =
-                    "*TEBAK KATA*\n\nclue : " +
+                    "*✱ TEBAK KATA ✱*\n\nclue : " +
                     response.soal +
                     "\n\n" +
                     response.reward +
@@ -92,7 +95,7 @@ exports.tebakkata = async (grup, user) => {
                 if (err.response.status == 403) {
                     resolve({
                         play: false,
-                        text: "Maaf, limit dari pengguna gratis telah tercapai. Harap menunggu esok hari agar limit refresh kembali. Hubungi owner bot untuk upgrade ke Premium. Terimakasih :)",
+                        text: premiumNotifyText,
                     });
                 } else {
                     resolve({
@@ -120,9 +123,10 @@ exports.tekateki = async (grup, user) => {
                     });
                 }
                 response = response.result;
+                response.jawaban = response.jawaban.trim();
                 response.reward = rand(10, 50);
                 const text =
-                    "*TEKATEKI*\n\nclue : " +
+                    "*✱ TEKATEKI ✱*\n\nclue : " +
                     response.soal +
                     "\n\n" +
                     response.reward +
@@ -140,7 +144,7 @@ exports.tekateki = async (grup, user) => {
                 if (err.response.status == 403) {
                     resolve({
                         play: false,
-                        text: "Maaf, limit dari pengguna gratis telah tercapai. Harap menunggu esok hari agar limit refresh kembali. Hubungi owner bot untuk upgrade ke Premium. Terimakasih :)",
+                        text: premiumNotifyText,
                     });
                 } else {
                     resolve({
@@ -168,9 +172,10 @@ exports.tebaklirik = async (grup, user) => {
                     });
                 }
                 response = response.result;
+                response.jawaban = response.jawaban.trim();
                 response.reward = rand(10, 50);
                 const text =
-                    "*TEBAK LIRIK*\n\n" +
+                    "*✱ TEBAK LIRIK ✱*\n\n" +
                     response.soal +
                     "\n\n" +
                     response.reward +
@@ -188,7 +193,7 @@ exports.tebaklirik = async (grup, user) => {
                 if (err.response.status == 403) {
                     resolve({
                         play: false,
-                        text: "Maaf, limit dari pengguna gratis telah tercapai. Harap menunggu esok hari agar limit refresh kembali. Hubungi owner bot untuk upgrade ke Premium. Terimakasih :)",
+                        text: premiumNotifyText,
                     });
                 } else {
                     resolve({
@@ -216,9 +221,10 @@ exports.tebakkalimat = async (grup, user) => {
                     });
                 }
                 response = response.result;
+                response.jawaban = response.jawaban.trim();
                 response.reward = rand(5, 30);
                 const text =
-                    "*TEBAK KALIMAT*\n\n" +
+                    "*✱ TEBAK KALIMAT ✱*\n\n" +
                     response.soal +
                     "\n\n" +
                     response.reward +
@@ -236,7 +242,56 @@ exports.tebakkalimat = async (grup, user) => {
                 if (err.response.status == 403) {
                     resolve({
                         play: false,
-                        text: "Maaf, limit dari pengguna gratis telah tercapai. Harap menunggu esok hari agar limit refresh kembali. Hubungi owner bot untuk upgrade ke Premium. Terimakasih :)",
+                        text: premiumNotifyText,
+                    });
+                } else {
+                    resolve({
+                        play: false,
+                        text: err,
+                    });
+                }
+            });
+    });
+};
+
+exports.tebakbendera = async (grup, user) => {
+    return new Promise((resolve, reject) => {
+        axios
+            .get(
+                "https://api.zeeoneofc.my.id/api/game/tebakbendera2?apikey=" +
+                    AlphaKey(user)
+            )
+            .then((res) => {
+                let response = res.data;
+                if (response.status != 200) {
+                    resolve({
+                        play: false,
+                        text: response.message,
+                    });
+                }
+                response = response.result;
+                response.name = response.name.trim();
+                response.reward = rand(30, 100);
+                const text =
+                    "*✱ TEBAK BENDERA ✱*\n\nNegara apakah ini?" +
+                    "\n\n" +
+                    response.reward +
+                    " point | " +
+                    this.TIME +
+                    "s";
+
+                setGames(grup, "tebakbendera", response);
+                resolve({
+                    play: true,
+                    text,
+                    img: response.img,
+                });
+            })
+            .catch((err) => {
+                if (err.response.status == 403) {
+                    resolve({
+                        play: false,
+                        text: premiumNotifyText,
                     });
                 } else {
                     resolve({
@@ -262,25 +317,29 @@ exports.end = (grup, chat, gc) => {
     setStatus(grup, 0, gc);
     if (gc == "caklontong")
         chat.sendMessage(
-            `*CAK LONTONG*\n\nwaktu habis!\n\njawaban : ${
+            `*✱ CAK LONTONG ✱*\n\nwaktu habis!\n\njawaban : ${
                 soal.answer
             }\ndeskripsi : ${soal.desc.toLowerCase()}`
         );
     else if (gc == "tebakkata")
         chat.sendMessage(
-            `*TEBAK KATA*\n\nwaktu habis!\n\njawaban : ${soal.answer}`
+            `*✱ TEBAK KATA ✱*\n\nwaktu habis!\n\njawaban : ${soal.answer}`
         );
     else if (gc == "tebaklirik")
         chat.sendMessage(
-            `*TEBAK LIRIK*\n\nwaktu habis!\n\njawaban : ${soal.answer}`
+            `*✱ TEBAK LIRIK ✱*\n\nwaktu habis!\n\njawaban : ${soal.answer}`
         );
     else if (gc == "tekateki")
         chat.sendMessage(
-            `*TEKATEKI*\n\nwaktu habis!\n\njawaban : ${soal.answer}`
+            `*✱ TEKATEKI ✱*\n\nwaktu habis!\n\njawaban : ${soal.answer}`
         );
     else if (gc == "tebakkalimat")
         chat.sendMessage(
-            `*TEBAK KALIMAT*\n\nwaktu habis!\n\njawaban : ${soal.answer}`
+            `*✱ TEBAK KALIMAT ✱*\n\nwaktu habis!\n\njawaban : ${soal.answer}`
+        );
+    else if (gc == "tebakbendera")
+        chat.sendMessage(
+            `*✱ TEBAK BENDERA ✱*\n\nwaktu habis!\n\njawaban : ${soal.name}`
         );
     this.destroy(grup, gc);
 };
@@ -335,8 +394,9 @@ const setGames = (grup, game, response) => {
         game,
         question: response.soal,
         answer: response.jawaban,
-        desc: response.desc,
+        desc: response.deskripsi,
         reward: response.reward,
+        name: response.name,
     });
     fs.writeFileSync("./database/games.json", JSON.stringify(data));
 };
@@ -345,7 +405,8 @@ const getGames = (grup, game) => {
     const file = fs.readFileSync("./database/games.json");
     let data = JSON.parse(file);
     data = data.filter((d) => d.grup == grup && d.game == game);
-    if (!data.length) return { answer: "", reward: 0, desc: "", grup, game };
+    if (!data.length)
+        return { answer: "", reward: 0, desc: "", grup, game, name: "" };
     return data[0];
 };
 
@@ -353,7 +414,13 @@ const deleteGames = (grup, game) => {
     const file = fs.readFileSync("./database/games.json");
     let data = JSON.parse(file);
     const ndata = data.filter((d) => d.grup == grup && d.game == game);
-    data = data.filter((d) => d.grup != grup && d.game != game);
+    // console.log("ndata", ndata);
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].grup == grup && data[i].game == game) {
+            data.splice(i, 1);
+        }
+    }
+    // console.log("data", data);
     if (!ndata.length) return false;
     fs.writeFileSync("./database/games.json", JSON.stringify(data));
     return true;

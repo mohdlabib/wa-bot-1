@@ -64,7 +64,7 @@ exports.setStatus = (grup, act) => {
 
 exports.writeSoal = (text) => {
     if (text.length != 3)
-        return "ex. untuk menambah soal game Family100.\n\n-qdd\n\nfam\n\n'soal'\n\n'jawaban1, jawaban2, jawaban3, ...'\n\n'hadiah'\n\nnb: tanpa tanda kutip.";
+        return "Cara untuk menambah soal game Family100.\n\n-qdd\n\nfam\n\n'soal'\n\n'jawaban1, jawaban2, jawaban3, ...'\n\n'hadiah'\n\n*CATATAN :* tanpa tanda kutip.";
     const file = fs.readFileSync("./database/" + this.GAME + ".json");
     let data = JSON.parse(file);
     data.push({
@@ -73,18 +73,18 @@ exports.writeSoal = (text) => {
         reward: parseInt(text[2]),
     });
     fs.writeFileSync("./database/" + this.GAME + ".json", JSON.stringify(data));
-    return `berhasil menambah soal baru untuk game Family100.\n\nterimakasih telah membantu mengembangkan bot ini.`;
+    return `Berhasil menambah soal baru untuk game Family100.\n\nTerimakasih telah membantu mengembangkan bot ini.`;
 };
 
 exports.end = (grup, chat, act) => {
     let extra = "";
     this.setStatus(grup, 0);
     if (act == -1) {
-        extra = "times up!\n\n";
+        extra = "WAKTU HABIS!\n\n";
     }
     const soal = this.getSoal(grup);
     if (soal.answer.length > 0) {
-        let text = `*FAMILY100*\n\n${extra}*${soal.answer.length} answer(s) remaining*`;
+        let text = `*>> FAMILY100 <<*\n\n${extra}*${soal.answer.length} jawaban tersisa*`;
         soal.answer.forEach((j) => (text += `\n- ${j}`));
         chat.sendMessage(text);
     }

@@ -1,92 +1,189 @@
-*Bantuan untuk Funday Bot*
-*Dibuat oleh Fikri 'Freack21' Rivandi*
+*✱ HELP & GUIDE ✱*
 
-*NB :*
-- Semua perintah dimulai dengan tanda minus (-).
-- Silahkan hubungi owner jika ada kendala atau ingin premium.
+*✲ CATATAN ✲*
+⚠ Perintah dimulai dengan tanda minus (-)
+⚠ Hubungi owner jika ada kendala atau ingin Premium
+⚠ ☆ = Perintah Standar / Gratis
+⚠ ★ = Perintah Spesial / Premium / Limit
 
-*>> PREMIUM & LIMIT <<*
-*-limit* -> melihat sisa limit perintah spesial (downloader, stiker random, emoji ke stiker, dan games).
+*✲ MENU & HELP ✲*
+☆ *-menu* ➔
+    ➮ Melihat semua menu Funday Bot.
+☆ *-help* ➔
+    ➮ Melihat bantuan atau petunjuk penggunaan bot.
+☆ *-bot* ➔
+    ➮ Mengecek bot hidup atau mati.
 
-*-premium* atau *-jadipremium* atau *-addpremium* -> daftar menjadi User Premium.
+*✲ PREMIUM & LIMIT ✲*
+☆ *-limit* ➔
+    ➮ Melihat limitmu untuk Perintah Spesial.
+☆ *-premium* atau *-addpremium* ➔
+    ➮ Mendaftar jadi User Premium.
+☆ *-premiumlist* atau *-listpremium* ➔
+    ➮ Melihat daftar User Premium.
 
-*-premiumlist* atau *-listpremium* -> daftar User Premium Funday Bot.
+*✲ FITUR GRUP ✲*
+☆ *-groupinfo* ➔
+    ➮ Melihat info grup chat.
+☆ *-everyone* atau *-tagall* ➔
+    ➮ Tag semua orang dalam grup chat. Pesan tag terlihat.
+☆ *-hidetag* ➔
+    ➮ Tag semua orang dengan menambahkan pesan. Tag tidak terlihat.
+    ➮ Bisa dengan cara mengirim pesan atau membalas yang ingin diumumkan ke semua anggota grup chat.
+    ➮ Contoh : -hidetag Besok kelas jam berapa?
 
+*✲ STIKER & MEDIA ✲*
+☆ *-sticker* atau *-s* ➔
+    ➮ Membuat stiker dari gambar/video/gif.
+    ➮ Kirim atau balas gambar/video/gif yang sudah ada dengan perintah ini.
+☆ *-smeme* ➔
+    ➮ Membuat stiker dan menambahkan teks kedalam stiker tersebut.
+    ➮ Kirim atau balas gambar/stiker yang sudah ada dengan perintah ini dan beberapa atribut.
+    ➮ Format : -smeme TeksAtas|TeksBawah|JarakTeksDanUjungGambar|UkuranFont
+    ➮ Atribut yang harus ada hanyalah TeksAtas atau TeksBawah.
+    ➮ Atribut bisa diskip dengan menambahkan simbol | sebelum atribut selanjutnya.
+☆ *-meme* ➔
+    ➮ Menambahkan teks kedalam gambar (meme).
+    ➮ Kirim atau balas gambar yang sudah ada dengan perintah ini dan beberapa atribut.
+    ➮ Format : -meme TeksAtas|TeksBawah|JarakTeksDanUjungGambar|UkuranFont
+    ➮ Atribut yang harus ada hanyalah TeksAtas atau TeksBawah.
+    ➮ Atribut bisa diskip dengan menambahkan simbol | sebelum atribut selanjutnya.
+☆ *-toimg* atau *-img* ➔
+    ➮ Mengubah stiker menjadi gambar.
+    ➮ Balas stiker dengan perintah ini.
+☆ *-stickers* ➔
+    ➮ Melihat daftar stiker random yang bisa di-generate.
+☆ *-emojis* ➔
+    ➮ Melihat daftar platform untuk mengubah emoji ke stiker.
 
-*>> STIKER & MEDIA <<*
-*-sticker* atau *-s* -> kirim atau balas gambar/video/gif yang sudah ada dengan perintah ini.
+*✲ STIKER RANDOM ✲*
+    ★ *-patrick*
+    ★ *-popoci*
+    ★ *-sponsbob*
+    ★ *-kawansponsbob*
+    ★ *-awoawo*
+    ★ *-kelinci*
+    ★ *-chat*
+    ★ *-dbfly*
+    ★ *-dinokuning*
+    ★ *-doge*
+    ★ *-gojosatoru*
+    ★ *-hopeboy*
+    ★ *-jisoo*
+    ★ *-krrobot*
+    ★ *-kucing*
+    ★ *-manusialidi*
+    ★ *-menjamet*
+    ★ *-meow*
+    ★ *-nicholas*
+    ★ *-tyni*
+    ➮ Contoh : -patrick
 
-*-smeme* -> kirim atau balas gambar/stiker yang sudah ada dengan perintah ini.
-PERINTAH : -smeme TEKS ATAS|TEKS BAWAH|JARAK ANTARA TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT
-CATATAN : Atribut yang harus ada hanya TEKS ATAS atau TEKS BAWAH. atribut bisa di skip dengan simbol |. Contoh skip TEKS BAWAH, jadi seperti ini,
--smeme TEKS ATAS||JARAK|UKURAN FONT
+*✲ PLATFORM EMOJI KE STIKER ✲*
+    ★ *-apple*
+    ★ *-google*
+    ★ *-samsung*
+    ★ *-microsoft*
+    ★ *-whatsapp*
+    ★ *-twitter*
+    ★ *-facebook*
+    ★ *-joypixels*
+    ★ *-openmoji*
+    ★ *-emojidex*
+    ★ *-messenger*
+    ★ *-lg*
+    ★ *-htc*
+    ★ *-mozilla*
+    ★ *-softbank*
+    ★ *-docomo*
+    ★ *-aubykddi*
+    ➮ Contoh : -joypixels-🙁
 
-*-meme* -> kirim atau balas gambar yang sudah ada dengan perintah ini.
-PERINTAH : -meme TEKS ATAS|TEKS BAWAH|JARAK ANTARA TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT
-CATATAN : Atribut yang harus ada hanya TEKS ATAS atau TEKS BAWAH. atribut bisa di skip dengan simbol |. Contoh skip TEKS BAWAH, jadi seperti ini,
--meme TEKS ATAS||JARAK|UKURAN FONT
+*✲ DOWNLOADER ✲*
+★ *-ytvid* url ➔
+    ➮ Mendownload video dari YouTube.
+    ➮ Contoh : -ytvid http://yt.vid/
+★ *-ytaudio* url ➔
+    ➮ Mendownload audio dari YouTube.
+    ➮ Contoh : -ytaudio http://yt.audio/
+★ *-tt* url ➔
+    ➮ Mendownload audio dan video dari TikTok.
+    ➮ Contoh : -tt http://tt.me/
+★ *-ig* url ➔
+    ➮ Mendownload audio dan video dari Instagram.
+    ➮ Contoh : -ig http://ig.me/
 
-*-toimg* atau *-img* -> balas stiker yang sudah ada dengan perintah ini.
+*✲ IBADAH ✲*
+☆ *-salat* kota ➔
+    ➮ Melihat jadwal Shalat berbagai kota di Indonesia.
+    ➮ Contoh : -salat pekanbaru
+☆ *-doa* namadoa ➔
+    ➮ Melihat berbagai doa.
+    ➮ Contoh : -doa all ➔ lihat semua doa
+    ➮ Contoh : -doa tidur ➔ lihat doa tidur
 
-*-stickers* -> kirim satu perintah random yang tersedia.
+*✲ SPESIFIKASI HP ✲*
+☆ *-speq* keyword ➔
+    ➮ Mencari 10 daftar HP dengan keyword.
+    ➮ Dalam daftar ini terdapat keywordHP yang bisa digunakan untuk perintah *-spek*.
+    ➮ Contoh : -speq redmi 9
+☆ *-spec* namaHP ➔
+    ➮ Mencari spesifikasi HP dengan namaHP.
+    ➮ Hasil perintah ini mungkin tidak sesuai dengan yang user inginkan.
+    ➮ Contoh : -spec redmi 9
+☆ *-spek* keywordHP ➔
+    ➮ Mencari spesifikasi HP dengan keywordHP.
+    ➮ Hasil perintah ini paling sesuai dengan yang user inginkan.
+    ➮ Contoh : -spek redmi-9c-12345
 
-*-emojis* -> kirim satu perintah platform yang tersedia dan diikut dengan emoji yang ingin dibuat stiker.
-CONTOH: -joypixels-emoji
+*✲ AI & TRANSLATE ✲*
+☆ *-ai* atau *-t* ➔
+    ➮ Bertanya ke OpenAI Text Completion.
+    ➮ Masukkan kalimat dengan baik dan benar secara huruf dan tanda baca. Jika tidak lengkap, biasanya AI akan menambahkan tanda baca atau kata yang kurang dari kalimat kamu.
+    ➮ Kirim atau balas pesan dengan perintah ini.
+    ➮ Contoh : -t Apa itu air?
+☆ *-tlen* ➔
+    ➮ Translate ke Bahasa Inggris dengan OpenAI Text Completion.
+    ➮ Masukkan kalimat dengan baik dan benar secara huruf dan tanda baca. Jika tidak lengkap, biasanya AI akan menambahkan tanda baca atau kata yang kurang dari kalimat kamu.
+    ➮ Kirim atau balas pesan dengan perintah ini.
+    ➮ Contoh : -tlen Aku suka coklat.
+☆ *-tlin* atau *-tlid* ➔
+    ➮ Translate ke Bahasa Indonesia dengan OpenAI Text Completion.
+    ➮ Masukkan kalimat dengan baik dan benar secara huruf dan tanda baca. Jika tidak lengkap, biasanya AI akan menambahkan tanda baca atau kata yang kurang dari kalimat kamu.
+    ➮ Kirim atau balas pesan dengan perintah ini.
+    ➮ Contoh : -tlid I love you.
+☆ *-stden* ➔
+    ➮ Mengubah kalimat ke Standard Grammatical dengan OpenAI Text Completion.
+    ➮ Masukkan kalimat dengan baik dan benar secara huruf dan tanda baca. Jika tidak lengkap, biasanya AI akan menambahkan tanda baca atau kata yang kurang dari kalimat kamu.
+    ➮ Kirim atau balas pesan dengan perintah ini.
+    ➮ Contoh : -stden I meet your father yesterday.
 
-*NB :* Untuk stiker random dan emoji ke stiker ada limit harian. Gunakan seperlunya. Donasi ke bot untuk membantu owner mengoptimalkan bot ini.
+*✲ GAMES ✲*
+☆ *-gamecodes* ➔
+    ➮ Melihat daftar GameCode yang bisa dimainkan.
+★ *-qdd* ➔
+    ➮ Menambah soal / pertanyaan ke game di bot ini.
+★ *-stop* gamecode ➔
+    ➮ Menghentikan game yang sedang berjalan dengan GameCodenya.
+    ➮ Contoh : -stop caklontong
+☆ *-lb* ➔
+    ➮ Melihat leaderboard dalam grup chat.
+    ➮ Skor didapatkan dari game yang dimainkan bersama di grup chat.
 
+*✲ BERITA ✲*
+☆ *-cnn* category ➔
+    ➮ Melihat berita berdasarkan dengan kategori.
+    ➮ Contoh : -cnn olahraga
+☆ *-category* newsportal ➔
+    ➮ Melihat daftar kategori berita dari Portal Berita.
+    ➮ Contoh : -category cnn
 
-*>> DOWNLOADER <<*
-*-yt* atau *-ytvid* -> kirim atau balas url dengan perintah ini.
-CONTOH : -yt http://yt.com/video1
+⚠ Semakin banyak yang Premium, semakin cepat fitur baru update.
 
-*-ytaudio* -> kirim atau balas url dengan perintah ini.
-CONTOH : -ytaudio http://yt.com/video1
-
-*-tt* atau *-tiktok* -> kirim atau balas url dengan perintah ini.
-CONTOH : -tt http://tt.com/video1
-
-*-ig* -> kirim atau balas url dengan perintah ini.
-CONTOH : -ig http://ig.com/video1
-
-*NB :* Untuk semua fitur downloader ada limit harian. Gunakan seperlunya. Donasi ke bot untuk membantu owner mengoptimalkan bot ini.
-
-*>> IBADAH <<*
-*-solat* atau *-salat* 'city' -> kirim perintah ini diikut nama kota yang ingin dicari jadwalnya.
-
-*-doa* -> kirim perintah ini diikut nama doa yang ingin dicari.
-
-
-*>> SPESIFIKASI HP <<*
-*-speq* 'keyword' -> CONTOH : -speq redmi
-*-spec* 'phone name' -> CONTOH : -spec redmi 9c
-*-spek* 'keyword' -> CONTOH : -spek keyword-hp-redmi9c
-
-
-*>> AI & TRANSLATE <<*
-*-ai* atau *-t* -> kirim atau balas pesan dengan perintah ini.
-
-*-tlen* -> kirim atau balas pesan dengan perintah ini.
-
-*-tlin* atau *-tlid* -> kirim atau balas pesan dengan perintah ini.
-
-*-stden* -> kirim atau balas pesan dengan perintah ini.
-
-
-*>> BERITA <<*
-*-cnn* 'category' -> CONTOH : -cnn olahraga
-
-
-*>> Owner Contact <<*
-
-WhatsApp : @6282286230830
-
-Facebook : http://facebook.com/fkrvndii
-
-Instagram : http://instagram.com/fkrvndii
-
-LinkedIn : http://linkedin.com/in/fikrivandi
-
-Web : http://freack21.github.io/
-
-GitHub : http://github.com/freack21/
+*✲ OWNER CONTACT ✲*
+➮ WhatsApp : @6282286230830
+➮ Facebook : http://facebook.com/fkrvndii
+➮ Instagram : http://instagram.com/fkrvndii
+➮ LinkedIn : http://linkedin.com/in/fikrivandi
+➮ Web : http://freack21.github.io/
+➮ GitHub : http://github.com/freack21/

@@ -5,6 +5,9 @@ const { getStatus } = require("../games/status");
 const memeMaker = require("meme-maker");
 let times = [];
 
+exports.premiumNotifyText =
+    "Maaf, limit anda telah tercapai. Harap menunggu esok hari agar limit refresh kembali.\n\nKetik *-premium* untuk mendaftar User Premium. Terimakasih :)";
+
 exports.sticker = async (
     message,
     image,
@@ -237,6 +240,10 @@ exports.autoBot = (file, msg, mentions) => {
     });
 };
 
+exports.premiumNotify = (message) => {
+    message.reply(this.premiumNotifyText);
+};
+
 exports.error = (msg, err) => {
     msg.reply(
         "ada error! ketik *-menu* untuk melihat menu. lihat bantuan dengan ketik *-help* atau hubungi owner bot.\n\n" +
@@ -323,7 +330,7 @@ exports.getKW = (keyword, msg) => {
     try {
         const file = fs.readFileSync("./database/keyword.json");
         let data = JSON.parse(file);
-        data = data.filter((d) => keyword.includes(d.keyword));
+        data = data.filter((d) => keyword == d.keyword);
         let text = "";
         if (data.length) {
             data.forEach((d) => {

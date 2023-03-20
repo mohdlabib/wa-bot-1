@@ -14,6 +14,7 @@ const gamecodes = [
     "tebaklirik",
     "tebakkalimat",
     "tekateki",
+    "tebakbendera",
 ];
 const mks = ["sd", "asd", "bing", "arsikom", "md", "imk", "ep", "sm"];
 const lb = require("./controllers/games/lb");
@@ -164,7 +165,7 @@ client.on("message", async (message) => {
     if (message.body.startsWith("-resetlimit")) {
         AlphaCount(0, -1, message.body.split(" ")[1]);
         message.reply(
-            "limit user " + message.body.split(" ")[1] + " sudah di reset."
+            "Limit user " + message.body.split(" ")[1] + " sudah di reset."
         );
         return;
     }
@@ -203,13 +204,34 @@ client.on("message", async (message) => {
         } else {
             group(message);
         }
-    } else if (message.body === "-sticker" || message.body == "-s") {
+    } else if (message.body === "-stickers") {
+        let gcs = "*✱ STIKER RANDOM ✱*";
+        stickersCmd.forEach((gc) => {
+            gcs += `\n★ *-${gc.toLowerCase()}*`;
+        });
+        if (!stickersCmd.length) gcs += "\n*Tidak Ada!*";
+        gcs += "\n\nKetik *-menu* untuk melihat semua menu.";
+        message.reply(gcs);
+    } else if (message.body === "-emojis") {
+        let gcs = "*✱ PLATFORM EMOJI KE STIKER ✱*";
+        emojisCmd.forEach((gc) => {
+            gcs += `\n★ *-${gc.toLowerCase()}*`;
+        });
+        if (!emojisCmd.length) gcs += "\n*Tidak Ada!*";
+        gcs +=
+            "\n\nPerintah :\n★ -platform-emoji\nContoh :\n★ -joypixels-🙁\n\nKetik *-help* untuk melihat bantuan.";
+        message.reply(gcs);
+    } else if (
+        message.body.startsWith("-sticker") ||
+        message.body == "-s" ||
+        message.body.startsWith("-stiker")
+    ) {
         sticker(message, qtmsg, MessageMedia);
     } else if (message.body.startsWith("-smeme")) {
         const text = message.body.slice("-smeme ".length).split("|");
         if (text.length < 1)
             return message.reply(
-                "format salah. ketik *-smeme* TEKS ATAS|TEKS BAWAH|JARAK TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT untuk membuat stiker dengan teks (meme).\n\nketik *-help* untuk melihat bantuan."
+                "Format salah. Kirim atau balas gambar dengan perintah *-smeme* TEKS ATAS|TEKS BAWAH|JARAK TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT untuk membuat stiker dengan teks (meme).\n\nKetik *-help* untuk melihat bantuan."
             );
         sticker(
             message,
@@ -223,14 +245,14 @@ client.on("message", async (message) => {
     } else if (message.body === "-limit") {
         let limit = AlphaCount(0, 0, user);
         message.reply(
-            "limit user " + limit.name.split("|")[1] + " -> " + limit.hit
+            "Limit user " + limit.name.split("|")[1] + " -> " + limit.hit
         );
     } else if (
         message.body === "-premiumlist" ||
         message.body === "-listpremium"
     ) {
         let premium = PremiumList();
-        let prm = "*List User Premium Funday Bot*\n",
+        let prm = "*✱ List User Premium Funday Bot ✱*\n",
             no = 1,
             mentions = [];
         for (const pr of premium) {
@@ -242,7 +264,7 @@ client.on("message", async (message) => {
         }
         if (!premium.length) prm += "\nTidak ada User Premium";
         prm +=
-            "\n\n*NB :* ketik *-jadipremium* atau *-addpremium* atau *-premium* untuk daftar jadi User Premium.";
+            "\n\n*CATATAN :* Ketik *-addpremium* atau *-premium* untuk daftar jadi User Premium.";
         await message.reply(prm, message.from, {
             mentions,
         });
@@ -257,31 +279,13 @@ client.on("message", async (message) => {
             message.from,
             { mentions }
         );
-    } else if (message.body === "-stickers") {
-        let gcs = "*stiker random yang tersedia*\n";
-        stickersCmd.forEach((gc) => {
-            gcs += `\n-${gc.toLowerCase()}`;
-        });
-        if (!stickersCmd.length) gcs += "\nnone";
-        gcs +=
-            "\n\nketik *-menu* untuk melihat semua menu.\nketik *-help* untuk melihat bantuan.";
-        message.reply(gcs);
-    } else if (message.body === "-emojis") {
-        let gcs = "*platform emoji ke stiker yang tersedia*\n";
-        emojisCmd.forEach((gc) => {
-            gcs += `\n-${gc.toLowerCase()}`;
-        });
-        if (!emojisCmd.length) gcs += "\nnone";
-        gcs +=
-            "\n\nperintah :\n-platform-emoji\nganti 'emoji' dengan emoji yang ingin dibuat stiker\n\nketik *-menu* untuk melihat semua menu.\nketik *-help* untuk melihat bantuan.";
-        message.reply(gcs);
     } else if (message.body === "-mks") {
         let gcs = "*available matakuliah for task TI-B UR 22*\n";
         mks.forEach((gc) => {
             gcs += `\n-${gc.toLowerCase()}`;
         });
-        if (!emojisCmd.length) gcs += "\nnone";
-        gcs += "\n\nketik *-menu* untuk melihat semua menu.";
+        if (!emojisCmd.length) gcs += "\n*Tidak Ada!*";
+        gcs += "\n\nKetik *-menu* untuk melihat semua menu.";
         message.reply(gcs);
     } else if (message.body === "-img" || message.body == "-toimg") {
         img(message, qtmsg, MessageMedia);
@@ -289,7 +293,7 @@ client.on("message", async (message) => {
         const text = message.body.slice("-meme ".length).split("|");
         if (text.length <= 1)
             return message.reply(
-                "format salah. ketik *-meme* TEKS ATAS|TEKS BAWAH|JARAK TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT untuk membuat teks di gambar (meme).\n\nketik *-help* untuk melihat bantuan."
+                "Format salah. Kirim atau balas gambar dengan perintah *-meme* TEKS ATAS|TEKS BAWAH|JARAK TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT untuk membuat teks di gambar (meme).\n\nKetik *-help* untuk melihat bantuan."
             );
         img(
             message,
@@ -301,9 +305,11 @@ client.on("message", async (message) => {
             Number(text[3])
         );
     } else if (message.body === "-help") {
-        autoBot("help.txt", message);
+        const mentions = [await client.getContactById(owner)];
+        autoBot("help.txt", message, mentions);
     } else if (message.body === "-menu") {
-        autoBot("menu.txt", message);
+        const mentions = [await client.getContactById(owner)];
+        autoBot("menu.txt", message, mentions);
     } else if (
         message.body.startsWith("-jadwalkuliah") ||
         message.body.startsWith("-jk")
@@ -311,14 +317,14 @@ client.on("message", async (message) => {
         const hari = message.body.split(" ")[1];
         if (!hari)
             return message.reply(
-                "format salah. ketik *-jadwalkuliah* 'hari' atau *-jk* 'hari' untuk melihat Jadwal Kuliah TI-B Semester 2."
+                "Format salah. Ketik *-jadwalkuliah* 'hari' atau *-jk* 'hari' untuk melihat Jadwal Kuliah TI-B Semester 2."
             );
         jadwalkuliah(hari.toLowerCase(), message);
     } else if (message.body.startsWith("-addtask")) {
         const cmd = message.body.split("+");
         if (cmd.length != 4)
             return message.reply(
-                "format salah. ketik *-addtask* 'class' 'mk' 'task1,task2' untuk add task list."
+                "Format salah. Ketik *-addtask* 'class' 'mk' 'task1,task2' untuk add task list."
             );
         addTask(
             cmd[1].toLowerCase(),
@@ -330,7 +336,7 @@ client.on("message", async (message) => {
         const cmd = message.body.split("+");
         if (cmd.length != 4)
             return message.reply(
-                "format salah. ketik *-deltask* 'class' 'mk' 'task1,task2' untuk delete task list."
+                "Format salah. Ketik *-deltask* 'class' 'mk' 'task1,task2' untuk delete task list."
             );
         delTask(
             cmd[1].toLowerCase(),
@@ -342,28 +348,28 @@ client.on("message", async (message) => {
         const cmd = message.body.split("+");
         if (cmd.length != 3)
             return message.reply(
-                "format salah. ketik *-viewtask* 'class' 'mk' untuk view task list."
+                "Format salah. Ketik *-viewtask* 'class' 'mk' untuk view task list."
             );
         getTask(cmd[1].toLowerCase(), cmd[2].toLowerCase(), message);
     } else if (message.body.startsWith("-addtb")) {
         const cmd = message.body.split("+");
         if (cmd.length != 3)
             return message.reply(
-                "format salah. ketik *-addtb* 'mk' 'task1,task2' untuk add task list for TI-B UR 22."
+                "Format salah. Ketik *-addtb* 'mk' 'task1,task2' untuk add task list for TI-B UR 22."
             );
         addTask("ti-b", cmd[1].toLowerCase(), cmd[2].split(","), message);
     } else if (message.body.startsWith("-deltb")) {
         const cmd = message.body.split("+");
         if (cmd.length != 3)
             return message.reply(
-                "format salah. ketik *-deltb* 'mk' 'task1,task2' untuk delete task list for TI-B UR 22."
+                "Format salah. Ketik *-deltb* 'mk' 'task1,task2' untuk delete task list for TI-B UR 22."
             );
         delTask("ti-b", cmd[1].toLowerCase(), cmd[2].split(","), message);
     } else if (message.body.startsWith("-vtb")) {
         const cmd = message.body.split("+");
         if (cmd.length != 2)
             return message.reply(
-                "format salah. ketik *-vtb* 'mk' untuk view task list for TI-B UR 22."
+                "Format salah. Ketik *-vtb* 'mk' untuk view task list for TI-B UR 22."
             );
         getTask("ti-b", cmd[1].toLowerCase(), message);
     } else if (
@@ -374,7 +380,7 @@ client.on("message", async (message) => {
         const kota = message.body.split(" ")[1];
         if (!kota)
             return message.reply(
-                "format salah. ketik *-solat* atau *-shalat* 'kota' (tanpa tanda kutip) untuk melihat Jadwal Solat hari ini.\n\nketik *-help* untuk melihat bantuan."
+                "Format salah. Ketik *-solat* atau *-shalat* kota untuk melihat Jadwal Solat hari ini.\n\nKetik *-help* untuk melihat bantuan."
             );
         salat(kota.toLowerCase(), message);
     } else if (message.body === "-spku") {
@@ -383,14 +389,14 @@ client.on("message", async (message) => {
         const doaa = message.body.slice("-doa ".length);
         if (!doaa)
             return message.reply(
-                "format salah. ketik *-doa* 'nama doa' (tanpa tanda kutip) untuk mencari Doa.\n\nketik *-help* untuk melihat bantuan."
+                "Format salah. Ketik *-doa* nama doa untuk mencari Doa.\n\nKetik *-help* untuk melihat bantuan."
             );
         doa(doaa.toLowerCase(), message);
     } else if (message.body.startsWith("-ytaudio")) {
         let url = message.body.split(" ")[1];
         if (!url && !qtmsg)
             return message.reply(
-                "format salah. ketik *-ytaudio* 'url yt' (tanpa tanda kutip) untuk download audio dari YouTube.\n\nketik *-help* untuk melihat bantuan."
+                "Format salah. Ketik *-ytaudio* url untuk download audio dari YouTube.\n\nKetik *-help* untuk melihat bantuan."
             );
         if (qtmsg && !url) url = qtmsg.body;
         ytaudio(url, message, MessageMedia, chat, user);
@@ -401,7 +407,7 @@ client.on("message", async (message) => {
         let url = message.body.split(" ")[1];
         if (!url && !qtmsg)
             return message.reply(
-                "format salah. ketik *-ytvid* 'url yt' (tanpa tanda kutip) untuk download video dari YouTube.\n\nketik *-help* untuk melihat bantuan."
+                "Format salah. Ketik *-ytvid* urlyt untuk download video dari YouTube.\n\nKetik *-help* untuk melihat bantuan."
             );
         if (qtmsg && !url) url = qtmsg.body;
         yt(url, message, MessageMedia, chat, user);
@@ -412,7 +418,7 @@ client.on("message", async (message) => {
         let url = message.body.split(" ")[1];
         if (!url && !qtmsg)
             return message.reply(
-                "format salah. ketik *-tt* 'url tiktok' (tanpa tanda kutip) untuk download video dan audio dari TikTok.\n\nketik *-help* untuk melihat bantuan."
+                "Format salah. Ketik *-tt* urltiktok untuk download video dan audio dari TikTok.\n\nKetik *-help* untuk melihat bantuan."
             );
         if (qtmsg && !url) url = qtmsg.body;
         tt(url, message, user);
@@ -420,7 +426,7 @@ client.on("message", async (message) => {
         let url = message.body.split(" ")[1];
         if (!url && !qtmsg)
             return message.reply(
-                "format salah. ketik *-ig* 'url ig' (tanpa tanda kutip) untuk download video dari Instagram.\n\nketik *-help* untuk melihat bantuan."
+                "Format salah. Ketik *-ig* urlig untuk download video dari Instagram.\n\nKetik *-help* untuk melihat bantuan."
             );
         if (qtmsg && !url) url = qtmsg.body;
         ig(url, message, MessageMedia, user);
@@ -480,7 +486,7 @@ client.on("message", async (message) => {
         const [kw, rp] = text.split("|");
         if (!kw || !rp)
             return message.reply(
-                "format salah. ketik *-addkw* keyword|balasan untuk menambah keyword baru."
+                "Format salah. Ketik *-addkw* keyword|balasan untuk menambah keyword baru."
             );
         setKW(kw.toLowerCase(), rp, message);
     } else if (message.body.startsWith("-upkw ")) {
@@ -488,14 +494,14 @@ client.on("message", async (message) => {
         const [kw, rp] = text.split("|");
         if (!kw || !rp)
             return message.reply(
-                "format salah. ketik *-upkw* keyword|balasan untuk edit keyword."
+                "Format salah. Ketik *-upkw* keyword|balasan untuk edit keyword."
             );
         upKW(kw.toLowerCase(), rp, message);
     } else if (message.body.startsWith("-delkw ")) {
         const text = message.body.slice("-delkw ".length);
         if (!text)
             return message.reply(
-                "format salah. ketik *-delkw* 'keyword' (tanpa tanda kutip) untuk hapus keyword."
+                "Format salah. Ketik *-delkw* 'keyword' (tanpa tanda kutip) untuk hapus keyword."
             );
         delKW(text.toLowerCase(), message);
     } else if (
@@ -503,14 +509,14 @@ client.on("message", async (message) => {
         (message.body.toLowerCase() === "p" && !chat.isGroup)
     ) {
         message.reply(
-            "halo, aku Funday. ketik *-menu* untuk melihat semua menu. jika ada kesulitan lihat bantuan di *-help* atau hubungi owner bot ini."
+            "Halo, aku Funday. Ketik *-menu* untuk melihat semua menu. Jika ada kesulitan lihat bantuan di *-help* atau hubungi owner bot ini."
         );
 
         //AI
     } else if (message.body === "-ai" || message.body === "-t") {
         if (!qtmsg) {
             return message.reply(
-                "halo, aku Funday. ketik atau balas pesan dengan *-ai* atau *-t* untuk berbicara denganku.\n\naku bisa semua bahasa loh, jadi tanya sesukamu yaa."
+                "Halo, aku Funday. Ketik atau balas pesan dengan *-ai* atau *-t* untuk berbicara denganku.\n\nAku bisa semua bahasa loh, jadi tanya sesukamu yaa."
             );
         }
         ai(qtmsg.body, qtmsg);
@@ -523,7 +529,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-tlid" || message.body == "-tlin") {
         if (!qtmsg) {
             return message.reply(
-                "halo, aku Funday. ketik atau balas pesan dengan *-tlid* untuk translate ke bahasa indonesia."
+                "Halo, aku Funday. Ketik atau balas pesan dengan *-tlid* untuk translate ke bahasa indonesia."
             );
         }
         tlid(qtmsg.body, qtmsg);
@@ -539,7 +545,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-tlen") {
         if (!qtmsg) {
             return message.reply(
-                "halo, aku Funday. ketik atau balas pesan dengan *-tlen* untuk translate ke english."
+                "Halo, aku Funday. Ketik atau balas pesan dengan *-tlen* untuk translate ke english."
             );
         }
         tlen(qtmsg.body, qtmsg);
@@ -548,7 +554,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-stden") {
         if (!qtmsg) {
             return message.reply(
-                "halo, aku Funday. ketik atau balas pesan dengan *-stden* untuk membenarkan kalimat ke Grammatical Standard English."
+                "Halo, aku Funday. Ketik atau balas pesan dengan *-stden* untuk membenarkan kalimat ke Grammatical Standard English."
             );
         }
         stden(qtmsg.body, qtmsg);
@@ -729,10 +735,41 @@ client.on("message", async (message) => {
             group(message);
         }
         //tebakkalimat
+        //tebakbendera
+    } else if (message.body === "-tebakbendera") {
+        if (chat.isGroup) {
+            try {
+                const game = status.setStatus(chat.id.user, 1, "tebakbendera");
+                if (game.status) {
+                    const tebakbendera = await games.tebakbendera(
+                        chat.id.user,
+                        user
+                    );
+                    if (!tebakbendera.play) {
+                        message.reply(tebakbendera.text);
+                        status.setStatus(chat.id.user, 0, "tebakbendera");
+                        return;
+                    }
+                    await message.reply(
+                        await MessageMedia.fromUrl(tebakbendera.img),
+                        message.from,
+                        { caption: tebakbendera.text }
+                    );
+                    games.timer(chat.id.user, chat, "tebakbendera");
+                } else {
+                    message.reply(game.msg);
+                }
+            } catch (err) {
+                error(message, err);
+            }
+        } else {
+            group(message);
+        }
+        //tebakbendera
     } else if (message.body === "-stop") {
         if (chat.isGroup) {
             message.reply(
-                "untuk menghentikan game, ketik *-stop* 'gamecode' (tanpa tanda kutip).\nketik *-help* untuk melihat bantuan.\n\nketik *-gamecodes* untuk melihat gamecode yang tersedia."
+                "Ketik *-stop* gamecode\n\nKetik *-gamecodes* untuk melihat gamecode yang tersedia."
             );
         } else {
             group(message);
@@ -769,7 +806,7 @@ client.on("message", async (message) => {
         }
     } else if (message.body === "-qdd") {
         message.reply(
-            "untuk menambah soal, ketik *-qdd* dengan format berikut.\n\n-qdd\n\n'gamecode' (tanpa tanda kutip)\n\nketik *-gamecodes* untuk melihat gamecode yang tersedia."
+            "untuk menambah soal, Ketik *-qdd* dengan format berikut.\n\n-qdd\n\n'gamecode' (tanpa tanda kutip)\n\nKetik *-gamecodes* untuk melihat gamecode yang tersedia."
         );
     } else if (message.body.startsWith("-qdd")) {
         let [cmd, game, ...msg] = message.body.split("\n\n");
@@ -781,12 +818,12 @@ client.on("message", async (message) => {
             message.reply("gamecode ini tidak bisa ditambahkan soalnya.");
         }
     } else if (message.body === "-gamecodes") {
-        let gcs = "*gamecode yang tersedia*\n";
+        let gcs = "*✱ GameCode yang Tersedia ✱*\n";
         gamecodes.forEach((gc) => {
-            gcs += `\n-${gc}`;
+            gcs += `\n★ -${gc}`;
         });
-        if (!gamecodes.length) gcs += "\nnone";
-        gcs += "\n\nketik *-menu* untuk melihat semua menu.";
+        if (!gamecodes.length) gcs += "\n*Tidak Ada!*";
+        gcs += "\n\nKetik *-menu* untuk melihat semua menu.";
         message.reply(gcs);
     } else if (message.body === "-lb") {
         if (chat.isGroup) {
@@ -828,7 +865,7 @@ client.on("message", async (message) => {
         }
         if (nocmd)
             message.reply(
-                "perintah tidak valid. ketik *-menu* untuk melihat menu. untuk melihat bantuan, ketik *-help* atau hubungi owner bot."
+                "Perintah tidak valid. Ketik *-menu* untuk melihat menu. untuk melihat bantuan, Ketik *-help* atau hubungi owner bot."
             );
     } else {
         getKW(message.body.toLowerCase(), message);
@@ -858,7 +895,7 @@ client.on("message", async (message) => {
                                     soal.reward
                                 );
                                 if (soal.answer.length == 1) {
-                                    extra = `hebat! game telah selesai.\n\nketik *-lb* untuk melihat leaderboard.`;
+                                    extra = `Hebat! Game telah selesai.\n\nKetik *-lb* untuk melihat leaderboard.`;
                                     fam.setStatus(chat.id.user, 0);
                                     fam.delSoal(chat.id.user);
                                 } else {
@@ -867,7 +904,7 @@ client.on("message", async (message) => {
                                     fam.upSoal(soal);
                                 }
                                 message.reply(
-                                    `*FAMILY100*\n\njawaban benar. +${soal.reward} point.\n\n${extra}`
+                                    `*✱ FAMILY100 ✱*\n\nJawaban benar. +${soal.reward} point.\n\n${extra}`
                                 );
                             }
                         }
@@ -881,7 +918,7 @@ client.on("message", async (message) => {
                             message.body.toLowerCase()
                         ) {
                             message.reply(
-                                `*QUIZ LONTONG*\n\njawaban benar. +${soal.reward} point.\n\nketik *-lb* untuk melihat leaderboard.`
+                                `*✱ QUIZ LONTONG ✱*\n\nJawaban benar. +${soal.reward} point.\n\nKetik *-lb* untuk melihat leaderboard.`
                             );
                             lontong.setStatus(chat.id.user, 0);
                             lontong.delSoal(chat.id.user);
@@ -906,7 +943,7 @@ client.on("message", async (message) => {
                             message.body.toLowerCase()
                         ) {
                             message.reply(
-                                `*CAK LONTONG*\n\njawaban benar. +${
+                                `*✱ CAK LONTONG ✱*\n\nJawaban benar. +${
                                     soal.reward
                                 } point.\n\ndeskripsi : ${soal.desc.toLowerCase()}`
                             );
@@ -933,7 +970,7 @@ client.on("message", async (message) => {
                             message.body.toLowerCase()
                         ) {
                             message.reply(
-                                `*TEBAK KATA*\n\njawaban benar. +${soal.reward} point.`
+                                `*✱ TEBAK KATA ✱*\n\nJawaban benar. +${soal.reward} point.`
                             );
                             status.setStatus(chat.id.user, 0, "tebakkata");
                             games.destroy(chat.id.user, "tebakkata");
@@ -955,7 +992,7 @@ client.on("message", async (message) => {
                             message.body.toLowerCase()
                         ) {
                             message.reply(
-                                `*TEKATEKI*\n\njawaban benar. +${soal.reward} point.`
+                                `*✱ TEKATEKI ✱*\n\nJawaban benar. +${soal.reward} point.`
                             );
                             status.setStatus(chat.id.user, 0, "tekateki");
                             games.destroy(chat.id.user, "tekateki");
@@ -980,7 +1017,7 @@ client.on("message", async (message) => {
                             message.body.toLowerCase()
                         ) {
                             message.reply(
-                                `*TEBAK LIRIK*\n\njawaban benar. +${soal.reward} point.`
+                                `*✱ TEBAK LIRIK ✱*\n\nJawaban benar. +${soal.reward} point.`
                             );
                             status.setStatus(chat.id.user, 0, "tebaklirik");
                             games.destroy(chat.id.user, "tebaklirik");
@@ -1005,10 +1042,35 @@ client.on("message", async (message) => {
                             message.body.toLowerCase()
                         ) {
                             message.reply(
-                                `*TEBAK KALIMAT*\n\njawaban benar. +${soal.reward} point.`
+                                `*✱ TEBAK KALIMAT ✱*\n\nJawaban benar. +${soal.reward} point.`
                             );
                             status.setStatus(chat.id.user, 0, "tebakkalimat");
                             games.destroy(chat.id.user, "tebakkalimat");
+                            lb.setLB(
+                                chat.id.user,
+                                {
+                                    user: `@${message.author.split("@")[0]}`,
+                                    contact,
+                                },
+                                soal.reward
+                            );
+                        }
+                    }
+                    if (Object.values(game.game).indexOf("tebakbendera") > -1) {
+                        const soal = games.getAnsWard(
+                            chat.id.user,
+                            "tebakbendera"
+                        );
+
+                        if (
+                            soal.name.toLowerCase() ===
+                            message.body.toLowerCase()
+                        ) {
+                            message.reply(
+                                `*✱ TEBAK BENDERA ✱*\n\nJawaban benar. +${soal.reward} point.`
+                            );
+                            status.setStatus(chat.id.user, 0, "tebakbendera");
+                            games.destroy(chat.id.user, "tebakbendera");
                             lb.setLB(
                                 chat.id.user,
                                 {

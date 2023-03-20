@@ -13,7 +13,7 @@ exports.getStatus = (grup) => {
     } else {
         return {
             status: false,
-            msg: "game belum dimulai. ketik *-menu* untuk melihat menu. lihat bantuan dengan ketik *-help* atau hubungi owner bot.",
+            msg: "Game belum dimulai. Ketik *-menu* untuk melihat menu.",
         };
     }
 };
@@ -26,28 +26,31 @@ exports.setStatus = (grup, act, game) => {
     let status = { status: true, msg: "", game };
     switch (game) {
         case "fam":
-            status.msg = "*FAMILY100*\n\n";
+            status.msg = "*>> FAMILY100 <<*\n\n";
             break;
         case "lontong":
-            status.msg = "*QUIZ LONTONG*\n\n";
+            status.msg = "*>> QUIZ LONTONG <<*\n\n";
             break;
         case "caklontong":
-            status.msg = "*CAK LONTONG*\n\n";
+            status.msg = "*>> CAK LONTONG <<*\n\n";
             break;
         case "tebakkata":
-            status.msg = "*TEBAK KATA*\n\n";
+            status.msg = "*>> TEBAK KATA <<*\n\n";
             break;
         case "tebaklirik":
-            status.msg = "*TEBAK LIRIK*\n\n";
+            status.msg = "*>> TEBAK LIRIK <<*\n\n";
             break;
         case "tebakkalimat":
-            status.msg = "*TEBAK KALIMAT*\n\n";
+            status.msg = "*>> TEBAK KALIMAT <<*\n\n";
+            break;
+        case "tebakbendera":
+            status.msg = "*>> TEBAK BENDERA <<*\n\n";
             break;
     }
     if (act == 1) {
         if (temp.length) {
             status.status = false;
-            status.msg += `game masih berjalan..\nketik *-stop* 'gamecode' (tanpa tanda kutip) untuk menghentikan game.`;
+            status.msg += `Game masih berjalan..\nKetik *-stop* gamecode untuk menghentikan game.`;
             return status;
         }
         data.push({ id, grup, game });
@@ -56,11 +59,11 @@ exports.setStatus = (grup, act, game) => {
     } else {
         if (!temp.length) {
             status.status = false;
-            status.msg += `game belum dimulai. ketik *-menu* untuk melihat menu. lihat bantuan dengan ketik *-help* atau hubungi owner bot.`;
+            status.msg += `Game belum dimulai. Ketik *-menu* untuk melihat menu.`;
             return status;
         }
         data = data.filter((obj) => temp[0].id != obj.id);
-        status.msg += `game berhenti.`;
+        status.msg += `Game berhenti.`;
     }
     fs.writeFileSync("./database/status.json", JSON.stringify(data));
     return status;

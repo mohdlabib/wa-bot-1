@@ -1,96 +1,122 @@
-*Funday Bot,*
-*Dibuat oleh Fikri 'Freack21' Rivandi*
+*✱ MENU ✱*
 
-*NB :*
-- Semua perintah dimulai dengan tanda minus (-).
-- Silahkan hubungi owner jika ada kendala atau ingin premium.
+*✲ CATATAN ✲*
+⚠ Perintah dimulai dengan tanda minus (-)
+⚠ Hubungi owner jika ada kendala atau ingin Premium
+⚠ ☆ = Perintah Standar / Gratis
+⚠ ★ = Perintah Spesial / Premium / Limit
 
-*>> BOT MENU <<*
-*-menu* -> melihat semua menu
-*-help* -> melihat bantuan bot
-*-bot* -> memanggil bot
+*✲ MENU & HELP ✲*
+☆ *-menu*
+☆ *-help*
+☆ *-bot*
 
-*>> PREMIUM & LIMIT <<*
-*-limit* -> melihat sisa limit perintah spesial (downloader, stiker random, emoji ke stiker, dan games).
-*-premium* atau *-jadipremium* atau *-addpremium* -> daftar menjadi User Premium.
-*-premiumlist* atau *-listpremium* -> daftar User Premium Funday Bot.
+*✲ PREMIUM & LIMIT ✲*
+☆ *-limit*
+☆ *-premium* atau *-addpremium*
+☆ *-premiumlist* atau *-listpremium*
 
-*>> FITUR DASAR <<*
-*-groupinfo* -> melihat info grup chat
-*-everyone* atau *-tagall* -> tag semua orang di grup chat
-*-hidetag* -> kirim pesan dan tag semua orang di grup chat
+*✲ FITUR GRUP ✲*
+☆ *-groupinfo*
+☆ *-everyone* atau *-tagall*
+☆ *-hidetag*
 
-*>> STIKER & MEDIA <<*
-*-sticker* atau *-s* -> membuat stiker dari gambar/video/gif
-*-smeme* -> membuat stiker dengan teks
-*-meme* -> menambah teks ke gambar
-*-toimg* atau *-img* -> merubah stiker menjadi gambar
-*-stickers* -> melihat stiker random yang tersedia
-*-emojis* -> melihat platform emoji ke stiker yang tersedia
+*✲ STIKER & MEDIA ✲*
+☆ *-sticker* atau *-s* atau *-stiker*
+☆ *-smeme*
+☆ *-meme*
+☆ *-toimg* atau *-img*
+☆ *-stickers*
+☆ *-emojis*
 
-*NB :* Untuk stiker random dan emoji ke stiker ada limit harian. Gunakan seperlunya. Donasi ke bot untuk membantu owner mengoptimalkan bot ini.
+*✲ STIKER RANDOM ✲*
+★ *-patrick*
+★ *-popoci*
+★ *-sponsbob*
+★ *-kawansponsbob*
+★ *-awoawo*
+★ *-kelinci*
+★ *-chat*
+★ *-dbfly*
+★ *-dinokuning*
+★ *-doge*
+★ *-gojosatoru*
+★ *-hopeboy*
+★ *-jisoo*
+★ *-krrobot*
+★ *-kucing*
+★ *-manusialidi*
+★ *-menjamet*
+★ *-meow*
+★ *-nicholas*
+★ *-tyni*
 
-*>> DOWNLOADER <<*
-*-yt* atau *-ytvid* 'url' -> download video dari YouTube
-*-ytaudio* 'url' -> download audio dari YouTube
-*-tt* atau *-tiktok* 'url' -> download video dan audio dari TikTok
-*-ig* 'url' -> download video dari Instagram
+*✲ PLATFORM EMOJI KE STIKER ✲*
+★ *-apple*
+★ *-google*
+★ *-samsung*
+★ *-microsoft*
+★ *-whatsapp*
+★ *-twitter*
+★ *-facebook*
+★ *-joypixels*
+★ *-openmoji*
+★ *-emojidex*
+★ *-messenger*
+★ *-lg*
+★ *-htc*
+★ *-mozilla*
+★ *-softbank*
+★ *-docomo*
+★ *-aubykddi*
 
-*NB :* Untuk semua fitur downloader ada limit harian. Gunakan seperlunya. Donasi ke bot untuk membantu owner mengoptimalkan bot ini.
+*✲ DOWNLOADER ✲*
+★ *-ytvid* url
+★ *-ytaudio* url
+★ *-tt* url
+★ *-ig* url
 
-*>> IBADAH <<*
-*-solat* atau *-salat* 'kota' -> lihat jadwal solat
-*-doa* all -> lihat semua doa
-*-doa* 'name' -> cari doa
+*✲ IBADAH ✲*
+☆ *-salat* kota
+☆ *-doa* namadoa
 
-*>> SPESIFIKASI HP <<*
-*-speq* 'keyword' -> cari daftar hp dengan keyword
-*-spec* 'nama hp' -> cek spesifikasi hp dari nama hp
-*-spek* 'keyword' -> cek spesifikasi hp dengan keyword
+*✲ SPESIFIKASI HP ✲*
+☆ *-speq* keyword
+☆ *-spec* namahp
+☆ *-spek* keywordhp
 
-*>> AI & TRANSLATE <<*
-*-ai* atau *-t* -> berbicara / bertanya dengan AI
-*-tlen* -> translate ke english
-*-tlin* atau *-tlid* -> translate ke bahasa indonesia
-*-stden* -> membenarkan kalimat ke Grammatical Standard English
+*✲ AI & TRANSLATE ✲*
+☆ *-ai* atau *-t*
+☆ *-tlen*
+☆ *-tlin* atau *-tlid*
+☆ *-stden*
 
-*>> GAMES <<*
-*-gamecodes* -> lihat gamecode yang tersedia
-*-fam* -> start Family100
-*-lontong* -> start Quiz Lontong
-*-caklontong* -> start Cak Lontong
-*-tebakkata* -> start Tebak Kata
-*-tebaklirik* -> start Tebak Lirik
-*-tebakkalimat* -> start Tebak Kalimat
-*-tekateki* -> start Tebak Kalimat
-*-qdd* -> add question for selected gamecode
-*-stop* 'gamecode' -> stop game from selected gamecode
-*-lb* -> view leaderboard in this group
+*✲ GAMES ✲*
+☆ *-gamecodes*
+☆ *-fam*
+☆ *-lontong*
+★ *-caklontong*
+★ *-tebakkata*
+★ *-tebaklirik*
+★ *-tebakkalimat*
+★ *-tekateki*
+★ *-qdd*
+★ *-stop* gamecode
+☆ *-lb*
 
-*NB :* Untuk game caklontong, tebakkata, tebaklirik, tebakkalimat, dan tekateki ada limit harian. Gunakan seperlunya. Donasi ke bot untuk membantu owner mengoptimalkan bot ini.
+*✲ BERITA ✲*
+☆ *-cnn* category
+☆ *-category* newsportal
 
-*>> BERITA <<*
-*-cnn* 'category' -> search news by category in CNN indonesia
-*-category* 'newsportal' -> view available categories of newsportal
+*✲ FITUR YANG SEGERA DATANG ✲*
+★ *-nsfw*
+➮ dan lain-lain..
+⚠ Semakin banyak yang Premium, semakin cepat fitur baru update.
 
-*>> FITUR YANG SEGERA DATANG <<*
-*-quran* -> menampilkan surah, beserta arti, data, dan tafsirnya.
-*-nsfw* -> auto generate Anime Character
-dan banyak lagi lainnya..
-
-*NB :* Semakin banyak yang Premium, semakin cepat fitur baru update.
-
-
-*>> Owner Contact <<*
-
-WhatsApp : @6282286230830
-
-Facebook : http://facebook.com/fkrvndii
-
-Instagram : http://instagram.com/fkrvndii
-
-LinkedIn : http://linkedin.com/in/fikrivandi
-
-Web : http://freack21.github.io/
-
-GitHub : http://github.com/freack21/
+*✲ OWNER CONTACT ✲*
+➮ WhatsApp : @6282286230830
+➮ Facebook : http://facebook.com/fkrvndii
+➮ Instagram : http://instagram.com/fkrvndii
+➮ LinkedIn : http://linkedin.com/in/fikrivandi
+➮ Web : http://freack21.github.io/
+➮ GitHub : http://github.com/freack21/

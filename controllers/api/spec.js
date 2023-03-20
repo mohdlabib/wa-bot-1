@@ -9,7 +9,7 @@ exports.spec = (hp, message, MessageMedia, chat) => {
             }
             if (!query.data.data.phones.length) {
                 return message.reply(
-                    "maaf, gagal mencari ponsel yang kamu maksud. ada error."
+                    "Maaf, gagal mencari ponsel yang kamu maksud. ada error."
                 );
             }
             this.spek(
@@ -21,7 +21,7 @@ exports.spec = (hp, message, MessageMedia, chat) => {
         })
         .catch((err) => {
             message.reply(
-                "maaf, gagal mencari ponsel yang kamu maksud.\n\n" + err
+                "Maaf, gagal mencari ponsel yang kamu maksud.\n\n" + err
             );
         });
 };
@@ -39,13 +39,13 @@ exports.speq = (hp, message) => {
             data.phones.forEach((phone) => {
                 text += `\n${i++}.\n- Nama: ${phone.phone_name}\n- Brand: ${
                     phone.brand
-                }\n- Keyword: ${phone.slug}\n`;
+                }\n- KeywordHP: ${phone.slug}\n`;
             });
             message.reply(text);
         })
         .catch((err) => {
             message.reply(
-                "maaf, gagal mencari ponsel yang kamu maksud.\n\n" + err
+                "Maaf, gagal mencari ponsel yang kamu maksud.\n\n" + err
             );
         });
 };
@@ -75,7 +75,7 @@ exports.spek = async (hp, message, MessageMedia, chat) => {
         })
         .catch((err) => {
             message.reply(
-                "maaf, gagal mencari ponsel yang kamu maksud.\n\n" + err
+                "Maaf, gagal mencari ponsel yang kamu maksud.\n\n" + err
             );
         });
 };
