@@ -150,17 +150,17 @@ client.on("message", async (message) => {
     let contact = await client.getContactById(message.author || message.from);
     let user = contact.id._serialized;
     await chat.sendSeen();
-    if (!contact.isMyContact && message.body.startsWith("-")) {
-        const mentions = [await client.getContactById(owner)];
-        message.reply(
-            "Maaf, bot sedang maintenance. Upgrade ke premium untuk ikut mencoba bot saat maintenance. Hubungi owner bot, @" +
-                mentions[0].id.user +
-                ".",
-            message.from,
-            { mentions }
-        );
-        return;
-    }
+    // if (!contact.isMyContact && message.body.startsWith("-")) {
+    //     const mentions = [await client.getContactById(owner)];
+    //     message.reply(
+    //         "Maaf, bot sedang maintenance. Upgrade ke premium untuk ikut mencoba bot saat maintenance. Hubungi owner bot, @" +
+    //             mentions[0].id.user +
+    //             ".",
+    //         message.from,
+    //         { mentions }
+    //     );
+    //     return;
+    // }
     let qtmsg = null;
     try {
         if (message.hasQuotedMsg) qtmsg = await message.getQuotedMessage();
