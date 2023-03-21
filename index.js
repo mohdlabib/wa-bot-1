@@ -17,6 +17,7 @@ const gamecodes = [
     "tebakbendera",
     "susunkata",
     "asahotak",
+    "tebakkimia",
 ];
 const mks = ["sd", "asd", "bing", "arsikom", "md", "imk", "ep", "sm"];
 const lb = require("./controllers/games/lb");
@@ -38,6 +39,7 @@ const {
     addTask,
     delTask,
     getTask,
+    wait,
 } = require("./controllers/utils/autoMsg");
 const { ai, tlid, tlen, stden } = require("./controllers/api/ai");
 const { cnn, base } = require("./controllers/api/berita");
@@ -51,6 +53,7 @@ const {
     AlphaCount,
     PremiumList,
 } = require("./controllers/utils/apikey");
+const { join } = require("path");
 const emojisCmd = [
     "Apple",
     "Google",
@@ -140,10 +143,6 @@ app.get("/", (req, res) => {
     }
 });
 
-if (new Date().getHours == 0) {
-    AlphaCount(0, "all", "all");
-}
-
 client.on("message", async (message) => {
     // console.log(message.body);
     // console.log(message);
@@ -151,13 +150,17 @@ client.on("message", async (message) => {
     let contact = await client.getContactById(message.author || message.from);
     let user = contact.id._serialized;
     await chat.sendSeen();
-    // if (!contact.isMyContact && message.body.startsWith("-")) {
-    // const mentions = [await client.getContactById(owner)];
-    //     message.reply(
-    //         "Maaf, bot sedang maintenance. Upgrade ke premium untuk ikut mencoba bot saat maintenance. Hubungi owner bot, @"+mentions[0].id.user+".", {mentions}
-    //     );
-    //     return;
-    // }
+    if (!contact.isMyContact && message.body.startsWith("-")) {
+        const mentions = [await client.getContactById(owner)];
+        message.reply(
+            "Maaf, bot sedang maintenance. Upgrade ke premium untuk ikut mencoba bot saat maintenance. Hubungi owner bot, @" +
+                mentions[0].id.user +
+                ".",
+            message.from,
+            { mentions }
+        );
+        return;
+    }
     let qtmsg = null;
     try {
         if (message.hasQuotedMsg) qtmsg = await message.getQuotedMessage();
@@ -172,28 +175,51 @@ client.on("message", async (message) => {
         return;
     }
 
-    //api
+    //API
+    //spesifikasi
     if (
         message.body == "-spec" ||
         message.body == "-spek" ||
         message.body == "-speq"
     ) {
         if (!qtmsg) {
-            return speb(message.body, message);
+            message.reply(
+                "Format salah. Kirim atau balas keyword/namaHP/keywordHP dengan perintah *-speq* atau *-spec* atau *-spek*.\n\nKetik *-help* untuk melihat bantuan."
+            );
+            return;
         }
+        wait(message, 2);
         specs(message.body, qtmsg.body, qtmsg, MessageMedia, chat);
     } else if (message.body.startsWith("-spec ")) {
+        wait(message, 2);
         spec(message.body.slice("-spec ".length), message, MessageMedia, chat);
     } else if (message.body.startsWith("-spek ")) {
+        wait(message, 2);
         spek(message.body.slice("-spek ".length), message, MessageMedia, chat);
     } else if (message.body.startsWith("-speq ")) {
+        wait(message, 2);
         speq(message.body.slice("-speq ".length), message);
+        //spesifikasi
+        //berita
     } else if (message.body == "-cnn") {
-        base("cnn", "", message);
+        message.reply(
+            "Format salah. Kirim KategoriBerita dengan perintah *-cnn*.\n\nKetik *-help* untuk melihat bantuan."
+        );
     } else if (message.body.startsWith("-cnn ")) {
+        wait(message, 0);
         cnn(message.body.slice("-cnn ".length), message);
-
+        //berita
         //fitur bot
+    } else if (message.body === "-bot" || message.body.toLowerCase() === "p") {
+        message.reply(
+            "Halo, aku Funday. Ketik *-menu* untuk melihat semua menu. Jika ada kesulitan lihat bantuan di *-help* atau hubungi owner bot ini."
+        );
+    } else if (message.body === "-help") {
+        const mentions = [await client.getContactById(owner)];
+        autoBot("help.txt", message, mentions);
+    } else if (message.body === "-menu") {
+        const mentions = [await client.getContactById(owner)];
+        autoBot("menu.txt", message, mentions);
     } else if (message.body === "-groupinfo") {
         if (chat.isGroup) {
             message.reply(
@@ -206,6 +232,59 @@ client.on("message", async (message) => {
         } else {
             group(message);
         }
+    } else if (message.body === "-everyone" || message.body === "-tagall") {
+        if (chat.isGroup) {
+            let text = "";
+            let mentions = [];
+
+            for (let participant of chat.participants) {
+                const contact = await client.getContactById(
+                    participant.id._serialized
+                );
+
+                mentions.push(contact);
+                text += `@${participant.id.user} `;
+            }
+
+            if (message.body === "-tagall")
+                await chat.sendMessage(text, {
+                    mentions,
+                });
+            else
+                await chat.sendMessage("@everyone", {
+                    mentions,
+                });
+        } else {
+            group(message);
+        }
+    } else if (
+        message.body === "-hidetag" ||
+        message.body.startsWith("-hidetag ")
+    ) {
+        if (chat.isGroup) {
+            const text =
+                message.body === "-hidetag"
+                    ? qtmsg
+                        ? qtmsg.body
+                        : "."
+                    : message.body.slice("-hidetag ".length);
+            let mentions = [];
+
+            for (let participant of chat.participants) {
+                const contact = await client.getContactById(
+                    participant.id._serialized
+                );
+                mentions.push(contact);
+            }
+
+            message.reply(text, message.from, {
+                mentions,
+            });
+        } else {
+            group(message);
+        }
+        //fitur bot
+        //listcommand
     } else if (message.body === "-stickers") {
         let gcs = "*✱ STIKER RANDOM ✱*";
         stickersCmd.forEach((gc) => {
@@ -223,18 +302,54 @@ client.on("message", async (message) => {
         gcs +=
             "\n\n➮ Perintah :\n    ★ -platform-emoji\n➮ Contoh :\n    ★ -joypixels-🙁\n\nKetik *-help* untuk melihat bantuan.";
         message.reply(gcs);
+    } else if (message.body === "-mks") {
+        let gcs = "*available matakuliah for task TI-B UR 22*\n";
+        mks.forEach((gc) => {
+            gcs += `\n-${gc.toLowerCase()}`;
+        });
+        if (!emojisCmd.length) gcs += "\n*Tidak Ada!*";
+        gcs += "\n\nKetik *-menu* untuk melihat semua menu.";
+        message.reply(gcs);
+    } else if (message.body === "-gamecodes") {
+        let gcs = "*✱ GameCode yang Tersedia ✱*\n";
+        gamecodes.forEach((gc) => {
+            gcs += `\n★ -${gc}`;
+        });
+        if (!gamecodes.length) gcs += "\n*Tidak Ada!*";
+        gcs += "\n\nKetik *-menu* untuk melihat semua menu.";
+        message.reply(gcs);
+    } else if (message.body === "-lb") {
+        if (chat.isGroup) {
+            try {
+                const { text, mentions } = lb.getLB(chat.id.user);
+                chat.sendMessage(text, {
+                    mentions,
+                });
+            } catch (err) {
+                error(message, err);
+            }
+        } else {
+            group(message);
+        }
+        //listcommand
+        //media&stickers
+    } else if (message.body === "-img" || message.body == "-toimg") {
+        wait(message, 0);
+        img(message, qtmsg, MessageMedia);
     } else if (
         message.body.startsWith("-sticker") ||
         message.body == "-s" ||
         message.body.startsWith("-stiker")
     ) {
+        wait(message, 0);
         sticker(message, qtmsg, MessageMedia);
     } else if (message.body.startsWith("-smeme")) {
         const text = message.body.slice("-smeme ".length).split("|");
-        if (text.length < 1)
+        if (text.length < 1 || (text[0] == "" && text.length <= 1))
             return message.reply(
                 "Format salah. Kirim atau balas gambar dengan perintah *-smeme* TEKS ATAS|TEKS BAWAH|JARAK TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT untuk membuat stiker dengan teks (meme).\n\nKetik *-help* untuk melihat bantuan."
             );
+        wait(message, 0);
         sticker(
             message,
             qtmsg,
@@ -244,11 +359,66 @@ client.on("message", async (message) => {
             Number(text[2]),
             Number(text[3])
         );
-    } else if (message.body === "-limit") {
-        let limit = AlphaCount(0, 0, user);
-        message.reply(
-            "Limit user " + limit.name.split("|")[1] + " -> " + limit.hit
+    } else if (message.body.startsWith("-meme")) {
+        const text = message.body.slice("-meme ".length).split("|");
+        if (text.length <= 1)
+            return message.reply(
+                "Format salah. Kirim atau balas gambar dengan perintah *-meme* TEKS ATAS|TEKS BAWAH|JARAK TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT untuk membuat teks di gambar (meme).\n\nKetik *-help* untuk melihat bantuan."
+            );
+        wait(message, 0);
+        img(
+            message,
+            qtmsg,
+            MessageMedia,
+            text[0],
+            text[1],
+            Number(text[2]),
+            Number(text[3])
         );
+    } else if (message.body.startsWith("-sttp")) {
+        const texts = message.body.split(" ");
+        if (texts.length < 2 || (texts[1] == "" && texts.length <= 2))
+            return message.reply(
+                "Format salah. Kirim perintah *-sttp* TEKS untuk membuat sticker text-to-picture.\n\nKetik *-help* untuk melihat bantuan."
+            );
+        wait(message, 0);
+        const [a, ...text] = texts;
+        stickers.ttp(text.join(" "), 1, message, MessageMedia, user);
+    } else if (message.body.startsWith("-ttp")) {
+        const texts = message.body.split(" ");
+        if (texts.length < 2 || (texts[1] == "" && texts.length <= 2))
+            return message.reply(
+                "Format salah. Kirim perintah *-ttp* TEKS untuk membuat gambar text-to-picture.\n\nKetik *-help* untuk melihat bantuan."
+            );
+        wait(message, 0);
+        const [a, ...text] = texts;
+        stickers.ttp(text.join(" "), 0, message, MessageMedia, user);
+    } else if (message.body.startsWith("-sattp")) {
+        const texts = message.body.split(" ");
+        if (texts.length < 2 || (texts[1] == "" && texts.length <= 2))
+            return message.reply(
+                "Format salah. Kirim perintah *-attp* TEKS untuk membuat sticker animated-text-to-picture.\n\nKetik *-help* untuk melihat bantuan."
+            );
+        wait(message, 0);
+        const [a, ...text] = texts;
+        stickers.attp(text.join(" "), 1, message, MessageMedia, user);
+    } else if (message.body.startsWith("-attp")) {
+        const texts = message.body.split(" ");
+        if (texts.length < 2 || (texts[1] == "" && texts.length <= 2))
+            return message.reply(
+                "Format salah. Kirim perintah *-attp* TEKS untuk membuat gambar animated-text-to-picture.\n\nKetik *-help* untuk melihat bantuan."
+            );
+        wait(message, 0);
+        const [a, ...text] = texts;
+        stickers.attp(text.join(" "), 0, message, MessageMedia, user);
+        //media&stickers
+        //premium&limit
+    } else if (message.body === "-limit") {
+        message.reply("Cooming soon..");
+        // let limit = AlphaCount(0, 0, user);
+        // message.reply(
+        //     "Limit user " + limit.name.split("|")[1] + " -> " + limit.hit
+        // );
     } else if (
         message.body === "-premiumlist" ||
         message.body === "-listpremium"
@@ -281,37 +451,79 @@ client.on("message", async (message) => {
             message.from,
             { mentions }
         );
-    } else if (message.body === "-mks") {
-        let gcs = "*available matakuliah for task TI-B UR 22*\n";
-        mks.forEach((gc) => {
-            gcs += `\n-${gc.toLowerCase()}`;
-        });
-        if (!emojisCmd.length) gcs += "\n*Tidak Ada!*";
-        gcs += "\n\nKetik *-menu* untuk melihat semua menu.";
-        message.reply(gcs);
-    } else if (message.body === "-img" || message.body == "-toimg") {
-        img(message, qtmsg, MessageMedia);
-    } else if (message.body.startsWith("-meme")) {
-        const text = message.body.slice("-meme ".length).split("|");
-        if (text.length <= 1)
+        //premium&limit
+        //downloader
+    } else if (message.body.startsWith("-ytaudio")) {
+        wait(message, 0);
+        let url = message.body.split(" ")[1];
+        if (!url && !qtmsg)
             return message.reply(
-                "Format salah. Kirim atau balas gambar dengan perintah *-meme* TEKS ATAS|TEKS BAWAH|JARAK TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT untuk membuat teks di gambar (meme).\n\nKetik *-help* untuk melihat bantuan."
+                "Format salah. Ketik *-ytaudio* url untuk download audio dari YouTube.\n\nKetik *-help* untuk melihat bantuan."
             );
-        img(
-            message,
-            qtmsg,
-            MessageMedia,
-            text[0],
-            text[1],
-            Number(text[2]),
-            Number(text[3])
-        );
-    } else if (message.body === "-help") {
-        const mentions = [await client.getContactById(owner)];
-        autoBot("help.txt", message, mentions);
-    } else if (message.body === "-menu") {
-        const mentions = [await client.getContactById(owner)];
-        autoBot("menu.txt", message, mentions);
+        if (qtmsg && !url) url = qtmsg.body;
+        ytaudio(url, message, MessageMedia, chat, user);
+    } else if (
+        message.body.startsWith("-yt") ||
+        message.body.startsWith("-ytvid")
+    ) {
+        wait(message, 0);
+        let url = message.body.split(" ")[1];
+        if (!url && !qtmsg)
+            return message.reply(
+                "Format salah. Ketik *-ytvid* urlyt untuk download video dari YouTube.\n\nKetik *-help* untuk melihat bantuan."
+            );
+        if (qtmsg && !url) url = qtmsg.body;
+        yt(url, message, MessageMedia, chat, user);
+    } else if (
+        message.body.startsWith("-tt") ||
+        message.body.startsWith("-tiktok")
+    ) {
+        wait(message, 0);
+        let url = message.body.split(" ")[1];
+        if (!url && !qtmsg)
+            return message.reply(
+                "Format salah. Ketik *-tt* urltiktok untuk download video dan audio dari TikTok.\n\nKetik *-help* untuk melihat bantuan."
+            );
+        if (qtmsg && !url) url = qtmsg.body;
+        tt(url, message, user);
+    } else if (message.body.startsWith("-ig")) {
+        wait(message, 0);
+        let url = message.body.split(" ")[1];
+        if (!url && !qtmsg)
+            return message.reply(
+                "Format salah. Ketik *-ig* urlig untuk download video dari Instagram.\n\nKetik *-help* untuk melihat bantuan."
+            );
+        if (qtmsg && !url) url = qtmsg.body;
+        ig(url, message, MessageMedia, user);
+        //downloader
+        //ibadah
+    } else if (
+        message.body.startsWith("-solat") ||
+        message.body.startsWith("-salat") ||
+        message.body.startsWith("-shalat")
+    ) {
+        wait(message, 2);
+        const kota = message.body.split(" ")[1];
+        if (!kota)
+            return message.reply(
+                "Format salah. Ketik *-solat* atau *-shalat* kota untuk melihat Jadwal Solat hari ini.\n\nKetik *-help* untuk melihat bantuan."
+            );
+        salat(kota.toLowerCase(), message);
+    } else if (message.body === "-spku") {
+        wait(message, 2);
+        salat("pekanbaru", message);
+    } else if (message.body.startsWith("-doa")) {
+        wait(message, 2);
+        const doaa = message.body.slice("-doa ".length);
+        if (!doaa)
+            return message.reply(
+                "Format salah. Ketik *-doa* nama doa untuk mencari Doa.\n\nKetik *-help* untuk melihat bantuan."
+            );
+        doa(doaa.toLowerCase(), message);
+        //ibadah
+        //API
+
+        //KULIAH
     } else if (
         message.body.startsWith("-jadwalkuliah") ||
         message.body.startsWith("-jk")
@@ -374,115 +586,9 @@ client.on("message", async (message) => {
                 "Format salah. Ketik *-vtb* 'mk' untuk view task list for TI-B UR 22."
             );
         getTask("ti-b", cmd[1].toLowerCase(), message);
-    } else if (
-        message.body.startsWith("-solat") ||
-        message.body.startsWith("-salat") ||
-        message.body.startsWith("-shalat")
-    ) {
-        const kota = message.body.split(" ")[1];
-        if (!kota)
-            return message.reply(
-                "Format salah. Ketik *-solat* atau *-shalat* kota untuk melihat Jadwal Solat hari ini.\n\nKetik *-help* untuk melihat bantuan."
-            );
-        salat(kota.toLowerCase(), message);
-    } else if (message.body === "-spku") {
-        salat("pekanbaru", message);
-    } else if (message.body.startsWith("-doa")) {
-        const doaa = message.body.slice("-doa ".length);
-        if (!doaa)
-            return message.reply(
-                "Format salah. Ketik *-doa* nama doa untuk mencari Doa.\n\nKetik *-help* untuk melihat bantuan."
-            );
-        doa(doaa.toLowerCase(), message);
-    } else if (message.body.startsWith("-ytaudio")) {
-        let url = message.body.split(" ")[1];
-        if (!url && !qtmsg)
-            return message.reply(
-                "Format salah. Ketik *-ytaudio* url untuk download audio dari YouTube.\n\nKetik *-help* untuk melihat bantuan."
-            );
-        if (qtmsg && !url) url = qtmsg.body;
-        ytaudio(url, message, MessageMedia, chat, user);
-    } else if (
-        message.body.startsWith("-yt") ||
-        message.body.startsWith("-ytvid")
-    ) {
-        let url = message.body.split(" ")[1];
-        if (!url && !qtmsg)
-            return message.reply(
-                "Format salah. Ketik *-ytvid* urlyt untuk download video dari YouTube.\n\nKetik *-help* untuk melihat bantuan."
-            );
-        if (qtmsg && !url) url = qtmsg.body;
-        yt(url, message, MessageMedia, chat, user);
-    } else if (
-        message.body.startsWith("-tt") ||
-        message.body.startsWith("-tiktok")
-    ) {
-        let url = message.body.split(" ")[1];
-        if (!url && !qtmsg)
-            return message.reply(
-                "Format salah. Ketik *-tt* urltiktok untuk download video dan audio dari TikTok.\n\nKetik *-help* untuk melihat bantuan."
-            );
-        if (qtmsg && !url) url = qtmsg.body;
-        tt(url, message, user);
-    } else if (message.body.startsWith("-ig")) {
-        let url = message.body.split(" ")[1];
-        if (!url && !qtmsg)
-            return message.reply(
-                "Format salah. Ketik *-ig* urlig untuk download video dari Instagram.\n\nKetik *-help* untuk melihat bantuan."
-            );
-        if (qtmsg && !url) url = qtmsg.body;
-        ig(url, message, MessageMedia, user);
-    } else if (message.body === "-everyone" || message.body === "-tagall") {
-        if (chat.isGroup) {
-            let text = "";
-            let mentions = [];
+        //KULIAH
 
-            for (let participant of chat.participants) {
-                const contact = await client.getContactById(
-                    participant.id._serialized
-                );
-
-                mentions.push(contact);
-                text += `@${participant.id.user} `;
-            }
-
-            if (message.body === "-tagall")
-                await chat.sendMessage(text, {
-                    mentions,
-                });
-            else
-                await chat.sendMessage("@everyone", {
-                    mentions,
-                });
-        } else {
-            group(message);
-        }
-    } else if (
-        message.body === "-hidetag" ||
-        message.body.startsWith("-hidetag ")
-    ) {
-        if (chat.isGroup) {
-            const text =
-                message.body === "-hidetag"
-                    ? qtmsg
-                        ? qtmsg.body
-                        : "."
-                    : message.body.slice("-hidetag ".length);
-            let mentions = [];
-
-            for (let participant of chat.participants) {
-                const contact = await client.getContactById(
-                    participant.id._serialized
-                );
-                mentions.push(contact);
-            }
-
-            message.reply(text, message.from, {
-                mentions,
-            });
-        } else {
-            group(message);
-        }
+        //KEYWORD&SENSITIVEWORD
     } else if (message.body.startsWith("-addkw ")) {
         const text = message.body.slice("-addkw ".length);
         const [kw, rp] = text.split("|");
@@ -506,13 +612,7 @@ client.on("message", async (message) => {
                 "Format salah. Ketik *-delkw* 'keyword' (tanpa tanda kutip) untuk hapus keyword."
             );
         delKW(text.toLowerCase(), message);
-    } else if (
-        message.body === "-bot" ||
-        (message.body.toLowerCase() === "p" && !chat.isGroup)
-    ) {
-        message.reply(
-            "Halo, aku Funday. Ketik *-menu* untuk melihat semua menu. Jika ada kesulitan lihat bantuan di *-help* atau hubungi owner bot ini."
-        );
+        //KEYWORD&SENSITIVEWORD
 
         //AI
     } else if (message.body === "-ai" || message.body === "-t") {
@@ -521,11 +621,13 @@ client.on("message", async (message) => {
                 "Halo, aku Funday. Ketik atau balas pesan dengan *-ai* atau *-t* untuk berbicara denganku.\n\nAku bisa semua bahasa loh, jadi tanya sesukamu yaa."
             );
         }
+        wait(message, 1);
         ai(qtmsg.body, qtmsg);
     } else if (
         message.body.startsWith("-ai ") ||
         message.body.startsWith("-t ")
     ) {
+        wait(message, 1);
         const cmd = message.body.startsWith("-ai ") ? "-ai " : "-t ";
         ai(message.body.slice(cmd.length), message);
     } else if (message.body === "-tlid" || message.body == "-tlin") {
@@ -534,24 +636,24 @@ client.on("message", async (message) => {
                 "Halo, aku Funday. Ketik atau balas pesan dengan *-tlid* untuk translate ke bahasa indonesia."
             );
         }
+        wait(message, 1);
         tlid(qtmsg.body, qtmsg);
     } else if (
         message.body.startsWith("-tlid ") ||
         message.body.startsWith("-tlin ")
     ) {
-        try {
-            tlid(message.body.slice("-tlid ".length), message);
-        } catch (err) {
-            errai(message, err);
-        }
+        wait(message, 1);
+        tlid(message.body.slice("-tlid ".length), message);
     } else if (message.body === "-tlen") {
         if (!qtmsg) {
             return message.reply(
                 "Halo, aku Funday. Ketik atau balas pesan dengan *-tlen* untuk translate ke english."
             );
         }
+        wait(message, 1);
         tlen(qtmsg.body, qtmsg);
     } else if (message.body.startsWith("-tlen ")) {
+        wait(message, 1);
         tlen(message.body.slice("-tlen ".length), message);
     } else if (message.body === "-stden") {
         if (!qtmsg) {
@@ -559,15 +661,19 @@ client.on("message", async (message) => {
                 "Halo, aku Funday. Ketik atau balas pesan dengan *-stden* untuk membenarkan kalimat ke Grammatical Standard English."
             );
         }
+        wait(message, 1);
         stden(qtmsg.body, qtmsg);
     } else if (message.body.startsWith("-stden ")) {
+        wait(message, 1);
         stden(message.body.slice("-stden ".length), message);
+        //AI
 
-        //game
+        //GAME
         //family100
     } else if (message.body === "-fam") {
         if (chat.isGroup) {
             try {
+                wait(message, 0);
                 const game = fam.setStatus(chat.id.user, 1);
                 if (game.status) {
                     fam.setSoal(chat.id.user);
@@ -592,6 +698,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-lontong") {
         if (chat.isGroup) {
             try {
+                wait(message, 0);
                 const game = lontong.setStatus(chat.id.user, 1);
                 if (game.status) {
                     lontong.setSoal(chat.id.user);
@@ -617,6 +724,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-caklontong") {
         if (chat.isGroup) {
             try {
+                wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "caklontong");
                 if (game.status) {
                     const caklontong = await games.caklontong(
@@ -643,6 +751,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-tebakkata") {
         if (chat.isGroup) {
             try {
+                wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "tebakkata");
                 if (game.status) {
                     const tebakkata = await games.tebakkata(chat.id.user, user);
@@ -666,6 +775,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-tekateki") {
         if (chat.isGroup) {
             try {
+                wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "tekateki");
                 if (game.status) {
                     const tekateki = await games.tekateki(chat.id.user, user);
@@ -689,6 +799,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-tebaklirik") {
         if (chat.isGroup) {
             try {
+                wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "tebaklirik");
                 if (game.status) {
                     const tebaklirik = await games.tebaklirik(
@@ -715,6 +826,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-tebakkalimat") {
         if (chat.isGroup) {
             try {
+                wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "tebakkalimat");
                 if (game.status) {
                     const tebakkalimat = await games.tebakkalimat(
@@ -741,6 +853,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-tebakbendera") {
         if (chat.isGroup) {
             try {
+                wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "tebakbendera");
                 if (game.status) {
                     const tebakbendera = await games.tebakbendera(
@@ -772,6 +885,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-susunkata") {
         if (chat.isGroup) {
             try {
+                wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "susunkata");
                 if (game.status) {
                     const susunkata = await games.susunkata(chat.id.user, user);
@@ -795,6 +909,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-asahotak") {
         if (chat.isGroup) {
             try {
+                wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "asahotak");
                 if (game.status) {
                     const asahotak = await games.asahotak(chat.id.user, user);
@@ -814,6 +929,33 @@ client.on("message", async (message) => {
             group(message);
         }
         //asahotak
+        //tebakkimia
+    } else if (message.body === "-tebakkimia") {
+        if (chat.isGroup) {
+            try {
+                wait(message, 0);
+                const game = status.setStatus(chat.id.user, 1, "tebakkimia");
+                if (game.status) {
+                    const tebakkimia = await games.tebakkimia(
+                        chat.id.user,
+                        user
+                    );
+                    message.reply(tebakkimia.text);
+                    if (!tebakkimia.play) {
+                        status.setStatus(chat.id.user, 0, "tebakkimia");
+                        return;
+                    }
+                    games.timer(chat.id.user, chat, "tebakkimia");
+                } else {
+                    message.reply(game.msg);
+                }
+            } catch (err) {
+                error(message, err);
+            }
+        } else {
+            group(message);
+        }
+        //tebakkimia
     } else if (message.body === "-stop") {
         if (chat.isGroup) {
             message.reply(
@@ -825,6 +967,7 @@ client.on("message", async (message) => {
     } else if (message.body.startsWith("-stop ")) {
         if (chat.isGroup) {
             try {
+                wait(message, 0);
                 const game = status.setStatus(
                     chat.id.user,
                     0,
@@ -850,6 +993,8 @@ client.on("message", async (message) => {
                         games.destroy(chat.id.user, "susunkata");
                     } else if (game.game == "asahotak") {
                         games.destroy(chat.id.user, "asahotak");
+                    } else if (game.game == "tebakkimia") {
+                        games.destroy(chat.id.user, "tebakkimia");
                     }
                 }
             } catch (err) {
@@ -860,7 +1005,7 @@ client.on("message", async (message) => {
         }
     } else if (message.body === "-qdd") {
         message.reply(
-            "untuk menambah soal, Ketik *-qdd* dengan format berikut.\n\n-qdd\n\n'gamecode' (tanpa tanda kutip)\n\nKetik *-gamecodes* untuk melihat gamecode yang tersedia."
+            "Untuk menambah soal, Ketik *-qdd* dengan format berikut.\n\n-qdd\n\n'gamecode' (tanpa tanda kutip)\n\nKetik *-gamecodes* untuk melihat gamecode yang tersedia."
         );
     } else if (message.body.startsWith("-qdd")) {
         let [cmd, game, ...msg] = message.body.split("\n\n");
@@ -869,29 +1014,11 @@ client.on("message", async (message) => {
         } else if (game == "lontong") {
             message.reply(lontong.writeSoal(msg));
         } else {
-            message.reply("gamecode ini tidak bisa ditambahkan soalnya.");
+            message.reply("Gamecode ini tidak bisa ditambahkan soalnya.");
         }
-    } else if (message.body === "-gamecodes") {
-        let gcs = "*✱ GameCode yang Tersedia ✱*\n";
-        gamecodes.forEach((gc) => {
-            gcs += `\n★ -${gc}`;
-        });
-        if (!gamecodes.length) gcs += "\n*Tidak Ada!*";
-        gcs += "\n\nKetik *-menu* untuk melihat semua menu.";
-        message.reply(gcs);
-    } else if (message.body === "-lb") {
-        if (chat.isGroup) {
-            try {
-                const { text, mentions } = lb.getLB(chat.id.user);
-                chat.sendMessage(text, {
-                    mentions,
-                });
-            } catch (err) {
-                error(message, err);
-            }
-        } else {
-            group(message);
-        }
+        //GAME
+
+        //ProbablyCMD
     } else if (message.body.startsWith("-")) {
         const cmd = message.body.split("-")[1].toLowerCase();
         let char = message.body.split("-")[2];
@@ -900,6 +1027,7 @@ client.on("message", async (message) => {
         stickersCmd.forEach((el) => {
             if (el.toLowerCase() == cmd) {
                 nocmd = false;
+                wait(message, 0);
                 return stickers.generate(cmd, message, MessageMedia, user);
             }
         });
@@ -907,6 +1035,7 @@ client.on("message", async (message) => {
             emojisCmd.forEach((el) => {
                 if (el.toLowerCase() == cmd) {
                     nocmd = false;
+                    wait(message, 0);
                     return stickers.emoji(
                         cmd,
                         char,
@@ -921,6 +1050,9 @@ client.on("message", async (message) => {
             message.reply(
                 "Perintah tidak valid. Ketik *-menu* untuk melihat menu. untuk melihat bantuan, Ketik *-help* atau hubungi owner bot."
             );
+        //ProbablyCMD
+
+        //PLAINTEXT
     } else {
         getKW(message.body.toLowerCase(), message);
         if (chat.isGroup) {
@@ -1182,12 +1314,38 @@ client.on("message", async (message) => {
                             );
                         }
                     }
+                    if (Object.values(game.game).indexOf("tebakkimia") > -1) {
+                        const soal = games.getAnsWard(
+                            chat.id.user,
+                            "tebakkimia"
+                        );
+
+                        if (
+                            soal.answer.toLowerCase() ===
+                            message.body.toLowerCase()
+                        ) {
+                            message.reply(
+                                `*✱ TEBAK KIMIA ✱*\n\nJawaban benar. +${soal.reward} point.`
+                            );
+                            status.setStatus(chat.id.user, 0, "tebakkimia");
+                            games.destroy(chat.id.user, "tebakkimia");
+                            lb.setLB(
+                                chat.id.user,
+                                {
+                                    user: `@${message.author.split("@")[0]}`,
+                                    contact,
+                                },
+                                soal.reward
+                            );
+                        }
+                    }
                 }
             } catch (err) {
                 error(message, err);
             }
         }
     }
+    //PLAINTEXT
 });
 
 client.initialize();
@@ -1227,5 +1385,5 @@ io.on("connection", function (socket) {
 });
 
 server.listen(port, function () {
-    console.log("App running on :" + port);
+    console.log("App running on http://localhost:" + port);
 });

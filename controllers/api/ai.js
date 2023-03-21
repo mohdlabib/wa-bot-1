@@ -1,8 +1,9 @@
 const { errai } = require("../utils/autoMsg");
 const { Configuration, OpenAIApi } = require("openai");
+const { AIKey } = require("../utils/apikey");
 
 const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: AIKey(),
 });
 const openai = new OpenAIApi(configuration);
 

@@ -61,7 +61,7 @@ exports.sticker = async (
                         memeMaker(options, (err) => {
                             if (err)
                                 return message.reply(
-                                    `*gagal membuat stiker meme.*\ncoba lagi!\n\n${err}`
+                                    `*Gagal membuat stiker meme.*\nCoba lagi!\n\n${err}`
                                 );
                             fs.unlinkSync(fullFilename);
                             // console.log(`file deleted! ` + fullFilename);
@@ -91,14 +91,14 @@ exports.sticker = async (
                     // console.log("failed to save:", err);
                     // console.log(`file deleted!`, err);
                     message.reply(
-                        `*gagal membuat stiker.*\ncoba lagi!\n${err}`
+                        `*Gagal membuat stiker.*\nCoba lagi!\n${err}`
                     );
                 }
             }
         });
     } else {
         message.reply(
-            `kirim atau balas gambar/video/gif dengan *-sticker* atau *-s* untuk membuat stiker.`
+            `Kirim atau balas gambar/video/gif dengan *-sticker* atau *-s* untuk membuat stiker.`
         );
     }
 };
@@ -111,7 +111,7 @@ exports.stickers = async (message, MessageMedia) => {
             stickerName: "Funday's Sticker",
         });
     } catch (err) {
-        message.reply(`*gagal membuat stiker.*\ncoba lagi!\n\n${err}`);
+        message.reply(`*Gagal membuat stiker.*\nCoba lagi!\n\n${err}`);
     }
 };
 
@@ -168,7 +168,7 @@ exports.img = async (
                         memeMaker(options, (err) => {
                             if (err)
                                 return msg.reply(
-                                    `*gagal membuat meme.*\ncoba lagi!\n\n${err}`
+                                    `*Gagal membuat meme.*\nCoba lagi!\n\n${err}`
                                 );
                             fs.unlinkSync(fullFilename);
                             // console.log(`file deleted! ` + fullFilename);
@@ -183,7 +183,8 @@ exports.img = async (
                         });
                     } else {
                         const im = MessageMedia.fromFilePath(fullFilename);
-                        await msg.reply(
+                        await this.image(
+                            msg,
                             new MessageMedia(im.mimetype, im.data, fullFilename)
                         );
                         fs.unlinkSync(fullFilename);
@@ -193,15 +194,23 @@ exports.img = async (
                     // console.log("failed to save:", err);
                     // console.log(`file deleted!`, err);
                     message.reply(
-                        `*gagal membuat gambar.*\ncoba lagi!\n\n${err}`
+                        `*Gagal membuat gambar.*\nCoba lagi!\n\n${err}`
                     );
                 }
             }
         });
     } else {
         message.reply(
-            `balas stiker dengan *-img* atau *-toimg* untuk merubah stiker ke gambar.`
+            `Balas stiker dengan *-img* atau *-toimg* untuk merubah stiker ke gambar.`
         );
+    }
+};
+
+exports.image = async (message, im) => {
+    try {
+        await message.reply(im);
+    } catch (err) {
+        message.reply(`*Gagal membuat gambar.*\nCoba lagi!\n\n${err}`);
     }
 };
 
@@ -242,6 +251,20 @@ exports.autoBot = (file, msg, mentions) => {
 
 exports.premiumNotify = (message) => {
     message.reply(this.premiumNotifyText);
+};
+
+exports.wait = (message, x) => {
+    switch (x) {
+        case 1:
+            message.reply("_Mengetik..._");
+            break;
+        case 2:
+            message.reply("_Mencari..._");
+            break;
+        default:
+            message.reply("_Memproses..._");
+            break;
+    }
 };
 
 exports.error = (msg, err) => {
@@ -300,7 +323,7 @@ exports.upKW = (ok, keyword, reply, msg) => {
         let data = JSON.parse(file);
         const ndata = data.filter((d) => d.keyword == ok);
         data = data.filter((d) => d.keyword != ok);
-        if (!ndata.length) return msg.reply("keyword not found! coba lagi.");
+        if (!ndata.length) return msg.reply("keyword not found! Coba lagi.");
         data.push({
             keyword,
             reply,
@@ -318,7 +341,7 @@ exports.delKW = (ok, msg) => {
         let data = JSON.parse(file);
         const ndata = data.filter((d) => d.keyword == ok);
         data = data.filter((d) => d.keyword != ok);
-        if (!ndata.length) return msg.reply("keyword not found! coba lagi.");
+        if (!ndata.length) return msg.reply("keyword not found! Coba lagi.");
         fs.writeFileSync("./database/keyword.json", JSON.stringify(data));
         msg.reply("sukses menghapus keyword!");
     } catch (err) {
@@ -379,7 +402,7 @@ exports.delTask = (kelas, mk, task, msg) => {
         let data = JSON.parse(file);
         let ndata = data.filter((d) => d.kelas == kelas && d.mk == mk);
         data = data.filter((d) => d.kelas != kelas && d.mk != mk);
-        if (!ndata.length) return msg.reply("mk or task not found. coba lagi.");
+        if (!ndata.length) return msg.reply("mk or task not found. Coba lagi.");
         if (task[0] != "all") {
             ndata = ndata[0];
             for (let i = 0; i < ndata.task.length; i++) {
@@ -435,7 +458,7 @@ exports.getTask = (kelas, mk, msg) => {
         if (mk != "all") {
             data = data.filter((d) => d.kelas == kelas && d.mk == mk);
             if (!data.length)
-                return msg.reply("mk or task not found. coba lagi.");
+                return msg.reply("mk or task not found. Coba lagi.");
             let text =
                 "*DAFTAR TUGAS " +
                 cMk(mk).toUpperCase() +

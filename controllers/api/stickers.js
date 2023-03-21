@@ -1,4 +1,4 @@
-const { stickers, premiumNotify } = require("../utils/autoMsg");
+const { stickers, premiumNotify, image } = require("../utils/autoMsg");
 const { AlphaKey } = require("../utils/apikey");
 
 exports.generate = async (char, message, MessageMedia, user) => {
@@ -36,7 +36,7 @@ exports.generate = async (char, message, MessageMedia, user) => {
         }
         stickers(message, img);
     } catch (err) {
-        message.reply(`*gagal membuat stiker.*\ncoba lagi!\n\n` + err);
+        message.reply(`*Gagal membuat stiker.*\nCoba lagi!\n\n` + err);
     }
 };
 
@@ -54,6 +54,46 @@ exports.emoji = async (platform, char, message, MessageMedia, user) => {
         }
         stickers(message, img);
     } catch (err) {
-        message.reply(`*gagal membuat stiker.*\ncoba lagi!\n\n` + err);
+        message.reply(`*Gagal membuat stiker.*\nCoba lagi!\n\n` + err);
+    }
+};
+
+exports.ttp = async (text, type, message, MessageMedia, user) => {
+    try {
+        const img = await MessageMedia.fromUrl(
+            `https://api.zeeoneofc.my.id/api/canvas/ttp?apikey=${AlphaKey(
+                user
+            )}&text=${text}`,
+            { unsafeMime: true }
+        );
+        if (img.filesize == 133) {
+            premiumNotify(message);
+            return;
+        }
+        if (type == 1) stickers(message, img);
+        else image(message, img);
+    } catch (err) {
+        message.reply(`*Gagal membuat text-to-picture.*\nCoba lagi!\n\n` + err);
+    }
+};
+
+exports.attp = async (text, type, message, MessageMedia, user) => {
+    try {
+        const img = await MessageMedia.fromUrl(
+            `https://api.zeeoneofc.my.id/api/canvas/attp?apikey=${AlphaKey(
+                user
+            )}&text=${text}`,
+            { unsafeMime: true }
+        );
+        if (img.filesize == 133) {
+            premiumNotify(message);
+            return;
+        }
+        if (type == 1) stickers(message, img);
+        else image(message, img);
+    } catch (err) {
+        message.reply(
+            `*Gagal membuat animated-text-to-picture.*\nCoba lagi!\n\n` + err
+        );
     }
 };

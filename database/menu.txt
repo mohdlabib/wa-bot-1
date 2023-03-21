@@ -28,6 +28,10 @@
 ☆ *-toimg* atau *-img*
 ☆ *-stickers*
 ☆ *-emojis*
+★ *-ttp* TEKS
+★ *-sttp* TEKS
+★ *-attp* TEKS
+★ *-sattp* TEKS
 
 *✲ STIKER RANDOM ✲*
 ★ *-patrick*
@@ -71,9 +75,9 @@
 ★ *-aubykddi*
 
 *✲ DOWNLOADER ✲*
-★ *-ytvid* url
+★ *-ytvid* atau *-yt* url
 ★ *-ytaudio* url
-★ *-tt* url
+★ *-tt* atau *-tiktok* url
 ★ *-ig* url
 
 *✲ IBADAH ✲*
@@ -82,8 +86,8 @@
 
 *✲ SPESIFIKASI HP ✲*
 ☆ *-speq* keyword
-☆ *-spec* namahp
-☆ *-spek* keywordhp
+☆ *-spec* namaHP
+☆ *-spek* keywordHP
 
 *✲ AI & TRANSLATE ✲*
 ☆ *-ai* atau *-t*
@@ -100,6 +104,10 @@
 ★ *-tebaklirik*
 ★ *-tebakkalimat*
 ★ *-tekateki*
+★ *-tebakbendera*
+★ *-susunkata*
+★ *-asahotak*
+★ *-tebakkimia*
 ★ *-qdd*
 ★ *-stop* gamecode
 ☆ *-lb*

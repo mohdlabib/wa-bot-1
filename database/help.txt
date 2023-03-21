@@ -55,6 +55,18 @@
     ➮ Melihat daftar stiker random yang bisa di-generate.
 ☆ *-emojis* ➔
     ➮ Melihat daftar platform untuk mengubah emoji ke stiker.
+★ *-ttp* TEKS ➔
+    ➮ Membuat gambar text-to-picture.
+    ➮ Contoh : -ttp FUNDAYYY
+★ *-sttp* TEKS ➔
+    ➮ Membuat stiker text-to-picture.
+    ➮ Contoh : -sttp FUNDAYYY
+★ *-attp* TEKS ➔
+    ➮ Membuat gambar animated-text-to-picture.
+    ➮ Contoh : -attp FUNDAYYY
+★ *-sattp* TEKS ➔
+    ➮ Membuat stiker animated-text-to-picture.
+    ➮ Contoh : -sattp FUNDAYYY
 
 *✲ STIKER RANDOM ✲*
     ★ *-patrick*

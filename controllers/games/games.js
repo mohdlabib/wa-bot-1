@@ -77,7 +77,7 @@ exports.tebakkata = async (grup, user) => {
                 response.jawaban = response.jawaban.trim();
                 response.reward = rand(5, 25);
                 const text =
-                    "*✱ TEBAK KATA ✱*\n\nHint : " +
+                    "*✱ TEBAK KATA ✱*\n\n*Hint :* " +
                     response.soal +
                     "\n\n" +
                     response.reward +
@@ -126,7 +126,7 @@ exports.tekateki = async (grup, user) => {
                 response.jawaban = response.jawaban.trim();
                 response.reward = rand(10, 50);
                 const text =
-                    "*✱ TEKATEKI ✱*\n\nHint : " +
+                    "*✱ TEKATEKI ✱*\n\n*Hint :* " +
                     response.soal +
                     "\n\n" +
                     response.reward +
@@ -324,7 +324,7 @@ exports.susunkata = async (grup, user) => {
                 const text =
                     "*✱ SUSUN KATA ✱*\n\n" +
                     response.soal +
-                    "\nTipe : " +
+                    "\n*Tipe :* " +
                     response.tipe +
                     "\n\n" +
                     response.reward +
@@ -371,7 +371,7 @@ exports.asahotak = async (grup, user) => {
                 }
                 response = response.result;
                 response.jawaban = response.jawaban.trim();
-                response.reward = rand(5, 30);
+                response.reward = rand(20, 50);
                 const text =
                     "*✱ ASAH OTAK ✱*\n\n" +
                     response.soal +
@@ -382,6 +382,55 @@ exports.asahotak = async (grup, user) => {
                     "s";
 
                 setGames(grup, "asahotak", response);
+                resolve({
+                    play: true,
+                    text,
+                });
+            })
+            .catch((err) => {
+                if (err.response.status == 403) {
+                    resolve({
+                        play: false,
+                        text: premiumNotifyText,
+                    });
+                } else {
+                    resolve({
+                        play: false,
+                        text: err,
+                    });
+                }
+            });
+    });
+};
+
+exports.tebakkimia = async (grup, user) => {
+    return new Promise((resolve, reject) => {
+        axios
+            .get(
+                "https://api.zeeoneofc.my.id/api/game/tebakkimia?apikey=" +
+                    AlphaKey(user)
+            )
+            .then((res) => {
+                let response = res.data;
+                if (response.status != 200) {
+                    resolve({
+                        play: false,
+                        text: response.message,
+                    });
+                }
+                response = response.result;
+                response.jawaban = response.unsur.trim();
+                response.reward = rand(20, 50);
+                const text =
+                    "*✱ TEBAK KIMIA ✱*\n\n*Lambang :* " +
+                    response.lambang +
+                    "\n\n" +
+                    response.reward +
+                    " point | " +
+                    this.TIME +
+                    "s";
+
+                setGames(grup, "tebakkimia", response);
                 resolve({
                     play: true,
                     text,
@@ -448,6 +497,10 @@ exports.end = (grup, chat, gc) => {
     else if (gc == "asahotak")
         chat.sendMessage(
             `*✱ ASAH OTAK ✱*\n\nWAKTU HABIS!\n\nJawaban : ${soal.answer}`
+        );
+    else if (gc == "tebakkimia")
+        chat.sendMessage(
+            `*✱ TEBAK KIMIA ✱*\n\nWAKTU HABIS!\n\nJawaban : ${soal.answer}`
         );
     this.destroy(grup, gc);
 };
