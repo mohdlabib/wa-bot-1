@@ -354,6 +354,55 @@ exports.susunkata = async (grup, user) => {
     });
 };
 
+exports.asahotak = async (grup, user) => {
+    return new Promise((resolve, reject) => {
+        axios
+            .get(
+                "https://api.zeeoneofc.my.id/api/game/asahotak?apikey=" +
+                    AlphaKey(user)
+            )
+            .then((res) => {
+                let response = res.data;
+                if (response.status != 200) {
+                    resolve({
+                        play: false,
+                        text: response.message,
+                    });
+                }
+                response = response.result;
+                response.jawaban = response.jawaban.trim();
+                response.reward = rand(5, 30);
+                const text =
+                    "*✱ ASAH OTAK ✱*\n\n" +
+                    response.soal +
+                    "\n\n" +
+                    response.reward +
+                    " point | " +
+                    this.TIME +
+                    "s";
+
+                setGames(grup, "asahotak", response);
+                resolve({
+                    play: true,
+                    text,
+                });
+            })
+            .catch((err) => {
+                if (err.response.status == 403) {
+                    resolve({
+                        play: false,
+                        text: premiumNotifyText,
+                    });
+                } else {
+                    resolve({
+                        play: false,
+                        text: err,
+                    });
+                }
+            });
+    });
+};
+
 exports.getAnsWard = (grup, game) => {
     return getGames(grup, game);
 };
@@ -395,6 +444,10 @@ exports.end = (grup, chat, gc) => {
     else if (gc == "susunkata")
         chat.sendMessage(
             `*✱ SUSUN KATA ✱*\n\nWAKTU HABIS!\n\nJawaban : ${soal.answer}`
+        );
+    else if (gc == "asahotak")
+        chat.sendMessage(
+            `*✱ ASAH OTAK ✱*\n\nWAKTU HABIS!\n\nJawaban : ${soal.answer}`
         );
     this.destroy(grup, gc);
 };

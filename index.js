@@ -16,6 +16,7 @@ const gamecodes = [
     "tekateki",
     "tebakbendera",
     "susunkata",
+    "asahotak",
 ];
 const mks = ["sd", "asd", "bing", "arsikom", "md", "imk", "ep", "sm"];
 const lb = require("./controllers/games/lb");
@@ -790,6 +791,29 @@ client.on("message", async (message) => {
             group(message);
         }
         //susunkata
+        //asahotak
+    } else if (message.body === "-asahotak") {
+        if (chat.isGroup) {
+            try {
+                const game = status.setStatus(chat.id.user, 1, "asahotak");
+                if (game.status) {
+                    const asahotak = await games.asahotak(chat.id.user, user);
+                    message.reply(asahotak.text);
+                    if (!asahotak.play) {
+                        status.setStatus(chat.id.user, 0, "asahotak");
+                        return;
+                    }
+                    games.timer(chat.id.user, chat, "asahotak");
+                } else {
+                    message.reply(game.msg);
+                }
+            } catch (err) {
+                error(message, err);
+            }
+        } else {
+            group(message);
+        }
+        //asahotak
     } else if (message.body === "-stop") {
         if (chat.isGroup) {
             message.reply(
@@ -824,6 +848,8 @@ client.on("message", async (message) => {
                         games.destroy(chat.id.user, "tebakbendera");
                     } else if (game.game == "susunkata") {
                         games.destroy(chat.id.user, "susunkata");
+                    } else if (game.game == "asahotak") {
+                        games.destroy(chat.id.user, "asahotak");
                     }
                 }
             } catch (err) {
@@ -1124,6 +1150,28 @@ client.on("message", async (message) => {
                             );
                             status.setStatus(chat.id.user, 0, "susunkata");
                             games.destroy(chat.id.user, "susunkata");
+                            lb.setLB(
+                                chat.id.user,
+                                {
+                                    user: `@${message.author.split("@")[0]}`,
+                                    contact,
+                                },
+                                soal.reward
+                            );
+                        }
+                    }
+                    if (Object.values(game.game).indexOf("asahotak") > -1) {
+                        const soal = games.getAnsWard(chat.id.user, "asahotak");
+
+                        if (
+                            soal.answer.toLowerCase() ===
+                            message.body.toLowerCase()
+                        ) {
+                            message.reply(
+                                `*✱ ASAH OTAK ✱*\n\nJawaban benar. +${soal.reward} point.`
+                            );
+                            status.setStatus(chat.id.user, 0, "asahotak");
+                            games.destroy(chat.id.user, "asahotak");
                             lb.setLB(
                                 chat.id.user,
                                 {
