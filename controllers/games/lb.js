@@ -40,17 +40,17 @@ exports.getLB = (grup) => {
     let data = datas.filter((d) => d.grup === grup);
     if (data.length) {
         const d = data[0];
-        let text = `*Leaderboard*\n`;
+        let text = `*✱ LOCAL LEADERBOARD ✱*\n`;
         let mentions = [];
         d.anggota.sort((a, b) => b.poin - a.poin);
         d.anggota.forEach((d, i) => {
-            text += `\n${i + 1}. ${d.anggota.user} -> ${d.poin} point`;
+            text += `\n${i + 1}. ${d.anggota.user} ➔ ${d.poin} point`;
             mentions.push(d.anggota.contact);
         });
         return { text, mentions };
     } else {
         return {
-            text: `tidak ada leaderboard ditemukan. mainkan game untuk membuat leaderboard.\n\nketik *-menu* untuk melihat menu. lihat bantuan dengan ketik *-help* atau hubungi owner bot.`,
+            text: `Tidak ada leaderboard ditemukan. Mainkan game untuk membuat Leaderboard.\n\nKetik *-menu* untuk melihat menu. Lihat bantuan dengan ketik *-help* atau hubungi owner bot.`,
             mentions: [],
         };
     }

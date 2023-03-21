@@ -77,7 +77,7 @@ exports.tebakkata = async (grup, user) => {
                 response.jawaban = response.jawaban.trim();
                 response.reward = rand(5, 25);
                 const text =
-                    "*✱ TEBAK KATA ✱*\n\nclue : " +
+                    "*✱ TEBAK KATA ✱*\n\nHint : " +
                     response.soal +
                     "\n\n" +
                     response.reward +
@@ -126,7 +126,7 @@ exports.tekateki = async (grup, user) => {
                 response.jawaban = response.jawaban.trim();
                 response.reward = rand(10, 50);
                 const text =
-                    "*✱ TEKATEKI ✱*\n\nclue : " +
+                    "*✱ TEKATEKI ✱*\n\nHint : " +
                     response.soal +
                     "\n\n" +
                     response.reward +
@@ -303,6 +303,57 @@ exports.tebakbendera = async (grup, user) => {
     });
 };
 
+exports.susunkata = async (grup, user) => {
+    return new Promise((resolve, reject) => {
+        axios
+            .get(
+                "https://api.zeeoneofc.my.id/api/game/susunkata?apikey=" +
+                    AlphaKey(user)
+            )
+            .then((res) => {
+                let response = res.data;
+                if (response.status != 200) {
+                    resolve({
+                        play: false,
+                        text: response.message,
+                    });
+                }
+                response = response.result;
+                response.jawaban = response.jawaban.trim();
+                response.reward = rand(10, 30);
+                const text =
+                    "*✱ SUSUN KATA ✱*\n\n" +
+                    response.soal +
+                    "\nTipe : " +
+                    response.tipe +
+                    "\n\n" +
+                    response.reward +
+                    " point | " +
+                    this.TIME +
+                    "s";
+
+                setGames(grup, "susunkata", response);
+                resolve({
+                    play: true,
+                    text,
+                });
+            })
+            .catch((err) => {
+                if (err.response.status == 403) {
+                    resolve({
+                        play: false,
+                        text: premiumNotifyText,
+                    });
+                } else {
+                    resolve({
+                        play: false,
+                        text: err,
+                    });
+                }
+            });
+    });
+};
+
 exports.getAnsWard = (grup, game) => {
     return getGames(grup, game);
 };
@@ -317,29 +368,33 @@ exports.end = (grup, chat, gc) => {
     setStatus(grup, 0, gc);
     if (gc == "caklontong")
         chat.sendMessage(
-            `*✱ CAK LONTONG ✱*\n\nwaktu habis!\n\njawaban : ${
+            `*✱ CAK LONTONG ✱*\n\nWAKTU HABIS!\n\nJawaban : ${
                 soal.answer
             }\ndeskripsi : ${soal.desc.toLowerCase()}`
         );
     else if (gc == "tebakkata")
         chat.sendMessage(
-            `*✱ TEBAK KATA ✱*\n\nwaktu habis!\n\njawaban : ${soal.answer}`
+            `*✱ TEBAK KATA ✱*\n\nWAKTU HABIS!\n\nJawaban : ${soal.answer}`
         );
     else if (gc == "tebaklirik")
         chat.sendMessage(
-            `*✱ TEBAK LIRIK ✱*\n\nwaktu habis!\n\njawaban : ${soal.answer}`
+            `*✱ TEBAK LIRIK ✱*\n\nWAKTU HABIS!\n\nJawaban : ${soal.answer}`
         );
     else if (gc == "tekateki")
         chat.sendMessage(
-            `*✱ TEKATEKI ✱*\n\nwaktu habis!\n\njawaban : ${soal.answer}`
+            `*✱ TEKATEKI ✱*\n\nWAKTU HABIS!\n\nJawaban : ${soal.answer}`
         );
     else if (gc == "tebakkalimat")
         chat.sendMessage(
-            `*✱ TEBAK KALIMAT ✱*\n\nwaktu habis!\n\njawaban : ${soal.answer}`
+            `*✱ TEBAK KALIMAT ✱*\n\nWAKTU HABIS!\n\nJawaban : ${soal.answer}`
         );
     else if (gc == "tebakbendera")
         chat.sendMessage(
-            `*✱ TEBAK BENDERA ✱*\n\nwaktu habis!\n\njawaban : ${soal.name}`
+            `*✱ TEBAK BENDERA ✱*\n\nWAKTU HABIS!\n\nJawaban : ${soal.name}`
+        );
+    else if (gc == "susunkata")
+        chat.sendMessage(
+            `*✱ SUSUN KATA ✱*\n\nWAKTU HABIS!\n\nJawaban : ${soal.answer}`
         );
     this.destroy(grup, gc);
 };
@@ -397,6 +452,7 @@ const setGames = (grup, game, response) => {
         desc: response.deskripsi,
         reward: response.reward,
         name: response.name,
+        tipe: response.tipe,
     });
     fs.writeFileSync("./database/games.json", JSON.stringify(data));
 };
@@ -414,13 +470,11 @@ const deleteGames = (grup, game) => {
     const file = fs.readFileSync("./database/games.json");
     let data = JSON.parse(file);
     const ndata = data.filter((d) => d.grup == grup && d.game == game);
-    // console.log("ndata", ndata);
     for (let i = 0; i < data.length; i++) {
         if (data[i].grup == grup && data[i].game == game) {
             data.splice(i, 1);
         }
     }
-    // console.log("data", data);
     if (!ndata.length) return false;
     fs.writeFileSync("./database/games.json", JSON.stringify(data));
     return true;

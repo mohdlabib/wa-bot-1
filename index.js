@@ -15,6 +15,7 @@ const gamecodes = [
     "tebakkalimat",
     "tekateki",
     "tebakbendera",
+    "susunkata",
 ];
 const mks = ["sd", "asd", "bing", "arsikom", "md", "imk", "ep", "sm"];
 const lb = require("./controllers/games/lb");
@@ -195,11 +196,11 @@ client.on("message", async (message) => {
     } else if (message.body === "-groupinfo") {
         if (chat.isGroup) {
             message.reply(
-                `*Detail Grup*\nNama\t: ${chat.name}\nDeskripsi\t: ${
+                `*✱ DETAIL GRUP ✱*\n➮ Nama\t: ${chat.name}\n➮ Deskripsi\t: ${
                     chat.description
-                }\nDibuat Pada\t: ${chat.createdAt.toString()}\nDibuat Oleh\t: ${
+                }\n➮ Dibuat Pada\t: ${chat.createdAt.toString()}\n➮ Dibuat Oleh\t: ${
                     chat.owner ? chat.owner.user : "admin"
-                }\nJumlah Anggota\t: ${chat.participants.length}`
+                }\n➮ Jumlah Anggota\t: ${chat.participants.length}`
             );
         } else {
             group(message);
@@ -219,7 +220,7 @@ client.on("message", async (message) => {
         });
         if (!emojisCmd.length) gcs += "\n*Tidak Ada!*";
         gcs +=
-            "\n\nPerintah :\n★ -platform-emoji\nContoh :\n★ -joypixels-🙁\n\nKetik *-help* untuk melihat bantuan.";
+            "\n\n➮ Perintah :\n    ★ -platform-emoji\n➮ Contoh :\n    ★ -joypixels-🙁\n\nKetik *-help* untuk melihat bantuan.";
         message.reply(gcs);
     } else if (
         message.body.startsWith("-sticker") ||
@@ -252,7 +253,7 @@ client.on("message", async (message) => {
         message.body === "-listpremium"
     ) {
         let premium = PremiumList();
-        let prm = "*✱ List User Premium Funday Bot ✱*\n",
+        let prm = "*✱ LIST USER PREMIUM ✱*\n",
             no = 1,
             mentions = [];
         for (const pr of premium) {
@@ -766,6 +767,29 @@ client.on("message", async (message) => {
             group(message);
         }
         //tebakbendera
+        //susunkata
+    } else if (message.body === "-susunkata") {
+        if (chat.isGroup) {
+            try {
+                const game = status.setStatus(chat.id.user, 1, "susunkata");
+                if (game.status) {
+                    const susunkata = await games.susunkata(chat.id.user, user);
+                    message.reply(susunkata.text);
+                    if (!susunkata.play) {
+                        status.setStatus(chat.id.user, 0, "susunkata");
+                        return;
+                    }
+                    games.timer(chat.id.user, chat, "susunkata");
+                } else {
+                    message.reply(game.msg);
+                }
+            } catch (err) {
+                error(message, err);
+            }
+        } else {
+            group(message);
+        }
+        //susunkata
     } else if (message.body === "-stop") {
         if (chat.isGroup) {
             message.reply(
@@ -796,6 +820,10 @@ client.on("message", async (message) => {
                         games.destroy(chat.id.user, "tebaklirik");
                     } else if (game.game == "tebakkalimat") {
                         games.destroy(chat.id.user, "tebakkalimat");
+                    } else if (game.game == "tebakbendera") {
+                        games.destroy(chat.id.user, "tebakbendera");
+                    } else if (game.game == "susunkata") {
+                        games.destroy(chat.id.user, "susunkata");
                     }
                 }
             } catch (err) {
@@ -1071,6 +1099,31 @@ client.on("message", async (message) => {
                             );
                             status.setStatus(chat.id.user, 0, "tebakbendera");
                             games.destroy(chat.id.user, "tebakbendera");
+                            lb.setLB(
+                                chat.id.user,
+                                {
+                                    user: `@${message.author.split("@")[0]}`,
+                                    contact,
+                                },
+                                soal.reward
+                            );
+                        }
+                    }
+                    if (Object.values(game.game).indexOf("susunkata") > -1) {
+                        const soal = games.getAnsWard(
+                            chat.id.user,
+                            "susunkata"
+                        );
+
+                        if (
+                            soal.answer.toLowerCase() ===
+                            message.body.toLowerCase()
+                        ) {
+                            message.reply(
+                                `*✱ SUSUN KATA ✱*\n\nJawaban benar. +${soal.reward} point.`
+                            );
+                            status.setStatus(chat.id.user, 0, "susunkata");
+                            games.destroy(chat.id.user, "susunkata");
                             lb.setLB(
                                 chat.id.user,
                                 {
