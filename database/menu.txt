@@ -6,10 +6,42 @@
 ⚠ ☆ = Perintah Standar / Gratis
 ⚠ ★ = Perintah Spesial / Premium / Limit
 
+*✲ SPESIAL RAMADHAN ✲*
+☆ *-salat* kota
+☆ *-doa* namaDoa
+★ *-doaid* ID_DOA
+☆ *-doa2* KataKunci
+☆ *-quran*
+☆ *-surah* ID_SURAH
+★ *-tafsir* ID_SURAH
+☆ *-imsak* kota
+
 *✲ MENU & HELP ✲*
 ☆ *-menu*
 ☆ *-help*
 ☆ *-bot*
+
+*✲ STIKER & MEDIA ✲*
+☆ *-sticker* atau *-s* atau *-stiker*
+☆ *-smeme*
+☆ *-meme*
+★ *-toimg* atau *-img*
+☆ *-stickers*
+☆ *-emojis*
+★ *-ttp* TEKS
+★ *-sttp* TEKS
+★ *-attp* TEKS
+★ *-sattp* TEKS
+
+*✲ DOWNLOADER ✲*
+★ *-ytvid* atau *-yt* url
+★ *-ytaudio* url
+★ *-tt* atau *-tiktok* url
+★ *-ig* url
+
+*✲ BOT PLAYER ✲*
+☆ *-play* KataKunci
+★ *-playid* ID_AUDIO
 
 *✲ PREMIUM & LIMIT ✲*
 ☆ *-limit*
@@ -20,18 +52,6 @@
 ☆ *-groupinfo*
 ☆ *-everyone* atau *-tagall*
 ☆ *-hidetag*
-
-*✲ STIKER & MEDIA ✲*
-☆ *-sticker* atau *-s* atau *-stiker*
-☆ *-smeme*
-☆ *-meme*
-☆ *-toimg* atau *-img*
-☆ *-stickers*
-☆ *-emojis*
-★ *-ttp* TEKS
-★ *-sttp* TEKS
-★ *-attp* TEKS
-★ *-sattp* TEKS
 
 *✲ STIKER RANDOM ✲*
 ★ *-patrick*
@@ -74,16 +94,6 @@
 ★ *-docomo*
 ★ *-aubykddi*
 
-*✲ DOWNLOADER ✲*
-★ *-ytvid* atau *-yt* url
-★ *-ytaudio* url
-★ *-tt* atau *-tiktok* url
-★ *-ig* url
-
-*✲ IBADAH ✲*
-☆ *-salat* kota
-☆ *-doa* namadoa
-
 *✲ SPESIFIKASI HP ✲*
 ☆ *-speq* keyword
 ☆ *-spec* namaHP
@@ -91,12 +101,12 @@
 
 *✲ AI & TRANSLATE ✲*
 ☆ *-ai* atau *-t*
-☆ *-tlen*
+★ *-tlen*
 ☆ *-tlin* atau *-tlid*
-☆ *-stden*
+★ *-stden*
 
 *✲ GAMES ✲*
-☆ *-gamecodes*
+☆ *-gamecodes* atau *-game*
 ☆ *-fam*
 ☆ *-lontong*
 ★ *-caklontong*
@@ -115,6 +125,7 @@
 *✲ BERITA ✲*
 ☆ *-cnn* category
 ☆ *-category* newsportal
+★ *-taugasih*
 
 *✲ FITUR YANG SEGERA DATANG ✲*
 ★ *-nsfw*

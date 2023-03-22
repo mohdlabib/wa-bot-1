@@ -18,44 +18,42 @@ exports.getStatus = (grup) => {
     }
 };
 
+exports.gameTitle = (game) => {
+    switch (game) {
+        case "fam":
+            return "*✱ FAMILY100 ✱*\n\n";
+        case "lontong":
+            return "*✱ QUIZ LONTONG ✱*\n\n";
+        case "caklontong":
+            return "*✱ CAK LONTONG ✱*\n\n";
+        case "tebakkata":
+            return "*✱ TEBAK KATA ✱*\n\n";
+        case "tebaklirik":
+            return "*✱ TEBAK LIRIK ✱*\n\n";
+        case "tebakkalimat":
+            return "*✱ TEBAK KALIMAT ✱*\n\n";
+        case "tebakbendera":
+            return "*✱ TEBAK BENDERA ✱*\n\n";
+        case "susunkata":
+            return "*✱ SUSUN KATA ✱*\n\n";
+        case "asahotak":
+            return "*✱ ASAH OTAK ✱*\n\n";
+        case "tebakkimia":
+            return "*✱ TEBAK KIMIA ✱*\n\n";
+        case "siapakahaku":
+            return "*✱ SIAPAKAH AKU ✱*\n\n";
+        case "tebaktebakan":
+            return "*✱ TEBAK-TEBAKAN ✱*\n\n";
+    }
+};
+
 exports.setStatus = (grup, act, game) => {
     const file = fs.readFileSync("./database/status.json");
     let data = JSON.parse(file);
     let id = data[0].ids;
     const temp = data.filter((obj) => obj.grup == grup && obj.game == game);
     let status = { status: true, msg: "", game };
-    switch (game) {
-        case "fam":
-            status.msg = "*✱ FAMILY100 ✱*\n\n";
-            break;
-        case "lontong":
-            status.msg = "*✱ QUIZ LONTONG ✱*\n\n";
-            break;
-        case "caklontong":
-            status.msg = "*✱ CAK LONTONG ✱*\n\n";
-            break;
-        case "tebakkata":
-            status.msg = "*✱ TEBAK KATA ✱*\n\n";
-            break;
-        case "tebaklirik":
-            status.msg = "*✱ TEBAK LIRIK ✱*\n\n";
-            break;
-        case "tebakkalimat":
-            status.msg = "*✱ TEBAK KALIMAT ✱*\n\n";
-            break;
-        case "tebakbendera":
-            status.msg = "*✱ TEBAK BENDERA ✱*\n\n";
-            break;
-        case "susunkata":
-            status.msg = "*✱ SUSUN KATA ✱*\n\n";
-            break;
-        case "asahotak":
-            status.msg = "*✱ ASAH OTAK ✱*\n\n";
-            break;
-        case "tebakkimia":
-            status.msg = "*✱ TEBAK KIMIA ✱*\n\n";
-            break;
-    }
+    status.msg = this.gameTitle(game);
     if (act == 1) {
         if (temp.length) {
             status.status = false;
@@ -84,4 +82,9 @@ exports.rand = (min, max) => {
 
     let randomNumber = Math.floor(Math.random() * range) + offset;
     return randomNumber;
+};
+
+exports.reset = () => {
+    const data = [{ ids: 0 }];
+    fs.writeFileSync("./database/status.json", JSON.stringify(data));
 };

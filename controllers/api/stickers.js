@@ -1,5 +1,6 @@
 const { stickers, premiumNotify, image } = require("../utils/autoMsg");
-const { AlphaKey } = require("../utils/apikey");
+const { AlphaKey, AlphaLimit } = require("../utils/apikey");
+const memes = require("random-memes");
 
 exports.generate = async (char, message, MessageMedia, user) => {
     try {
@@ -96,4 +97,45 @@ exports.attp = async (text, type, message, MessageMedia, user) => {
             `*Gagal membuat animated-text-to-picture.*\nCoba lagi!\n\n` + err
         );
     }
+};
+
+exports.rmeme = (message, MessageMedia, user) => {
+    try {
+        if (AlphaLimit(user).limit <= 0) {
+            premiumNotify(message);
+            return;
+        }
+        memes.random().then(async (meme) => {
+            let caption = meme.image;
+            const img = await MessageMedia.fromUrl(caption, {
+                unsafeMime: true,
+            });
+            caption = meme.caption;
+            message.reply(img, message.from, { caption });
+        });
+    } catch (err) {
+        message.reply(`*Gagal membuat random meme.*\nCoba lagi!\n\n` + err);
+        return;
+    }
+    return true;
+};
+
+exports.rsmeme = (message, MessageMedia, user) => {
+    try {
+        if (AlphaLimit(user).limit <= 0) {
+            premiumNotify(message);
+            return;
+        }
+        memes.random().then(async (meme) => {
+            let caption = meme.image;
+            const img = await MessageMedia.fromUrl(caption, {
+                unsafeMime: true,
+            });
+            stickers(message, img);
+        });
+    } catch (err) {
+        message.reply(`*Gagal membuat random meme.*\nCoba lagi!\n\n` + err);
+        return;
+    }
+    return true;
 };

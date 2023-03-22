@@ -84,7 +84,9 @@ exports.end = (grup, chat, act) => {
     }
     const soal = this.getSoal(grup);
     if (soal.answer.length > 0) {
-        let text = `*>> FAMILY100 <<*\n\n${extra}*${soal.answer.length} jawaban tersisa*`;
+        let text = `${status.gameTitle(this.GAME)}${extra}*${
+            soal.answer.length
+        } jawaban tersisa*`;
         soal.answer.forEach((j) => (text += `\n- ${j}`));
         chat.sendMessage(text);
     }

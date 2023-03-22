@@ -67,7 +67,9 @@ exports.end = (grup, chat, act) => {
     if (act == -1) text = "WAKTU HABIS!\n\n";
     const soal = this.getSoal(grup);
     chat.sendMessage(
-        `*>> QUIZ LONTONG <<*\n\n${text}jawaban : ${soal.answer.toLowerCase()}`
+        `${status.gameTitle(
+            this.GAME
+        )}${text}jawaban : ${soal.answer.toLowerCase()}`
     );
     this.delSoal(grup);
 };

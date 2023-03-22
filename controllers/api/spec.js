@@ -9,7 +9,7 @@ exports.spec = (hp, message, MessageMedia, chat) => {
             }
             if (!query.data.data.phones.length) {
                 return message.reply(
-                    "Maaf, gagal mencari ponsel yang kamu maksud. ada error."
+                    "Maaf, gagal mencari ponsel yang kamu maksud. Data tidak ditemukan."
                 );
             }
             this.spek(
@@ -34,12 +34,12 @@ exports.speq = (hp, message) => {
                 return message.reply(query.data.message);
             }
             let data = query.data.data;
-            let text = `*${data.title}*\n`;
+            let text = `*${data.title.toUpperCase()}*\n`;
             let i = 1;
             data.phones.forEach((phone) => {
-                text += `\n${i++}.\n- Nama: ${phone.phone_name}\n- Brand: ${
+                text += `\n*${i++}.*\n➮ Nama : ${phone.phone_name}\n➮ Brand : ${
                     phone.brand
-                }\n- KeywordHP: ${phone.slug}\n`;
+                }\n➮ KeywordHP : ${phone.slug}\n`;
             });
             message.reply(text);
         })
@@ -58,11 +58,11 @@ exports.spek = async (hp, message, MessageMedia, chat) => {
                 return message.reply(res.data.message);
             }
             const data = res.data.data;
-            let text = `*${data.phone_name}*\n\n- Nama: ${data.phone_name}\n- Brand: ${data.brand}\n- Tanggal Rilis: ${data.release_date}\n- Dimensi: ${data.dimension}\n- OS: ${data.os}\n- Storage: ${data.storage}\n- Spesifikasi:`;
+            let text = `*${data.phone_name}*\n\n➮ Nama : ${data.phone_name}\n➮ Brand : ${data.brand}\n➮ Tanggal Rilis : ${data.release_date}\n➮ Dimensi : ${data.dimension}\n➮ OS : ${data.os}\n➮ Storage : ${data.storage}\n➮ Spesifikasi :`;
             data.specifications.forEach((spec) => {
-                text += `\n\t+ ${spec.title} :\n`;
+                text += `\n\t➮ ${spec.title} :\n`;
                 spec.specs.forEach((s) => {
-                    text += `\t\t- ${s.key}: ${s.val}\n`;
+                    text += `\t\t➮ ${s.key}: ${s.val}\n`;
                 });
             });
             message.reply(text);
@@ -81,14 +81,14 @@ exports.spek = async (hp, message, MessageMedia, chat) => {
 };
 
 exports.speb = (cmd, msg) => {
-    const search = cmd != "-speq" ? "phone specifications" : "phones name";
-    const query = cmd != "-spec" ? "keyword" : "phone name";
+    const search = cmd != "-speq" ? "spesifikasi HP" : "nama-nama HP";
+    const query = cmd != "-spec" ? "KataKunci" : "namaHP";
     return msg.reply(
-        "to search " +
+        "Untuk mencari " +
             search +
-            " based on a " +
+            " berdasarkan " +
             query +
-            ", type *" +
+            ", ketik *" +
             cmd +
             "* '" +
             query +

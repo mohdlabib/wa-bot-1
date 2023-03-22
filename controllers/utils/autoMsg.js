@@ -3,6 +3,7 @@ const path = require("path");
 const mime = require("mime-types");
 const { getStatus } = require("../games/status");
 const memeMaker = require("meme-maker");
+const { AlphaLimit } = require("./apikey");
 let times = [];
 
 exports.premiumNotifyText =
@@ -122,8 +123,13 @@ exports.img = async (
     topText,
     bottomText,
     padding,
-    font
+    font,
+    user
 ) => {
+    if (AlphaLimit(user).limit <= 0) {
+        this.premiumNotify(msg);
+        return;
+    }
     let message = msg.hasMedia
         ? msg
         : image
@@ -196,6 +202,7 @@ exports.img = async (
                     message.reply(
                         `*Gagal membuat gambar.*\nCoba lagi!\n\n${err}`
                     );
+                    return;
                 }
             }
         });
@@ -203,14 +210,16 @@ exports.img = async (
         message.reply(
             `Balas stiker dengan *-img* atau *-toimg* untuk merubah stiker ke gambar.`
         );
+        return;
     }
+    return true;
 };
 
 exports.image = async (message, im) => {
     try {
         await message.reply(im);
     } catch (err) {
-        message.reply(`*Gagal membuat gambar.*\nCoba lagi!\n\n${err}`);
+        message.reply(`*Gagal mengirim gambar.*\nCoba lagi!\n\n${err}`);
     }
 };
 
@@ -269,18 +278,18 @@ exports.wait = (message, x) => {
 
 exports.error = (msg, err) => {
     msg.reply(
-        "ada error! ketik *-menu* untuk melihat menu. lihat bantuan dengan ketik *-help* atau hubungi owner bot.\n\n" +
+        "Ada error! Ulangi perintah dengan baik dan benar. Ketik *-menu* untuk melihat menu. Lihat bantuan dengan ketik *-help* atau hubungi owner bot.\n\n" +
             err
     );
 };
 
 exports.group = (msg) => {
-    msg.reply("perintah ini hanya bisa digunakan dalam grup chat!");
+    msg.reply("Perintah ini hanya bisa digunakan dalam grup chat!");
 };
 
 exports.errai = (msg, err) => {
     msg.reply(
-        "maaf, aku tidak bisa menjawab sekarang. ada yang salah.\n\n" + err
+        "Maaf, aku tidak bisa menjawab sekarang. Ada yang salah.\n\n" + err
     );
 };
 
@@ -311,7 +320,7 @@ exports.setKW = (keyword, reply, msg) => {
             reply,
         });
         fs.writeFileSync("./database/keyword.json", JSON.stringify(data));
-        msg.reply("sukses menambah keyword baru!");
+        msg.reply("Sukses menambah keyword baru!");
     } catch (err) {
         this.error(msg, err);
     }
@@ -323,13 +332,14 @@ exports.upKW = (ok, keyword, reply, msg) => {
         let data = JSON.parse(file);
         const ndata = data.filter((d) => d.keyword == ok);
         data = data.filter((d) => d.keyword != ok);
-        if (!ndata.length) return msg.reply("keyword not found! Coba lagi.");
+        if (!ndata.length)
+            return msg.reply("Keyword tidak ditemukan! Coba lagi.");
         data.push({
             keyword,
             reply,
         });
         fs.writeFileSync("./database/keyword.json", JSON.stringify(data));
-        msg.reply("sukses mengedit keyword!");
+        msg.reply("Sukses mengedit keyword!");
     } catch (err) {
         this.error(msg, err);
     }
@@ -341,9 +351,10 @@ exports.delKW = (ok, msg) => {
         let data = JSON.parse(file);
         const ndata = data.filter((d) => d.keyword == ok);
         data = data.filter((d) => d.keyword != ok);
-        if (!ndata.length) return msg.reply("keyword not found! Coba lagi.");
+        if (!ndata.length)
+            return msg.reply("Keyword tidak ditemukan! Coba lagi.");
         fs.writeFileSync("./database/keyword.json", JSON.stringify(data));
-        msg.reply("sukses menghapus keyword!");
+        msg.reply("Sukses menghapus keyword!");
     } catch (err) {
         this.error(msg, err);
     }

@@ -18,6 +18,8 @@ const gamecodes = [
     "susunkata",
     "asahotak",
     "tebakkimia",
+    "siapakahaku",
+    "tebaktebakan",
 ];
 const mks = ["sd", "asd", "bing", "arsikom", "md", "imk", "ep", "sm"];
 const lb = require("./controllers/games/lb");
@@ -45,13 +47,25 @@ const { ai, tlid, tlen, stden } = require("./controllers/api/ai");
 const { cnn, base } = require("./controllers/api/berita");
 const { spec, speq, spek, speb, specs } = require("./controllers/api/spec");
 const stickers = require("./controllers/api/stickers");
-const { salat, doa } = require("./controllers/api/salat");
-const { ytaudio, yt, tt, ig } = require("./controllers/api/downloader");
+const {
+    salat,
+    doa,
+    surah,
+    quran,
+    tafsir,
+    taugasih,
+    imsak,
+    doa2,
+} = require("./controllers/api/salat");
+const { ytaudio, yt, tt, ig, play } = require("./controllers/api/downloader");
 const { json } = require("express");
 const {
+    AlphaPremiumList,
+    refreshAlphaUser,
+    AlphaLimit,
+    newAlphaUser,
+    changeAlphaUser,
     AlphaKey,
-    AlphaCount,
-    PremiumList,
 } = require("./controllers/utils/apikey");
 const { join } = require("path");
 const emojisCmd = [
@@ -149,6 +163,8 @@ client.on("message", async (message) => {
     let chat = await message.getChat();
     let contact = await client.getContactById(message.author || message.from);
     let user = contact.id._serialized;
+    refreshAlphaUser(user);
+    newAlphaUser(user, 10);
     await chat.sendSeen();
     // if (!contact.isMyContact && message.body.startsWith("-")) {
     //     const mentions = [await client.getContactById(owner)];
@@ -166,13 +182,6 @@ client.on("message", async (message) => {
         if (message.hasQuotedMsg) qtmsg = await message.getQuotedMessage();
     } catch (error) {
         console.log("failed get quoted message");
-    }
-    if (message.body.startsWith("-resetlimit")) {
-        AlphaCount(0, -1, message.body.split(" ")[1]);
-        message.reply(
-            "Limit user " + message.body.split(" ")[1] + " sudah di reset."
-        );
-        return;
     }
 
     //API
@@ -311,9 +320,9 @@ client.on("message", async (message) => {
         gcs += "\n\nKetik *-menu* untuk melihat semua menu.";
         message.reply(gcs);
     } else if (message.body === "-gamecodes") {
-        let gcs = "*✱ GameCode yang Tersedia ✱*\n";
+        let gcs = "*✱ DAFTAR GAMECODE ✱*\n";
         gamecodes.forEach((gc) => {
-            gcs += `\n★ -${gc}`;
+            gcs += `\n★ *-${gc}*`;
         });
         if (!gamecodes.length) gcs += "\n*Tidak Ada!*";
         gcs += "\n\nKetik *-menu* untuk melihat semua menu.";
@@ -335,13 +344,13 @@ client.on("message", async (message) => {
         //media&stickers
     } else if (message.body === "-img" || message.body == "-toimg") {
         wait(message, 0);
-        img(message, qtmsg, MessageMedia);
+        if (img(message, qtmsg, MessageMedia, 0, 0, 0, 0, user)) AlphaKey(user);
     } else if (
         message.body.startsWith("-sticker") ||
         message.body == "-s" ||
         message.body.startsWith("-stiker")
     ) {
-        wait(message, 0);
+        // wait(message, 0);
         sticker(message, qtmsg, MessageMedia);
     } else if (message.body.startsWith("-smeme")) {
         const text = message.body.slice("-smeme ".length).split("|");
@@ -349,7 +358,7 @@ client.on("message", async (message) => {
             return message.reply(
                 "Format salah. Kirim atau balas gambar dengan perintah *-smeme* TEKS ATAS|TEKS BAWAH|JARAK TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT untuk membuat stiker dengan teks (meme).\n\nKetik *-help* untuk melihat bantuan."
             );
-        wait(message, 0);
+        // wait(message, 0);
         sticker(
             message,
             qtmsg,
@@ -365,7 +374,7 @@ client.on("message", async (message) => {
             return message.reply(
                 "Format salah. Kirim atau balas gambar dengan perintah *-meme* TEKS ATAS|TEKS BAWAH|JARAK TEKS DENGAN ATAS BAWAH GAMBAR|UKURAN FONT untuk membuat teks di gambar (meme).\n\nKetik *-help* untuk melihat bantuan."
             );
-        wait(message, 0);
+        // wait(message, 0);
         img(
             message,
             qtmsg,
@@ -375,6 +384,12 @@ client.on("message", async (message) => {
             Number(text[2]),
             Number(text[3])
         );
+    } else if (message.body == "-rmeme") {
+        wait(message, 0);
+        if (stickers.rmeme(message, MessageMedia, user)) AlphaKey(user);
+    } else if (message.body == "-rsmeme") {
+        wait(message, 0);
+        if (stickers.rsmeme(message, MessageMedia, user)) AlphaKey(user);
     } else if (message.body.startsWith("-sttp")) {
         const texts = message.body.split(" ");
         if (texts.length < 2 || (texts[1] == "" && texts.length <= 2))
@@ -414,25 +429,21 @@ client.on("message", async (message) => {
         //media&stickers
         //premium&limit
     } else if (message.body === "-limit") {
-        message.reply("Cooming soon..");
-        // let limit = AlphaCount(0, 0, user);
-        // message.reply(
-        //     "Limit user " + limit.name.split("|")[1] + " -> " + limit.hit
-        // );
+        // message.reply("Cooming soon..");
+        message.reply(AlphaLimit(user).text);
     } else if (
         message.body === "-premiumlist" ||
         message.body === "-listpremium"
     ) {
-        let premium = PremiumList();
+        let premium = AlphaPremiumList();
+        // console.log(premium);
         let prm = "*✱ LIST USER PREMIUM ✱*\n",
             no = 1,
             mentions = [];
         for (const pr of premium) {
-            for (const p of pr.user) {
-                const contact = await client.getContactById(p);
-                prm += `\n${no++}. @${contact.id.user}`;
-                mentions.push(contact);
-            }
+            const contact = await client.getContactById(pr.user);
+            prm += `\n*${no++}.* @${contact.id.user}`;
+            mentions.push(contact);
         }
         if (!premium.length) prm += "\nTidak ada User Premium";
         prm +=
@@ -447,54 +458,90 @@ client.on("message", async (message) => {
     ) {
         const mentions = [await client.getContactById(owner)];
         await message.reply(
-            `Upgrade ke premium dengan harga terjangkau.\n\n*List Paket Premium Funday Bot*\n1. 5k/bulan -> 350 perintah (downloader, stiker random, emoji ke stiker, dan games)/hari\n2. 10k/bulan -> 1000 perintah (downloader, stiker random, emoji ke stiker, dan games)/hari\n3. 15k/bulan -> 1750 perintah (downloader, stiker random, emoji ke stiker, dan games)/hari\n4. 20k/bulan -> 3000 perintah (downloader, stiker random, emoji ke stiker, dan games)/hari\n5. 25k/bulan -> 7500 perintah (downloader, stiker random, emoji ke stiker, dan games)/hari\n6. Donasi seikhlasnya -> 100-200 perintah (downloader, stiker random, emoji ke stiker, dan games)/hari\n\nTertarik? Hubungi owner bot, @${mentions[0].id.user}.`,
+            `*✱ DAFTAR PAKET PREMIUM ✱*\n\n*1.* Rp.2.000/bulan -> 100 limit/hari\n\n*2.* Rp.5.0000/bulan -> 500 limit/hari\n\n*3.* Rp.10.000/2 bulan -> 1200 limit/hari\n\n*4.* Rp.10.000/bulan -> 1500 limit/hari\n\n*5.* Rp.15.000/2 bulan -> 2000 limit/hari\n\n*6.* Rp.15.000/bulan -> 3000 limit/hari\n\n*7.* Rp.20.000/3 bulan -> 2500 limit/hari\n\n*8.* Rp.20.000/bulan -> 2000 limit/hari\n\n*9.* Rp.25.000/6 bulan -> 1500 limit/hari\n\n*10.* Rp.25.000/3 bulan -> 3500 limit/hari\n\nTertarik? Hubungi owner bot, @${mentions[0].id.user}.`,
             message.from,
             { mentions }
+        );
+    } else if (
+        message.body.startsWith("-addpr ") &&
+        (message.author || message.from) == owner
+    ) {
+        let texts = message.body.split(" ");
+        let user = await message.getMentions();
+        user = user[0].id._serialized;
+        message.reply(newAlphaUser(user, Number(texts[2]), texts[3], texts[4]));
+    } else if (
+        message.body.startsWith("-changepr ") &&
+        (message.author || message.from) == owner
+    ) {
+        let texts = message.body.split(" ");
+        let user = await message.getMentions();
+        user = user[0].id._serialized;
+        message.reply(
+            changeAlphaUser(user, Number(texts[2]), texts[3], texts[4])
         );
         //premium&limit
         //downloader
     } else if (message.body.startsWith("-ytaudio")) {
-        wait(message, 0);
         let url = message.body.split(" ")[1];
         if (!url && !qtmsg)
             return message.reply(
                 "Format salah. Ketik *-ytaudio* url untuk download audio dari YouTube.\n\nKetik *-help* untuk melihat bantuan."
             );
         if (qtmsg && !url) url = qtmsg.body;
+        wait(message, 0);
         ytaudio(url, message, MessageMedia, chat, user);
     } else if (
         message.body.startsWith("-yt") ||
         message.body.startsWith("-ytvid")
     ) {
-        wait(message, 0);
         let url = message.body.split(" ")[1];
         if (!url && !qtmsg)
             return message.reply(
                 "Format salah. Ketik *-ytvid* urlyt untuk download video dari YouTube.\n\nKetik *-help* untuk melihat bantuan."
             );
         if (qtmsg && !url) url = qtmsg.body;
+        wait(message, 0);
         yt(url, message, MessageMedia, chat, user);
     } else if (
         message.body.startsWith("-tt") ||
         message.body.startsWith("-tiktok")
     ) {
-        wait(message, 0);
         let url = message.body.split(" ")[1];
         if (!url && !qtmsg)
             return message.reply(
                 "Format salah. Ketik *-tt* urltiktok untuk download video dan audio dari TikTok.\n\nKetik *-help* untuk melihat bantuan."
             );
         if (qtmsg && !url) url = qtmsg.body;
+        wait(message, 0);
         tt(url, message, user);
     } else if (message.body.startsWith("-ig")) {
-        wait(message, 0);
         let url = message.body.split(" ")[1];
         if (!url && !qtmsg)
             return message.reply(
                 "Format salah. Ketik *-ig* urlig untuk download video dari Instagram.\n\nKetik *-help* untuk melihat bantuan."
             );
         if (qtmsg && !url) url = qtmsg.body;
+        wait(message, 0);
         ig(url, message, MessageMedia, user);
+    } else if (message.body.startsWith("-playid")) {
+        let query = message.body.split(" ")[1];
+        if (!query && !qtmsg)
+            return message.reply(
+                "Format salah. Ketik *-playid* ID untuk memainkan audio dari YouTube.\n\nKetik *-help* untuk melihat bantuan."
+            );
+        if (qtmsg && !query) query = qtmsg.body;
+        wait(message, 0);
+        play(0, Number(query), chat.id.user, message, MessageMedia, chat, user);
+    } else if (message.body.startsWith("-play")) {
+        let query = message.body.slice("-play ".length);
+        if (!query && !qtmsg)
+            return message.reply(
+                "Format salah. Ketik *-play* KataKunci untuk mencari audio dari YouTube.\n\nKetik *-help* untuk melihat bantuan."
+            );
+        if (qtmsg && !query) query = qtmsg.body;
+        wait(message, 2);
+        play(query, 0, chat.id.user, message, MessageMedia, chat, user);
         //downloader
         //ibadah
     } else if (
@@ -502,25 +549,78 @@ client.on("message", async (message) => {
         message.body.startsWith("-salat") ||
         message.body.startsWith("-shalat")
     ) {
-        wait(message, 2);
         const kota = message.body.split(" ")[1];
         if (!kota)
             return message.reply(
                 "Format salah. Ketik *-solat* atau *-shalat* kota untuk melihat Jadwal Solat hari ini.\n\nKetik *-help* untuk melihat bantuan."
             );
+        wait(message, 2);
         salat(kota.toLowerCase(), message);
+    } else if (
+        message.body.startsWith("-imsyak ") ||
+        message.body.startsWith("-imsak ")
+    ) {
+        const kota = message.body.split(" ")[1];
+        if (!kota)
+            return message.reply(
+                "Format salah. Ketik *-imsak* atau *-imsyak* kota untuk melihat Jadwal Imsak hari ini.\n\nKetik *-help* untuk melihat bantuan."
+            );
+        wait(message, 2);
+        imsak(kota.toLowerCase(), message);
     } else if (message.body === "-spku") {
         wait(message, 2);
         salat("pekanbaru", message);
-    } else if (message.body.startsWith("-doa")) {
+    } else if (message.body.startsWith("-doa2")) {
+        const doaa = message.body.slice("-doa2 ".length);
+        if (!doaa)
+            return message.reply(
+                "Format salah. Ketik *-doa2* KataKunci untuk mencari Doa.\n\nKetik *-help* untuk melihat bantuan."
+            );
         wait(message, 2);
+        doa2(doaa.toLowerCase(), message);
+    } else if (message.body.startsWith("-doaid")) {
+        const doaa = message.body.slice("-doaid ".length);
+        if (!doaa)
+            return message.reply(
+                "Format salah. Ketik *-doa* namaDoa untuk mencari Doa.\n\nKetik *-help* untuk melihat bantuan."
+            );
+        wait(message, 0);
+        if (doa(0, Number(doaa), message, chat.id.user, user)) AlphaKey(user);
+    } else if (message.body.startsWith("-doa")) {
         const doaa = message.body.slice("-doa ".length);
         if (!doaa)
             return message.reply(
-                "Format salah. Ketik *-doa* nama doa untuk mencari Doa.\n\nKetik *-help* untuk melihat bantuan."
+                "Format salah. Ketik *-doa* namaDoa untuk mencari Doa.\n\nKetik *-help* untuk melihat bantuan."
             );
-        doa(doaa.toLowerCase(), message);
+        wait(message, 2);
+        doa(doaa, 0, message, chat.id.user, user);
+    } else if (message.body == "-quran") {
+        // wait(message, 2);
+        quran(message);
+    } else if (message.body.startsWith("-surah")) {
+        let query = message.body.split(" ")[1];
+        if (!query && !qtmsg)
+            return message.reply(
+                "Format salah. Ketik *-surah* ID_SURAH untuk menampilkan Surah.\n\nKetik *-help* untuk melihat bantuan."
+            );
+        if (qtmsg && !query) query = qtmsg.body;
+        wait(message, 2);
+        surah(message, Number(query));
+    } else if (message.body.startsWith("-tafsir")) {
+        let query = message.body.split(" ")[1];
+        if (!query && !qtmsg)
+            return message.reply(
+                "Format salah. Ketik *-tafsir* ID_SURAH untuk menampilkan Tafsir Surah.\n\nKetik *-help* untuk melihat bantuan."
+            );
+        if (qtmsg && !query) query = qtmsg.body;
+        wait(message, 2);
+        if (tafsir(message, Number(query), user)) AlphaKey(user);
         //ibadah
+        //fakta
+    } else if (message.body == "-taugasih") {
+        wait(message, 2);
+        if ((taugasih(message, MessageMedia), user)) AlphaKey(user);
+        //fakta
         //API
 
         //KULIAH
@@ -621,13 +721,13 @@ client.on("message", async (message) => {
                 "Halo, aku Funday. Ketik atau balas pesan dengan *-ai* atau *-t* untuk berbicara denganku.\n\nAku bisa semua bahasa loh, jadi tanya sesukamu yaa."
             );
         }
-        wait(message, 1);
+        // wait(message, 1);
         ai(qtmsg.body, qtmsg);
     } else if (
         message.body.startsWith("-ai ") ||
         message.body.startsWith("-t ")
     ) {
-        wait(message, 1);
+        // wait(message, 1);
         const cmd = message.body.startsWith("-ai ") ? "-ai " : "-t ";
         ai(message.body.slice(cmd.length), message);
     } else if (message.body === "-tlid" || message.body == "-tlin") {
@@ -636,13 +736,13 @@ client.on("message", async (message) => {
                 "Halo, aku Funday. Ketik atau balas pesan dengan *-tlid* untuk translate ke bahasa indonesia."
             );
         }
-        wait(message, 1);
+        // wait(message, 1);
         tlid(qtmsg.body, qtmsg);
     } else if (
         message.body.startsWith("-tlid ") ||
         message.body.startsWith("-tlin ")
     ) {
-        wait(message, 1);
+        // wait(message, 1);
         tlid(message.body.slice("-tlid ".length), message);
     } else if (message.body === "-tlen") {
         if (!qtmsg) {
@@ -650,10 +750,11 @@ client.on("message", async (message) => {
                 "Halo, aku Funday. Ketik atau balas pesan dengan *-tlen* untuk translate ke english."
             );
         }
-        wait(message, 1);
+        // wait(message, 1);
+        AlphaKey(user);
         tlen(qtmsg.body, qtmsg);
     } else if (message.body.startsWith("-tlen ")) {
-        wait(message, 1);
+        // wait(message, 1);
         tlen(message.body.slice("-tlen ".length), message);
     } else if (message.body === "-stden") {
         if (!qtmsg) {
@@ -661,10 +762,11 @@ client.on("message", async (message) => {
                 "Halo, aku Funday. Ketik atau balas pesan dengan *-stden* untuk membenarkan kalimat ke Grammatical Standard English."
             );
         }
-        wait(message, 1);
+        // wait(message, 1);
+        AlphaKey(user);
         stden(qtmsg.body, qtmsg);
     } else if (message.body.startsWith("-stden ")) {
-        wait(message, 1);
+        // wait(message, 1);
         stden(message.body.slice("-stden ".length), message);
         //AI
 
@@ -673,7 +775,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-fam") {
         if (chat.isGroup) {
             try {
-                wait(message, 0);
+                // wait(message, 0);
                 const game = fam.setStatus(chat.id.user, 1);
                 if (game.status) {
                     fam.setSoal(chat.id.user);
@@ -698,7 +800,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-lontong") {
         if (chat.isGroup) {
             try {
-                wait(message, 0);
+                // wait(message, 0);
                 const game = lontong.setStatus(chat.id.user, 1);
                 if (game.status) {
                     lontong.setSoal(chat.id.user);
@@ -724,7 +826,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-caklontong") {
         if (chat.isGroup) {
             try {
-                wait(message, 0);
+                // wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "caklontong");
                 if (game.status) {
                     const caklontong = await games.caklontong(
@@ -751,7 +853,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-tebakkata") {
         if (chat.isGroup) {
             try {
-                wait(message, 0);
+                // wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "tebakkata");
                 if (game.status) {
                     const tebakkata = await games.tebakkata(chat.id.user, user);
@@ -775,7 +877,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-tekateki") {
         if (chat.isGroup) {
             try {
-                wait(message, 0);
+                // wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "tekateki");
                 if (game.status) {
                     const tekateki = await games.tekateki(chat.id.user, user);
@@ -799,7 +901,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-tebaklirik") {
         if (chat.isGroup) {
             try {
-                wait(message, 0);
+                // wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "tebaklirik");
                 if (game.status) {
                     const tebaklirik = await games.tebaklirik(
@@ -826,7 +928,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-tebakkalimat") {
         if (chat.isGroup) {
             try {
-                wait(message, 0);
+                // wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "tebakkalimat");
                 if (game.status) {
                     const tebakkalimat = await games.tebakkalimat(
@@ -853,7 +955,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-tebakbendera") {
         if (chat.isGroup) {
             try {
-                wait(message, 0);
+                // wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "tebakbendera");
                 if (game.status) {
                     const tebakbendera = await games.tebakbendera(
@@ -885,7 +987,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-susunkata") {
         if (chat.isGroup) {
             try {
-                wait(message, 0);
+                // wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "susunkata");
                 if (game.status) {
                     const susunkata = await games.susunkata(chat.id.user, user);
@@ -909,7 +1011,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-asahotak") {
         if (chat.isGroup) {
             try {
-                wait(message, 0);
+                // wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "asahotak");
                 if (game.status) {
                     const asahotak = await games.asahotak(chat.id.user, user);
@@ -933,7 +1035,7 @@ client.on("message", async (message) => {
     } else if (message.body === "-tebakkimia") {
         if (chat.isGroup) {
             try {
-                wait(message, 0);
+                // wait(message, 0);
                 const game = status.setStatus(chat.id.user, 1, "tebakkimia");
                 if (game.status) {
                     const tebakkimia = await games.tebakkimia(
@@ -956,6 +1058,64 @@ client.on("message", async (message) => {
             group(message);
         }
         //tebakkimia
+        //siapakahaku
+    } else if (
+        message.body === "-siapakahaku" ||
+        message.body === "-siapaku" ||
+        message.body === "-siapaaku"
+    ) {
+        if (chat.isGroup) {
+            try {
+                // wait(message, 0);
+                const game = status.setStatus(chat.id.user, 1, "siapakahaku");
+                if (game.status) {
+                    const siapakahaku = await games.siapakahaku(
+                        chat.id.user,
+                        user
+                    );
+                    message.reply(siapakahaku.text);
+                    if (!siapakahaku.play) {
+                        status.setStatus(chat.id.user, 0, "siapakahaku");
+                        return;
+                    }
+                    games.timer(chat.id.user, chat, "siapakahaku");
+                } else {
+                    message.reply(game.msg);
+                }
+            } catch (err) {
+                error(message, err);
+            }
+        } else {
+            group(message);
+        }
+        //siapakahaku
+        //tebaktebakan
+    } else if (message.body === "-tebaktebakan") {
+        if (chat.isGroup) {
+            try {
+                // wait(message, 0);
+                const game = status.setStatus(chat.id.user, 1, "tebaktebakan");
+                if (game.status) {
+                    const tebaktebakan = await games.tebaktebakan(
+                        chat.id.user,
+                        user
+                    );
+                    message.reply(tebaktebakan.text);
+                    if (!tebaktebakan.play) {
+                        status.setStatus(chat.id.user, 0, "tebaktebakan");
+                        return;
+                    }
+                    games.timer(chat.id.user, chat, "tebaktebakan");
+                } else {
+                    message.reply(game.msg);
+                }
+            } catch (err) {
+                error(message, err);
+            }
+        } else {
+            group(message);
+        }
+        //tebaktebakan
     } else if (message.body === "-stop") {
         if (chat.isGroup) {
             message.reply(
@@ -967,7 +1127,7 @@ client.on("message", async (message) => {
     } else if (message.body.startsWith("-stop ")) {
         if (chat.isGroup) {
             try {
-                wait(message, 0);
+                // wait(message, 0);
                 const game = status.setStatus(
                     chat.id.user,
                     0,
@@ -975,26 +1135,13 @@ client.on("message", async (message) => {
                 );
                 message.reply(game.msg);
                 if (game.status) {
+                    AlphaKey(user);
                     if (game.game == "fam") {
                         fam.delSoal(chat.id.user);
                     } else if (game.game == "lontong") {
                         lontong.delSoal(chat.id.user);
-                    } else if (game.game == "caklontong") {
-                        games.destroy(chat.id.user, "caklontong");
-                    } else if (game.game == "tebakkata") {
-                        games.destroy(chat.id.user, "tebakkata");
-                    } else if (game.game == "tebaklirik") {
-                        games.destroy(chat.id.user, "tebaklirik");
-                    } else if (game.game == "tebakkalimat") {
-                        games.destroy(chat.id.user, "tebakkalimat");
-                    } else if (game.game == "tebakbendera") {
-                        games.destroy(chat.id.user, "tebakbendera");
-                    } else if (game.game == "susunkata") {
-                        games.destroy(chat.id.user, "susunkata");
-                    } else if (game.game == "asahotak") {
-                        games.destroy(chat.id.user, "asahotak");
-                    } else if (game.game == "tebakkimia") {
-                        games.destroy(chat.id.user, "tebakkimia");
+                    } else {
+                        games.destroy(chat.id.user, game.game);
                     }
                 }
             } catch (err) {
@@ -1010,8 +1157,10 @@ client.on("message", async (message) => {
     } else if (message.body.startsWith("-qdd")) {
         let [cmd, game, ...msg] = message.body.split("\n\n");
         if (game == "fam") {
+            AlphaKey(user);
             message.reply(fam.writeSoal(msg));
         } else if (game == "lontong") {
+            AlphaKey(user);
             message.reply(lontong.writeSoal(msg));
         } else {
             message.reply("Gamecode ini tidak bisa ditambahkan soalnya.");
@@ -1031,10 +1180,10 @@ client.on("message", async (message) => {
                 return stickers.generate(cmd, message, MessageMedia, user);
             }
         });
-        if (char) {
-            emojisCmd.forEach((el) => {
-                if (el.toLowerCase() == cmd) {
-                    nocmd = false;
+        emojisCmd.forEach((el) => {
+            if (el.toLowerCase() == cmd) {
+                nocmd = false;
+                if (char) {
                     wait(message, 0);
                     return stickers.emoji(
                         cmd,
@@ -1044,11 +1193,14 @@ client.on("message", async (message) => {
                         user
                     );
                 }
-            });
-        }
+                return message.reply(
+                    "Format salah. Untuk membuat stiker dari emoji,\n➮ Perintah :\n    ★ -platform-emoji\n➮ Contoh :\n    ★ -joypixels-🙁"
+                );
+            }
+        });
         if (nocmd)
             message.reply(
-                "Perintah tidak valid. Ketik *-menu* untuk melihat menu. untuk melihat bantuan, Ketik *-help* atau hubungi owner bot."
+                "Perintah tidak valid. Ketik *-menu* untuk melihat menu. Untuk melihat bantuan, Ketik *-help* atau hubungi owner bot."
             );
         //ProbablyCMD
 
@@ -1056,19 +1208,21 @@ client.on("message", async (message) => {
     } else {
         getKW(message.body.toLowerCase(), message);
         if (chat.isGroup) {
+            let game;
             try {
                 //gameon
-                const game = status.getStatus(chat.id.user);
+                game = status.getStatus(chat.id.user);
                 if (game.status) {
                     if (Object.values(game.game).indexOf("fam") > -1) {
                         const soal = fam.getSoal(chat.id.user);
                         if (!soal.play) return fam.setStatus(chat.id.user, 0);
 
                         for (let i = 0; i < soal.answer.length; i++) {
-                            if (
-                                soal.answer[i].toLowerCase() ===
-                                message.body.toLowerCase()
-                            ) {
+                            const sim = games.similarity(
+                                soal.answer[i],
+                                message.body
+                            );
+                            if (sim == 1) {
                                 let extra = "";
                                 lb.setLB(
                                     chat.id.user,
@@ -1092,6 +1246,10 @@ client.on("message", async (message) => {
                                 message.reply(
                                     `*✱ FAMILY100 ✱*\n\nJawaban benar. +${soal.reward} point.\n\n${extra}`
                                 );
+                            } else if (sim >= 0.7) {
+                                message.reply("Sedikit lagi!!");
+                            } else if (sim >= 0.4) {
+                                message.reply("Bisa jadi!!");
                             }
                         }
                     }
@@ -1099,10 +1257,8 @@ client.on("message", async (message) => {
                         const soal = lontong.getSoal(chat.id.user);
                         if (!soal.play)
                             return lontong.setStatus(chat.id.user, 0);
-                        if (
-                            soal.answer.toLowerCase() ===
-                            message.body.toLowerCase()
-                        ) {
+                        const sim = games.similarity(soal.answer, message.body);
+                        if (sim == 1) {
                             message.reply(
                                 `*✱ QUIZ LONTONG ✱*\n\nJawaban benar. +${soal.reward} point.\n\nKetik *-lb* untuk melihat leaderboard.`
                             );
@@ -1116,232 +1272,41 @@ client.on("message", async (message) => {
                                 },
                                 soal.reward
                             );
+                        } else if (sim >= 0.7) {
+                            message.reply("Sedikit lagi!!");
+                        } else if (sim >= 0.4) {
+                            message.reply("Bisa jadi!!");
                         }
                     }
-                    if (Object.values(game.game).indexOf("caklontong") > -1) {
-                        const soal = games.getAnsWard(
-                            chat.id.user,
-                            "caklontong"
-                        );
-
+                    for (let i = 2; i < gamecodes.length; i++) {
                         if (
-                            soal.answer.toLowerCase() ===
-                            message.body.toLowerCase()
+                            Object.values(game.game).indexOf(gamecodes[i]) > -1
                         ) {
-                            message.reply(
-                                `*✱ CAK LONTONG ✱*\n\nJawaban benar. +${
-                                    soal.reward
-                                } point.\n\ndeskripsi : ${soal.desc.toLowerCase()}`
-                            );
-                            status.setStatus(chat.id.user, 0, "caklontong");
-                            games.destroy(chat.id.user, "caklontong");
-                            lb.setLB(
+                            games.interact(
                                 chat.id.user,
-                                {
-                                    user: `@${message.author.split("@")[0]}`,
-                                    contact,
-                                },
-                                soal.reward
-                            );
-                        }
-                    }
-                    if (Object.values(game.game).indexOf("tebakkata") > -1) {
-                        const soal = games.getAnsWard(
-                            chat.id.user,
-                            "tebakkata"
-                        );
-
-                        if (
-                            soal.answer.toLowerCase() ===
-                            message.body.toLowerCase()
-                        ) {
-                            message.reply(
-                                `*✱ TEBAK KATA ✱*\n\nJawaban benar. +${soal.reward} point.`
-                            );
-                            status.setStatus(chat.id.user, 0, "tebakkata");
-                            games.destroy(chat.id.user, "tebakkata");
-                            lb.setLB(
-                                chat.id.user,
-                                {
-                                    user: `@${message.author.split("@")[0]}`,
-                                    contact,
-                                },
-                                soal.reward
-                            );
-                        }
-                    }
-                    if (Object.values(game.game).indexOf("tekateki") > -1) {
-                        const soal = games.getAnsWard(chat.id.user, "tekateki");
-
-                        if (
-                            soal.answer.toLowerCase() ===
-                            message.body.toLowerCase()
-                        ) {
-                            message.reply(
-                                `*✱ TEKATEKI ✱*\n\nJawaban benar. +${soal.reward} point.`
-                            );
-                            status.setStatus(chat.id.user, 0, "tekateki");
-                            games.destroy(chat.id.user, "tekateki");
-                            lb.setLB(
-                                chat.id.user,
-                                {
-                                    user: `@${message.author.split("@")[0]}`,
-                                    contact,
-                                },
-                                soal.reward
-                            );
-                        }
-                    }
-                    if (Object.values(game.game).indexOf("tebaklirik") > -1) {
-                        const soal = games.getAnsWard(
-                            chat.id.user,
-                            "tebaklirik"
-                        );
-
-                        if (
-                            soal.answer.toLowerCase() ===
-                            message.body.toLowerCase()
-                        ) {
-                            message.reply(
-                                `*✱ TEBAK LIRIK ✱*\n\nJawaban benar. +${soal.reward} point.`
-                            );
-                            status.setStatus(chat.id.user, 0, "tebaklirik");
-                            games.destroy(chat.id.user, "tebaklirik");
-                            lb.setLB(
-                                chat.id.user,
-                                {
-                                    user: `@${message.author.split("@")[0]}`,
-                                    contact,
-                                },
-                                soal.reward
-                            );
-                        }
-                    }
-                    if (Object.values(game.game).indexOf("tebakkalimat") > -1) {
-                        const soal = games.getAnsWard(
-                            chat.id.user,
-                            "tebakkalimat"
-                        );
-
-                        if (
-                            soal.answer.toLowerCase() ===
-                            message.body.toLowerCase()
-                        ) {
-                            message.reply(
-                                `*✱ TEBAK KALIMAT ✱*\n\nJawaban benar. +${soal.reward} point.`
-                            );
-                            status.setStatus(chat.id.user, 0, "tebakkalimat");
-                            games.destroy(chat.id.user, "tebakkalimat");
-                            lb.setLB(
-                                chat.id.user,
-                                {
-                                    user: `@${message.author.split("@")[0]}`,
-                                    contact,
-                                },
-                                soal.reward
-                            );
-                        }
-                    }
-                    if (Object.values(game.game).indexOf("tebakbendera") > -1) {
-                        const soal = games.getAnsWard(
-                            chat.id.user,
-                            "tebakbendera"
-                        );
-
-                        if (
-                            soal.name.toLowerCase() ===
-                            message.body.toLowerCase()
-                        ) {
-                            message.reply(
-                                `*✱ TEBAK BENDERA ✱*\n\nJawaban benar. +${soal.reward} point.`
-                            );
-                            status.setStatus(chat.id.user, 0, "tebakbendera");
-                            games.destroy(chat.id.user, "tebakbendera");
-                            lb.setLB(
-                                chat.id.user,
-                                {
-                                    user: `@${message.author.split("@")[0]}`,
-                                    contact,
-                                },
-                                soal.reward
-                            );
-                        }
-                    }
-                    if (Object.values(game.game).indexOf("susunkata") > -1) {
-                        const soal = games.getAnsWard(
-                            chat.id.user,
-                            "susunkata"
-                        );
-
-                        if (
-                            soal.answer.toLowerCase() ===
-                            message.body.toLowerCase()
-                        ) {
-                            message.reply(
-                                `*✱ SUSUN KATA ✱*\n\nJawaban benar. +${soal.reward} point.`
-                            );
-                            status.setStatus(chat.id.user, 0, "susunkata");
-                            games.destroy(chat.id.user, "susunkata");
-                            lb.setLB(
-                                chat.id.user,
-                                {
-                                    user: `@${message.author.split("@")[0]}`,
-                                    contact,
-                                },
-                                soal.reward
-                            );
-                        }
-                    }
-                    if (Object.values(game.game).indexOf("asahotak") > -1) {
-                        const soal = games.getAnsWard(chat.id.user, "asahotak");
-
-                        if (
-                            soal.answer.toLowerCase() ===
-                            message.body.toLowerCase()
-                        ) {
-                            message.reply(
-                                `*✱ ASAH OTAK ✱*\n\nJawaban benar. +${soal.reward} point.`
-                            );
-                            status.setStatus(chat.id.user, 0, "asahotak");
-                            games.destroy(chat.id.user, "asahotak");
-                            lb.setLB(
-                                chat.id.user,
-                                {
-                                    user: `@${message.author.split("@")[0]}`,
-                                    contact,
-                                },
-                                soal.reward
-                            );
-                        }
-                    }
-                    if (Object.values(game.game).indexOf("tebakkimia") > -1) {
-                        const soal = games.getAnsWard(
-                            chat.id.user,
-                            "tebakkimia"
-                        );
-
-                        if (
-                            soal.answer.toLowerCase() ===
-                            message.body.toLowerCase()
-                        ) {
-                            message.reply(
-                                `*✱ TEBAK KIMIA ✱*\n\nJawaban benar. +${soal.reward} point.`
-                            );
-                            status.setStatus(chat.id.user, 0, "tebakkimia");
-                            games.destroy(chat.id.user, "tebakkimia");
-                            lb.setLB(
-                                chat.id.user,
-                                {
-                                    user: `@${message.author.split("@")[0]}`,
-                                    contact,
-                                },
-                                soal.reward
+                                gamecodes[i],
+                                message,
+                                lb
                             );
                         }
                     }
                 }
             } catch (err) {
-                error(message, err);
+                game = status.getStatus(chat.id.user);
+                if (game.status) {
+                    game.game.forEach((d) => {
+                        const game = status.setStatus(chat.id.user, 0, d);
+                        if (game.status) {
+                            if (d == "fam") {
+                                fam.delSoal(chat.id.user);
+                            } else if (d == "lontong") {
+                                lontong.delSoal(chat.id.user);
+                            } else {
+                                games.destroy(chat.id.user, d);
+                            }
+                        }
+                    });
+                }
             }
         }
     }
@@ -1365,6 +1330,8 @@ io.on("connection", function (socket) {
     client.on("ready", () => {
         socket.emit("ready", "Whatsapp is ready!");
         socket.emit("message", "Whatsapp is ready!");
+        status.reset();
+        console.log("READY");
     });
 
     client.on("authenticated", () => {

@@ -6,6 +6,35 @@
 ⚠ ☆ = Perintah Standar / Gratis
 ⚠ ★ = Perintah Spesial / Premium / Limit
 
+*✲ SPESIAL RAMADHAN ✲*
+☆ *-salat* kota ➔
+    ➮ Melihat jadwal Shalat berbagai kota di Indonesia.
+    ➮ Contoh : -salat pekanbaru
+☆ *-doa* namaDoa ➔
+    ➮ Mencari doa.
+    ➮ Contoh : -doa sebelum tidur ➔ lihat pencarian doa sebelum tidur
+★ *-doaid* ID_DOA ➔
+    ➮ Menampilkan doa dari hasil pencarian.
+    ➮ ID_DOA = Nomor
+    ➮ Contoh : -doaid 2 ➔ lihat doa ke-2 dari hasil pencarian.
+☆ *-doa2* KataKunci ➔
+    ➮ Melihat berbagai doa.
+    ➮ Contoh : -doa2 all ➔ lihat semua doa
+    ➮ Contoh : -doa2 tidur ➔ lihat doa tidur
+☆ *-quran* ➔
+    ➮ Melihat semua daftar Surah dan ID_SURAH.
+☆ *-surah* ID_SURAH ➔
+    ➮ Melihat Surah dari ID_SURAH.
+    ➮ ID_SURAH = Nomor Surah
+    ➮ Contoh : -surah 1 ➔ lihat surah ke-1 (Al-Fatiha)
+★ *-tafsir* ID_SURAH ➔
+    ➮ Melihat Tafsir per-ayat dari Surah.
+    ➮ ID_SURAH = Nomor Surah
+    ➮ Contoh : -tafsir 1 ➔ lihat tafsir surah ke-1 (Al-Fatiha)
+☆ *-imsak* kota ➔
+    ➮ Melihat jadwal Imsak berbagai kota di Indonesia.
+    ➮ Contoh : -imsak pekanbaru
+
 *✲ MENU & HELP ✲*
 ☆ *-menu* ➔
     ➮ Melihat semua menu Funday Bot.
@@ -21,16 +50,6 @@
     ➮ Mendaftar jadi User Premium.
 ☆ *-premiumlist* atau *-listpremium* ➔
     ➮ Melihat daftar User Premium.
-
-*✲ FITUR GRUP ✲*
-☆ *-groupinfo* ➔
-    ➮ Melihat info grup chat.
-☆ *-everyone* atau *-tagall* ➔
-    ➮ Tag semua orang dalam grup chat. Pesan tag terlihat.
-☆ *-hidetag* ➔
-    ➮ Tag semua orang dengan menambahkan pesan. Tag tidak terlihat.
-    ➮ Bisa dengan cara mengirim pesan atau membalas yang ingin diumumkan ke semua anggota grup chat.
-    ➮ Contoh : -hidetag Besok kelas jam berapa?
 
 *✲ STIKER & MEDIA ✲*
 ☆ *-sticker* atau *-s* ➔
@@ -48,7 +67,7 @@
     ➮ Format : -meme TeksAtas|TeksBawah|JarakTeksDanUjungGambar|UkuranFont
     ➮ Atribut yang harus ada hanyalah TeksAtas atau TeksBawah.
     ➮ Atribut bisa diskip dengan menambahkan simbol | sebelum atribut selanjutnya.
-☆ *-toimg* atau *-img* ➔
+★ *-toimg* atau *-img* ➔
     ➮ Mengubah stiker menjadi gambar.
     ➮ Balas stiker dengan perintah ini.
 ☆ *-stickers* ➔
@@ -67,6 +86,40 @@
 ★ *-sattp* TEKS ➔
     ➮ Membuat stiker animated-text-to-picture.
     ➮ Contoh : -sattp FUNDAYYY
+
+*✲ DOWNLOADER ✲*
+★ *-ytvid* url ➔
+    ➮ Mendownload video dari YouTube.
+    ➮ Contoh : -ytvid http://yt.vid/
+★ *-ytaudio* url ➔
+    ➮ Mendownload audio dari YouTube.
+    ➮ Contoh : -ytaudio http://yt.audio/
+★ *-tt* url ➔
+    ➮ Mendownload audio dan video dari TikTok.
+    ➮ Contoh : -tt http://tt.me/
+★ *-ig* url ➔
+    ➮ Mendownload audio dan video dari Instagram.
+    ➮ Contoh : -ig http://ig.me/
+
+*✲ BOT PLAYER ✲*
+☆ *-play* KataKunci ➔
+    ➮ Mencari daftar video/audio dari YouTube.
+    ➮ Contoh : -play Selamat Tinggal
+★ *-playid* ID_AUDIO ➔
+    ➮ Memainkan audio dari hasil pencarian.
+    ➮ Data yang diambil adalah hasil pencarian terakhir.
+    ➮ ID_AUDIO = Nomor
+    ➮ Contoh : -playid 1
+
+*✲ FITUR GRUP ✲*
+☆ *-groupinfo* ➔
+    ➮ Melihat info grup chat.
+☆ *-everyone* atau *-tagall* ➔
+    ➮ Tag semua orang dalam grup chat. Pesan tag terlihat.
+☆ *-hidetag* ➔
+    ➮ Tag semua orang dengan menambahkan pesan. Tag tidak terlihat.
+    ➮ Bisa dengan cara mengirim pesan atau membalas yang ingin diumumkan ke semua anggota grup chat.
+    ➮ Contoh : -hidetag Besok kelas jam berapa?
 
 *✲ STIKER RANDOM ✲*
     ★ *-patrick*
@@ -111,35 +164,12 @@
     ★ *-aubykddi*
     ➮ Contoh : -joypixels-🙁
 
-*✲ DOWNLOADER ✲*
-★ *-ytvid* url ➔
-    ➮ Mendownload video dari YouTube.
-    ➮ Contoh : -ytvid http://yt.vid/
-★ *-ytaudio* url ➔
-    ➮ Mendownload audio dari YouTube.
-    ➮ Contoh : -ytaudio http://yt.audio/
-★ *-tt* url ➔
-    ➮ Mendownload audio dan video dari TikTok.
-    ➮ Contoh : -tt http://tt.me/
-★ *-ig* url ➔
-    ➮ Mendownload audio dan video dari Instagram.
-    ➮ Contoh : -ig http://ig.me/
-
-*✲ IBADAH ✲*
-☆ *-salat* kota ➔
-    ➮ Melihat jadwal Shalat berbagai kota di Indonesia.
-    ➮ Contoh : -salat pekanbaru
-☆ *-doa* namadoa ➔
-    ➮ Melihat berbagai doa.
-    ➮ Contoh : -doa all ➔ lihat semua doa
-    ➮ Contoh : -doa tidur ➔ lihat doa tidur
-
 *✲ SPESIFIKASI HP ✲*
 ☆ *-speq* keyword ➔
     ➮ Mencari 10 daftar HP dengan keyword.
     ➮ Dalam daftar ini terdapat keywordHP yang bisa digunakan untuk perintah *-spek*.
     ➮ Contoh : -speq redmi 9
-☆ *-spec* namaHP ➔
+★ *-spec* namaHP ➔
     ➮ Mencari spesifikasi HP dengan namaHP.
     ➮ Hasil perintah ini mungkin tidak sesuai dengan yang user inginkan.
     ➮ Contoh : -spec redmi 9
@@ -154,7 +184,7 @@
     ➮ Masukkan kalimat dengan baik dan benar secara huruf dan tanda baca. Jika tidak lengkap, biasanya AI akan menambahkan tanda baca atau kata yang kurang dari kalimat kamu.
     ➮ Kirim atau balas pesan dengan perintah ini.
     ➮ Contoh : -t Apa itu air?
-☆ *-tlen* ➔
+★ *-tlen* ➔
     ➮ Translate ke Bahasa Inggris dengan OpenAI Text Completion.
     ➮ Masukkan kalimat dengan baik dan benar secara huruf dan tanda baca. Jika tidak lengkap, biasanya AI akan menambahkan tanda baca atau kata yang kurang dari kalimat kamu.
     ➮ Kirim atau balas pesan dengan perintah ini.
@@ -164,7 +194,7 @@
     ➮ Masukkan kalimat dengan baik dan benar secara huruf dan tanda baca. Jika tidak lengkap, biasanya AI akan menambahkan tanda baca atau kata yang kurang dari kalimat kamu.
     ➮ Kirim atau balas pesan dengan perintah ini.
     ➮ Contoh : -tlid I love you.
-☆ *-stden* ➔
+★ *-stden* ➔
     ➮ Mengubah kalimat ke Standard Grammatical dengan OpenAI Text Completion.
     ➮ Masukkan kalimat dengan baik dan benar secara huruf dan tanda baca. Jika tidak lengkap, biasanya AI akan menambahkan tanda baca atau kata yang kurang dari kalimat kamu.
     ➮ Kirim atau balas pesan dengan perintah ini.
@@ -189,6 +219,8 @@
 ☆ *-category* newsportal ➔
     ➮ Melihat daftar kategori berita dari Portal Berita.
     ➮ Contoh : -category cnn
+★ *-taugasih* ➔
+    ➮ Melihat fakta random hari ini.
 
 ⚠ Semakin banyak yang Premium, semakin cepat fitur baru update.
 
