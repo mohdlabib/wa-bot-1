@@ -32,6 +32,8 @@ exports.gameTitle = (game) => {
             return "*✱ TEBAK LIRIK ✱*\n\n";
         case "tebakkalimat":
             return "*✱ TEBAK KALIMAT ✱*\n\n";
+        case "tekateki":
+            return "*✱ TEKATEKI ✱*\n\n";
         case "tebakbendera":
             return "*✱ TEBAK BENDERA ✱*\n\n";
         case "susunkata":
