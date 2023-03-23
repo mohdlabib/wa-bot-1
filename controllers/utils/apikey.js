@@ -84,7 +84,10 @@ exports.refreshAlphaUser = (user) => {
         last.getDate().toString() +
         (last.getMonth() + 1).toString() +
         last.getFullYear().toString();
-    if (data[index].last != last) data[index].last = last;
+    if (data[index].last != last) {
+        data[index].last = last;
+        data[index].count = 0;
+    }
     fs.writeFileSync("./database/api.json", JSON.stringify(data));
 };
 

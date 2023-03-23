@@ -122,7 +122,7 @@ exports.ig = (url, msg, MessageMedia, user) => {
         });
 };
 
-exports.play = (query, id, grup, msg, MessageMedia, chat, user) => {
+exports.play = (query, id, grup, msg, MessageMedia, chat, user, autoplay) => {
     try {
         const file = fs.readFileSync("./database/playyt.json");
         let data = JSON.parse(file);
@@ -166,6 +166,16 @@ exports.play = (query, id, grup, msg, MessageMedia, chat, user) => {
                             "./database/playyt.json",
                             JSON.stringify(data)
                         );
+                        if (autoplay)
+                            return this.play(
+                                0,
+                                1,
+                                grup,
+                                msg,
+                                MessageMedia,
+                                chat,
+                                user
+                            );
                     }
                     msg.reply(text);
                 })

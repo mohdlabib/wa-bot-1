@@ -1,6 +1,7 @@
 const { stickers, premiumNotify, image } = require("../utils/autoMsg");
 const { AlphaKey, AlphaLimit } = require("../utils/apikey");
 const memes = require("random-memes");
+const { default: axios } = require("axios");
 
 exports.generate = async (char, message, MessageMedia, user) => {
     try {
@@ -95,6 +96,63 @@ exports.attp = async (text, type, message, MessageMedia, user) => {
     } catch (err) {
         message.reply(
             `*Gagal membuat animated-text-to-picture.*\nCoba lagi!\n\n` + err
+        );
+    }
+};
+
+exports.pinterest = async (text, message, MessageMedia, user) => {
+    try {
+        let res = await axios.get(
+            `https://api.zeeoneofc.my.id/api/downloader/pinterest?apikey=${AlphaKey(
+                user
+            )}&query=${text}`
+        );
+        // console.log(res);
+        res = res.data.result;
+        let i = 1;
+        for (const url of res) {
+            if (i > 5) break;
+            const img = await MessageMedia.fromUrl(url, {
+                unsafeMime: true,
+                filename: text + i + ".png",
+            });
+            if (img.filesize == 133) {
+                premiumNotify(message);
+                return;
+            }
+            message.reply(img, message.from, {
+                sendMediaAsDocument: true,
+                caption: `Hasil ke-${i} pencarian "${text}" dari Pinterest.`,
+            });
+            i++;
+        }
+    } catch (err) {
+        message.reply(
+            `*Gagal mencari gambar dari Pinterest.*\nCoba lagi!\n\n` + err
+        );
+    }
+};
+
+exports.pinterest2 = async (text, message, MessageMedia, user) => {
+    // https://api.zeeoneofc.my.id/api/downloader/pinterest2?apikey=aESQXF5C&query=loli
+    try {
+        const img = await MessageMedia.fromUrl(
+            `https://api.zeeoneofc.my.id/api/downloader/pinterest2?apikey=${AlphaKey(
+                user
+            )}&query=${text}`,
+            { unsafeMime: true, filename: text + ".png" }
+        );
+        if (img.filesize == 133) {
+            premiumNotify(message);
+            return;
+        }
+        message.reply(img, message.from, {
+            sendMediaAsDocument: true,
+            caption: `Hasil pencarian "${text}" dari Pinterest.`,
+        });
+    } catch (err) {
+        message.reply(
+            `*Gagal mencari gambar dari Pinterest.*\nCoba lagi!\n\n` + err
         );
     }
 };

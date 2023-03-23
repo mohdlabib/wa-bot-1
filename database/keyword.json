@@ -49,5 +49,10 @@
         "reply": "perintah di Funday Bot diawali dengan tanda minus (-)"
     },
     { "keyword": "halo", "reply": "hai!" },
-    { "keyword": "hai", "reply": "halo!" }
+    { "keyword": "hai", "reply": "halo!" },
+    { "keyword": ".s", "reply": "mungkin maksud anda *-s*?" },
+    { "keyword": ".play", "reply": "mungkin maksud anda *-play*?" },
+    { "keyword": ".pinterest", "reply": "mungkin maksud anda *-pinterest*?" },
+    { "keyword": ".menu", "reply": "mungkin maksud anda *-menu*?" },
+    { "keyword": ".help", "reply": "mungkin maksud anda *-help*?" }
 ]

@@ -103,7 +103,11 @@ exports.doa = (doa, id, msg, grup, user) => {
                     let index = [],
                         result = [];
                     res.filter((d, i) => {
-                        if (similarity(d.nama, doa) >= 0.4) index.push(i);
+                        if (
+                            similarity(d.nama, doa) >= 0.4 ||
+                            d.nama.includes(doa)
+                        )
+                            index.push(i);
                     });
                     if (!index.length) {
                         text +=
@@ -162,7 +166,7 @@ exports.doa = (doa, id, msg, grup, user) => {
                         res = res.data;
                         text += `*✱ ${res.nama.toUpperCase()} ✱*\n\n${
                             res.ar
-                        }\n\n_${res.tr}_\n\n"${res.idn}"\n\n➮ Tentang Doa :\n${
+                        }\n\n_${res.tr}_\n"${res.idn}"\n\n✲ *Tentang Doa* ✲\n${
                             res.tentang
                         }`;
                         msg.reply(text);
@@ -189,29 +193,54 @@ exports.quran = (msg) => {
     );
 };
 
-exports.surah = async (msg, id) => {
+exports.surah = async (msg, id, ayats) => {
     try {
         const response = await axios.get(
-            `https://raw.githubusercontent.com/penggguna/QuranJSON/master/surah/${id}.json`
+            `https://equran.id/api/v2/surat/${id}`
         );
-        let index = response.data;
-        let text = `*✱ Q.S ${index.name} ✱*\n➮ Arti Nama :\n    ➮ ${index.name_translations.en}\n    ➮ ${index.name_translations.id}\n➮ Jumlah Ayat : ${index.number_of_ayah}\n➮ Surah ke : ${index.number_of_surah}\n➮ Turun di : ${index.place} (${index.type})\n➮ Download Audio :`;
-        index.recitations.forEach((d) => {
-            text += `\n    ➮ ${d.name} : ${d.audio_url}`;
-        });
+        let index = response.data.data;
+        // console.log(index);
+        let text = `*✱ Q.S ${index.namaLatin} ✱*\n➮ Arti Nama : ${index.arti}\n➮ Jumlah Ayat : ${index.jumlahAyat}\n➮ Surah ke : ${index.nomor}\n➮ Turun di : ${index.tempatTurun}\n➮ Download Audio :`;
+        for (let i = 0; i < Object.keys(index.audioFull).length; i++) {
+            text += `\n    ➮ ${
+                index.audioFull[Object.keys(index.audioFull)[i]]
+            }`;
+        }
         text += `\n\n*✲ AYAT ✲*`;
-        index.verses.forEach((d) => {
-            text += `\n*${d.number}.*\n${d.text}\n"${d.translation_id}"\n_"${d.translation_en}"_\n`;
-        });
+        if (!ayats) {
+            index.ayat.forEach((d) => {
+                text += `\n*${d.nomorAyat}.*\n${d.teksArab}\n\n_${d.teksLatin}_\n"${d.teksIndonesia}"\n`;
+            });
+        } else {
+            if (ayats[0] <= 0 || ayats[0] > index.jumlahAyat) {
+                text +=
+                    "\n*PERINGATAN :* Ayat yang kamu masukkan tidak valid. Coba lagi!\n";
+            }
+            if (ayats.length == 2) {
+                index.ayat.forEach((d) => {
+                    if (d.nomorAyat >= ayats[0] && d.nomorAyat <= ayats[1])
+                        text += `\n*${d.nomorAyat}.*\n${d.teksArab}\n\n_${d.teksLatin}_\n"${d.teksIndonesia}"\n`;
+                });
+                if (ayats[1] <= 0 || ayats[1] >= index.jumlahAyat) {
+                    text +=
+                        "\n*PERINGATAN :* Ayat akhir yang kamu masukkan tidak valid!\n";
+                }
+            } else {
+                index.ayat.forEach((d) => {
+                    if (d.nomorAyat == ayats[0])
+                        text += `\n*${d.nomorAyat}.*\n${d.teksArab}\n\n_${d.teksLatin}_\n"${d.teksIndonesia}"\n`;
+                });
+            }
+        }
         text +=
-            "\n*CATATAN :*\n★ *-tafsir* ID_SURAH\n    ➮ ID_SURAH = Nomor Surah\n    ➮ Untuk melihat tafsir Surah.";
+            "\n*CATATAN :*\n★ *-tafsir* ID_SURAH\n★ *-tafsir* ID_SURAH:AYAT1\n★ *-tafsir* ID_SURAH:AYAT1-AYAT2\n    ➮ ID_SURAH = Nomor Surah\n    ➮ Untuk melihat tafsir Surah.";
         msg.reply(text);
     } catch (err) {
         error(msg, err);
     }
 };
 
-exports.tafsir = async (msg, id, user) => {
+exports.tafsir = async (msg, id, user, ayats) => {
     try {
         if (AlphaLimit(user).limit <= 0) {
             premiumNotify(msg);
@@ -228,9 +257,38 @@ exports.tafsir = async (msg, id, user) => {
         const ayah = index.number_of_ayah;
         index = index.tafsir.id.kemenag;
         text += `\n\n*✲ TAFSIR ✲*\n➮ Dari\t: ${index.name}\n➮ Sumber\t: ${index.source}`;
-        for (let i = 1; i <= ayah; i++) {
-            const d = index.text[`${i}`];
-            text += `\n\n*${i}*. ${d}`;
+        if (!ayats) {
+            text += `\n➮ Ayat\t: 1 - ${ayah}`;
+            for (let i = 1; i <= ayah; i++) {
+                const d = index.text[`${i}`];
+                text += `\n\n*${i}*. ${d}`;
+            }
+        } else {
+            if (ayats[0] <= 0 || ayats[0] > index.jumlahAyat) {
+                text +=
+                    "\n*PERINGATAN :* Ayat yang kamu masukkan tidak valid. Coba lagi!\n";
+            }
+            if (ayats.length == 2) {
+                text += `\n➮ Ayat\t: ${ayats[0]} - ${ayats[1]}`;
+                for (let i = 1; i <= ayah; i++) {
+                    if (i >= ayats[0] && i <= ayats[1]) {
+                        const d = index.text[`${i}`];
+                        text += `\n\n*${i}*. ${d}`;
+                    }
+                }
+                if (ayats[1] <= 0 || ayats[1] >= index.jumlahAyat) {
+                    text +=
+                        "\n*PERINGATAN :* Ayat akhir yang kamu masukkan tidak valid!\n";
+                }
+            } else {
+                text += `\n➮ Ayat\t: ${ayats[0]}`;
+                for (let i = 1; i <= ayah; i++) {
+                    if (i == ayats[0]) {
+                        const d = index.text[`${i}`];
+                        text += `\n\n*${i}*. ${d}`;
+                    }
+                }
+            }
         }
         msg.reply(text);
     } catch (err) {

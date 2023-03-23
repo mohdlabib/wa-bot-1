@@ -27,10 +27,32 @@
     ➮ Melihat Surah dari ID_SURAH.
     ➮ ID_SURAH = Nomor Surah
     ➮ Contoh : -surah 1 ➔ lihat surah ke-1 (Al-Fatiha)
+☆ *-surah* ID_SURAH:AYAT ➔
+    ➮ Melihat 1 ayat.
+    ➮ ID_SURAH = Nomor Surah
+    ➮ AYAT = Ayat pilihan
+    ➮ Contoh : -surah 1:5 ➔ lihat ayat ke-5 dari surah ke-1 (Al-Fatiha)
+☆ *-surah* ID_SURAH:AYAT1-AYAT2 ➔
+    ➮ Melihat beberapa ayat.
+    ➮ ID_SURAH = Nomor Surah
+    ➮ AYAT1 = Ayat Awal
+    ➮ AYAT2 = Ayat Akhir
+    ➮ Contoh : -surah 2:5-7 ➔ lihat ayat ke-5 sampai 7 dari surah ke-2 (Al-Baqarah)
 ★ *-tafsir* ID_SURAH ➔
     ➮ Melihat Tafsir per-ayat dari Surah.
     ➮ ID_SURAH = Nomor Surah
     ➮ Contoh : -tafsir 1 ➔ lihat tafsir surah ke-1 (Al-Fatiha)
+☆ *-tafsir* ID_SURAH:AYAT ➔
+    ➮ Melihat tafsir 1 ayat.
+    ➮ ID_SURAH = Nomor Surah
+    ➮ AYAT = Ayat pilihan
+    ➮ Contoh : -tafsir 1:5 ➔ lihat tafsir ayat ke-5 dari surah ke-1 (Al-Fatiha)
+☆ *-tafsir* ID_SURAH:AYAT1-AYAT2 ➔
+    ➮ Melihat tafsir beberapa ayat.
+    ➮ ID_SURAH = Nomor Surah
+    ➮ AYAT1 = Ayat Awal
+    ➮ AYAT2 = Ayat Akhir
+    ➮ Contoh : -tafsir 2:5-7 ➔ lihat tafsir ayat ke-5 sampai 7 dari surah ke-2 (Al-Baqarah)
 ☆ *-imsak* kota ➔
     ➮ Melihat jadwal Imsak berbagai kota di Indonesia.
     ➮ Contoh : -imsak pekanbaru
@@ -110,6 +132,9 @@
     ➮ Data yang diambil adalah hasil pencarian terakhir.
     ➮ ID_AUDIO = Nomor
     ➮ Contoh : -playid 1
+★ *-autoplay* KataKunci ➔
+    ➮ Memainkan audio otomatis.
+    ➮ Contoh : -autoplay this feeling
 
 *✲ FITUR GRUP ✲*
 ☆ *-groupinfo* ➔

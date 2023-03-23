@@ -42,6 +42,7 @@
 *✲ BOT PLAYER ✲*
 ☆ *-play* KataKunci
 ★ *-playid* ID_AUDIO
+★ *-autoplay* ID_AUDIO
 
 *✲ PREMIUM & LIMIT ✲*
 ☆ *-limit*
