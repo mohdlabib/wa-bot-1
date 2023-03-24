@@ -130,7 +130,9 @@ const client = new Client({
             "--single-process", // <- this one doesn't works in Windows
             "--disable-gpu",
         ],
-        // executablePath: "/usr/bin/google-chrome-stable",
+        // for Ubuntu
+        executablePath: "/usr/bin/google-chrome-stable",
+        // for Windows
         // executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe",
     },
     authStrategy: new LocalAuth(),
