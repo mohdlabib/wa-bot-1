@@ -1,9 +1,12 @@
 const { Client, LocalAuth, MessageMedia } = require("whatsapp-web.js");
 require("dotenv").config();
+
+const DonationController = require("./controllers/utils/pay");
 const express = require("express");
 const socket = require("socket.io");
 const qrcode = require("qrcode");
 const http = require("http");
+const bodyParser = require("body-parser");
 const fam = require("./controllers/games/fam");
 const lontong = require("./controllers/games/lontong");
 const gamecodes = [
@@ -128,7 +131,7 @@ const client = new Client({
             "--disable-gpu",
         ],
         // executablePath: "/usr/bin/google-chrome-stable",
-        executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe",
+        // executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe",
     },
     authStrategy: new LocalAuth(),
 });
@@ -148,8 +151,8 @@ app.use(
 app.get("/", (req, res) => {
     var apikey = req.query.apikey;
 
-    if (apikey === "2117102004") {
-        res.sendfile("public/index.html", {
+    if (apikey === "12344321") {
+        res.sendFile("public/index.html", {
             root: __dirname,
         });
     } else {
@@ -159,8 +162,7 @@ app.get("/", (req, res) => {
 
 client.on("message", async (message) => {
     try {
-        // console.log(message.body);
-        // console.log(message);
+
         let chat = await message.getChat();
         let contact = await client.getContactById(
             message.author || message.from
@@ -1479,6 +1481,8 @@ io.on("connection", function (socket) {
         client.initialize();
     });
 });
+
+app.post("/donate", DonationController.handleDonation);
 
 server.listen(port, function () {
     console.log("App running on http://localhost:" + port);
